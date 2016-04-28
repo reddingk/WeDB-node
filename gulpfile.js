@@ -22,16 +22,16 @@ var config = {
       'app/libs/angular/angular.min.js',
       'app/libs/angular-route/angular-route.min.js',
       'app/libs/angular-material/angular-material.min.js',
-      'app/libs/angular-animate/angular-animate.min.js'
-      //'app/libs/angular-aria/angular-aria.min.js',
-      //'app/libs/angular-messages/angular-messages.min.js',
-
+      'app/libs/angular-animate/angular-animate.min.js',
+      'app/libs/angular-aria/angular-aria.min.js',
+      'app/libs/angular-messages/angular-messages.min.js',
+      'app/libs/angular-ui-router/release/angular-ui-router.min.js'
     ],
     libsCSS: [
       'app/libs/angular-material.min.css',
       'app/libs/bootstrap/dist/css/bootstrap.min.css',
-      'app/libs/font-awesome/font-awesome.min.css'
-      //'app/libs/animate.css/animate.min.css'
+      'app/libs/font-awesome/font-awesome.min.css',
+      'app/libs/animate.css/animate.min.css'
     ]
   },
   dest:{

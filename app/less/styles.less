@@ -1,8 +1,29 @@
-@font-size: 18px;
+@font-size: 16px;
+.pagewidth {  width: 80%;  max-width: 1500px; }
 
-.test {
-  div{
-    font-size: @font-size;
-    width: 80%;
+html, body {
+  font-size: @font-size;
+  height: 100%;
+}
+
+.page-wrapper {
+  .pagewidth;
+
+  height: 100%;
+  margin: 0 auto;
+  .page {
+    border: 1px solid #000;
+    border-bottom: none;
+    border-radius: 5px 5px 0px 0px;
+    height: 1000px;
+    margin-top:50px;
+  }
+}
+
+.we-nav {
+  &.screenPass {
+    position: fixed;
+    top:0px;
+    .pagewidth;
   }
 }
