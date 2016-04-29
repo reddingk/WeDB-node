@@ -1,15 +1,24 @@
-<nav class="navbar navbar-default we-nav" ng-controller="HomeController as mc" nav-hold>
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as hc" nav-hold>
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" ui-sref="home">WeDB</a>
     </div>
     <div class="nav navbar-nav navbar-right">
-      <input type="text" ng-model="selected" uib-typeahead="state for state in states | limitTo:8" class="form-control">
+      <input type="text" ng-model="selected" uib-typeahead="state for state in sc.states | limitTo:8" class="form-control">
       <ul class="nav navbar-nav">
-        <li ng-repeat="section in mc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+        <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<h1>HOME - {{title}}<h1>
+<div>
+  <h1>HOME - {{sc.title}}<h1>
+  <p>message: {{sc.tstmsg}}</p>
+
+  <a href="" ng-click="sc.movieTest()">Test</a>
+  <ul>
+    <li>"Best Man" Results</li>
+    <li ng-repeat="item in sc.results.results">{{item.title}}</li>
+  </ul>
+</div>
