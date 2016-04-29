@@ -1,1 +1,15 @@
-<p>HOME - {{title}}</p>
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as mc" nav-hold>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">WeDB</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <input type="text" ng-model="selected" uib-typeahead="state for state in states | limitTo:8" class="form-control">
+      <ul class="nav navbar-nav">
+        <li ng-repeat="section in mc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<h1>HOME - {{title}}<h1>

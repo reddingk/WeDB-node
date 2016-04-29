@@ -45,7 +45,7 @@
     }]);
 
 
-});
+})();
 
 (function(){
   'use strict';
@@ -87,7 +87,8 @@
    "use strict";
 
     angular.module('castCtrl', []).controller('CastController', function($scope){
-      $scope.title = "Cast";
+      var vm = this;
+      vm.title = "Cast";
 
     });
 
@@ -97,12 +98,13 @@
    "use strict";
 
     angular.module('homeCtrl', []).controller('HomeController', function($scope){
-      $scope.title = "Home";
-      self.sections = [
+      var vm = this;
+      vm.title = "Home";
+      vm.sections = [
            //{order:'0', title:'Special', controller:'SpecialController', type:'special'}
-           {order:'3', title:'Cast', controller:'CastController', type:'cast' },
-           {order:'1', title:'Movie', controller:'MovieController', type:'movie' },
-           {order:'2', title:'Tv', controller:'TvController', type:'tv' }
+           {order:'3', title:'Actors/Actresses', controller:'CastController', state:'cast', type:'cast-tab'},
+           {order:'1', title:'Movie', controller:'MovieController', state:'movies', type:'movie-tab' },
+           {order:'2', title:'Tv Shows', controller:'TvController', state:'tv', type:'tv-tab' }
        ];
     });
 
@@ -112,7 +114,8 @@
    "use strict";
 
     angular.module('movieCtrl', []).controller('MovieController', function($scope){
-      $scope.title = "Movie";
+      var vm = this;
+      vm.title = "Movie";
 
     });
 
@@ -121,8 +124,12 @@
 (function(){
    "use strict";
 
-    angular.module('specialCtrl', []).controller('SpecialController', function($scope){
-      $scope.title = "Special";
+    angular.module('specialCtrl', ['ui.bootstrap']).controller('SpecialController', function($scope){
+      var vm = this;
+      vm.title = "Special";
+
+      vm.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana'];
+      vm.selected = undefined;
 
     });
 
@@ -132,7 +139,8 @@
    "use strict";
 
     angular.module('tvCtrl', []).controller('TvController', function($scope){
-      $scope.title = "Tv";
+      var vm = this;
+      vm.title = "Tv";
 
     });
 

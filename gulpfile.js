@@ -25,13 +25,16 @@ var config = {
       'app/libs/angular-animate/angular-animate.min.js',
       'app/libs/angular-aria/angular-aria.min.js',
       'app/libs/angular-messages/angular-messages.min.js',
-      'app/libs/angular-ui-router/release/angular-ui-router.min.js'
+      'app/libs/angular-ui-router/release/angular-ui-router.min.js',
+      'app/libs/angular-bootstrap/ui-bootstrap.min.js',
+      'app/libs/angular-bootstrap/ui-bootstrap-tpls.min.js'
     ],
     libsCSS: [
       'app/libs/angular-material.min.css',
       'app/libs/bootstrap/dist/css/bootstrap.min.css',
       'app/libs/font-awesome/font-awesome.min.css',
-      'app/libs/animate.css/animate.min.css'
+      'app/libs/animate.css/animate.min.css',
+      'app/libs/angular-bootstrap/ui-bootstrap-csp.css'
     ]
   },
   dest:{

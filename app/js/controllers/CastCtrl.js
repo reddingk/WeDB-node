@@ -2,7 +2,8 @@
    "use strict";
 
     angular.module('castCtrl', []).controller('CastController', function($scope){
-      $scope.title = "Cast";
+      var vm = this;
+      vm.title = "Cast";
 
     });
 
