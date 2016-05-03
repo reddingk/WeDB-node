@@ -5,11 +5,8 @@
       <a class="navbar-brand" ui-sref="home">WeDB</a>
     </div>
     <div class="nav navbar-nav navbar-right">
-      <!--<input type="text" ng-model="selected" uib-typeahead="state for state in sc.states | filter:$viewValue | limitTo:8" typeahead-min-length="3" class="form-control">-->
-      <!--<input type="text" ng-model="sc.selected" uib-typeahead="movie as movie.title for movie in sc.movieSearch($viewValue) | filter:{title: $viewValue} | limitTo:8" typeahead-loading="sc.loadingMovies" typeahead-min-length="3" class="form-control">-->
-      <!--<input type="text" ng-model="selected" placeholder="Custom template" uib-typeahead="state as state.name for state in sc.statesWithFlags | filter:{name:$viewValue}" typeahead-template-url="views/templates/customTemplate.html" class="form-control" typeahead-min-length="2">-->
-      <input type="text" ng-model="sc.selected" uib-typeahead="movie for movie in sc.movieSearch($viewValue) | filter:{title: $viewValue} | limitTo:8" typeahead-min-length="3" class="form-control">
-      
+      <input type="text" ng-model="sc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" class="form-control">
+      <!--<input type="text" ng-model="sc.selected" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue) | limitTo:8" typeahead-min-length="3" class="form-control">-->
       <ul class="nav navbar-nav">
         <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
       </ul>
@@ -19,12 +16,4 @@
 
 <div>
   <h1>HOME - {{sc.title}}<h1>
-  <p>message: {{sc.tstmsg}}</p>
-  <p>query: {{sc.selected}}</p>
-
-  <a href="" ng-click="sc.movieTest()">Test</a>
-  <ul>
-    <li>"Best Man" Results</li>
-    <li ng-repeat="item in sc.results.results">{{item.title}}</li>
-  </ul>
 </div>

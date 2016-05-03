@@ -1,1 +1,40 @@
-<p>Movies - {{title}}</p>
+
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as hc" nav-hold>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">WeDB</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <input type="text" ng-model="sc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in mc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" typeahead-on-select="mc.viewMovieInfo($item)" class="form-control">
+      <!--<input type="text" ng-model="sc.selected" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue) | limitTo:8" typeahead-min-length="3" class="form-control">-->
+      <ul class="nav navbar-nav">
+        <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div>
+  <h1>MOVIE - {{mc.title}}</h1>
+  <div ng-if="mc.showSelected" class="selected-movie">
+    <div class="selected-container">
+      <img ng-src="http://image.tmdb.org/t/p/w500{{mc.selectedMovie.poster_path}}">
+      <div class="selected-info">
+        <p class="selected-title">{{mc.selectedMovie.title}} <span class="selected-year">({{mc.selectedMovie.release_date | date:'yyyy'}})</span></p>
+        <p class="selected-overview">{{mc.selectedMovie.overview}}</p>
+
+        <div class="selected-cast">
+          <a ng-click="mc.viewMovieCredits(mc.selectedMovie.id)">View top billed Cast</a>
+          <div class="cast-member" ng-show="mc.showSelectedCredit">
+            <div class="selected-cast-members" ng-repeat="cast in mc.selectedCredit">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
+              <div class="no-poster" ng-if="cast.profile_path == null"></div>
+              <div class="selected-character"><div class="character">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
