@@ -1,10 +1,11 @@
 (function(){
    "use strict";
 
-    angular.module('movieCtrl', ['ui.bootstrap']).controller('MovieController', ['movieServices','MovieData', function(movieServices, MovieData){
+    angular.module('movieCtrl', ['ui.bootstrap']).controller('MovieController', ['movieServices','MovieData', '$filter', function(movieServices, MovieData, $filter){
       var vm = this;
       vm.title = "Movie";
 
+      // Select movie
       vm.resultsLimit = 8;
       vm.selected = undefined;
       vm.selectedMovie = undefined;
@@ -12,6 +13,9 @@
       vm.selectedCredit = undefined;
       vm.showSelectedCredit = false;
 
+      // Compare movies
+      vm.showCompare = false;
+      vm.selectedObjects = [];
 
       vm.movieSearch = function(query) {
         return movieServices.names(query).then(function (results) {
@@ -72,6 +76,29 @@
           vm.showSelectedCredit = false;
         }
 
+      }
+      vm.addMovieToCompare = function(movie) {
+        if(vm.ableToCompare(movie)){
+          vm.selectedObjects.push(movie);
+          vm.showSelected = false;
+          vm.showSelectedCredit = false;
+          vm.selectedMovie = undefined;
+          vm.selectedCredit = undefined;
+          vm.selected = undefined;
+          vm.showCompare = true;
+          console.log("added: " + vm.selectedObjects.length );
+        }
+        console.log("after add");
+      }
+
+      vm.ableToCompare = function(movie) {
+        if(vm.selectedObjects.length < 3 && movie!= null )
+        {
+          var found = $filter('filter')(vm.selectedObjects, {id: movie.id});
+          if(found == undefined || found.length == 0)
+            return true;
+        }
+        return false;
       }
 
     }]);

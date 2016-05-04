@@ -9,7 +9,7 @@
           angular.element($window).bind("scroll", function() {
 
             var topSection = angular.element(document.getElementsByClassName("page"))[0];
-            var windowp = angular.element($window)[0];
+            var windowp = angular.element($window)[0];          
 
             if(windowp.pageYOffset >= topSection.offsetTop ){
               if(!element.hasClass("screenPass"))

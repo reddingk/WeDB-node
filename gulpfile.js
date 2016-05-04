@@ -30,7 +30,7 @@ var config = {
       'app/libs/angular-bootstrap/ui-bootstrap-tpls.min.js'
     ],
     libsCSS: [
-      'app/libs/angular-material.min.css',
+      'app/libs/angular-material/angular-material.min.css',
       'app/libs/bootstrap/dist/css/bootstrap.min.css',
       'app/libs/font-awesome/font-awesome.min.css',
       'app/libs/animate.css/animate.min.css',

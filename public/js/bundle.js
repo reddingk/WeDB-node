@@ -105,42 +105,6 @@
 })();
 
 (function(){
-  'use strict';
-  angular.module('directives', []);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('navHold', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-
-          angular.element($window).bind("scroll", function() {
-
-            var topSection = angular.element(document.getElementsByClassName("page"))[0];
-            var windowp = angular.element($window)[0];
-
-            if(windowp.pageYOffset >= topSection.offsetTop ){
-              if(!element.hasClass("screenPass"))
-                element.addClass("screenPass");
-            }
-            else {
-              if(element.hasClass("screenPass")){
-                element.removeClass("screenPass");
-              }
-            }
-          });
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
    "use strict";
 
     angular.module('castCtrl', []).controller('CastController', function($scope){
@@ -170,10 +134,11 @@
 (function(){
    "use strict";
 
-    angular.module('movieCtrl', ['ui.bootstrap']).controller('MovieController', ['movieServices','MovieData', function(movieServices, MovieData){
+    angular.module('movieCtrl', ['ui.bootstrap']).controller('MovieController', ['movieServices','MovieData', '$filter', function(movieServices, MovieData, $filter){
       var vm = this;
       vm.title = "Movie";
 
+      // Select movie
       vm.resultsLimit = 8;
       vm.selected = undefined;
       vm.selectedMovie = undefined;
@@ -181,6 +146,9 @@
       vm.selectedCredit = undefined;
       vm.showSelectedCredit = false;
 
+      // Compare movies
+      vm.showCompare = false;
+      vm.selectedObjects = [];
 
       vm.movieSearch = function(query) {
         return movieServices.names(query).then(function (results) {
@@ -241,6 +209,29 @@
           vm.showSelectedCredit = false;
         }
 
+      }
+      vm.addMovieToCompare = function(movie) {
+        if(vm.ableToCompare(movie)){
+          vm.selectedObjects.push(movie);
+          vm.showSelected = false;
+          vm.showSelectedCredit = false;
+          vm.selectedMovie = undefined;
+          vm.selectedCredit = undefined;
+          vm.selected = undefined;
+          vm.showCompare = true;
+          console.log("added: " + vm.selectedObjects.length );
+        }
+        console.log("after add");
+      }
+
+      vm.ableToCompare = function(movie) {
+        if(vm.selectedObjects.length < 3 && movie!= null )
+        {
+          var found = $filter('filter')(vm.selectedObjects, {id: movie.id});
+          if(found == undefined || found.length == 0)
+            return true;
+        }
+        return false;
       }
 
     }]);
@@ -349,5 +340,41 @@
   'use strict';
 
   //angular.module('services', []);
+
+})();
+
+(function(){
+  'use strict';
+  angular.module('directives', []);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('navHold', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+
+          angular.element($window).bind("scroll", function() {
+
+            var topSection = angular.element(document.getElementsByClassName("page"))[0];
+            var windowp = angular.element($window)[0];          
+
+            if(windowp.pageYOffset >= topSection.offsetTop ){
+              if(!element.hasClass("screenPass"))
+                element.addClass("screenPass");
+            }
+            else {
+              if(element.hasClass("screenPass")){
+                element.removeClass("screenPass");
+              }
+            }
+          });
+        }
+      }
+
+    }]);
 
 })();

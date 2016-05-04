@@ -16,12 +16,14 @@ html, body {
 
   height: 100%;
   margin: 0 auto;
+  padding-top: 50px;
   .page {
     border: 1px solid #000;
     border-bottom: none;
     border-radius: 5px 5px 0px 0px;
-    height: 1000px;
-    margin-top:50px;
+    height: 100%;
+    min-height: 1000px;
+    padding-botton: 30px;
   }
 }
 /*Navigation*/
@@ -47,7 +49,17 @@ html, body {
     }
   }
 }
+.section-body {
+  padding: 10px;
+}
+.btn-section {
+  .md-button {
+    font-weight: bold;
+    &.view-button{  }
+    &.add-button { background-color: @movie;}
+  }
 
+}
 .selected-movie {
   padding:20px;
   .selected-container {
@@ -96,6 +108,29 @@ html, body {
         }
       }
 
+    }
+  }
+}
+
+.compare-movies {
+  .compare-movies-container {
+    position: relative;
+    .movie-display {
+      width: 33%;
+      float: left;
+      &+.movie-display {
+        padding-left: 5px;
+      }
+      .movie-container {
+        padding:10px;
+        border: 5px dashed #ccc;
+        .movie-poster {
+          width: 100%;
+          img {
+            width: 100%;
+          }
+        }
+      }
     }
   }
 }
