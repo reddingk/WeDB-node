@@ -41,12 +41,16 @@
     </div>
   </div>
   <!-- LIST OF MOVIES TO COMPARE-->
-  <p>{{mc.showCompare}}</p>
   <div class="compare-movies" ng-if="mc.showCompare">
     <div class="compare-movies-container">
-      <p>Movie Count: {{mc.selectedObjects.length}}</p>
       <div class="movie-display" ng-repeat="movie in mc.selectedObjects">
         <div class="movie-container">
+
+          <div class="movie-edits">
+            <div class="remove-movie">R: <i class="fa fa-times"></i></div>
+            <div class="info-movie">I: <i class="fa fa-info"></i></div>
+          </div>
+
           <div class="movie-poster">
             <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}">
           </div>
