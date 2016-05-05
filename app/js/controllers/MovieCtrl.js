@@ -128,11 +128,15 @@
       /*Compare Movies*/
       vm.compareSelectedMovies = function() {
         console.log("-- COMPARE --");
+        var deferred = $q.defer();
 
         vm.getCompareCasts().then(function (data){
           console.log("Cast List: ");
-          console.log(data);
-          vm.compared = vm.compareMovieCasts(data);
+          deferred.resolve(data);
+          console.log(deferred.promise);
+          vm.compared = vm.compareMovieCasts(deferred.promise);
+          console.log("Finished: ");
+          console.log(vm.compared);
         });
 
         //vm.compared = vm.compareMovieCasts(castList);
@@ -143,20 +147,44 @@
 
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
-
-        var compareCasts = [];
         var deferred = $q.defer();
 
-        for(var i =0; i < vm.selectedObjects.length; i++) {
-          var movieCast = vm.getMovieCredits(vm.selectedObjects[i].id);
-          compareCasts.push({movieinfo: vm.selectedObjects[i], cast: movieCast });
+        function fullCastInfo(mInfo) {
+          var fullCast =[];
+          var deferred = $q.defer();
+          return vm.getMovieCredits(mInfo.id).then(function(data){
+            fullCast.push({movieinfo: mInfo, cast: data });
+            deferred.resolve(fullCast);
+            return deferred.promise;
+          });
         }
-        deferred.resolve(compareCasts)
-        return deferred.promise;
+
+        function returnList() {
+          var compareCasts = [];
+
+          for(var i =0; i < vm.selectedObjects.length; i++) {
+            fullCastInfo(vm.selectedObjects[i]).then(function(data){
+              compareCasts.push(data);
+              console.log(compareCasts);
+            });
+          }
+
+          deferred.resolve(compareCasts);
+          return deferred.promise;
+        }
+
+        return returnList().then(function(data){
+          deferred.resolve(data);
+          console.log("data: ");
+          console.log(deferred.promise);
+          return deferred.promise;
+        });
       }
+
       /*Compare casts for each movie and return all cast members that appear in movies together*/
       vm.compareMovieCasts = function(castList) {
-        console.log("COMPARE LIST");
+
+        console.log("COMPARE LIST-" + castList.length);
         console.log(castList);
 
         var compareResults = [];
@@ -173,8 +201,9 @@
           compareResults.push({movie1: castList[0].movieinfo, movie2:castList[1].movieinfo, movie3:castList[2].movieinfo, matchedCast:vm.compareMovies(castList[0], castList[1], castList[2]) });
         }
         console.log("COMPARE RESULTS");
-        console.log(compareResults);
-        return compareResults;
+        deferred.resolve(compareResults);
+        console.log(deferred.promise);
+        return deferred.promise;
       }
 
       /*Compare movies and return cast in each movie*/
