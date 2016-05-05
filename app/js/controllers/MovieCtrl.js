@@ -16,6 +16,7 @@
       // Compare movies
       vm.showCompare = false;
       vm.selectedObjects = [];
+      vm.slider = [false, false, false];
 
       vm.movieSearch = function(query) {
         return movieServices.names(query).then(function (results) {
@@ -86,9 +87,12 @@
           vm.selectedCredit = undefined;
           vm.selected = undefined;
           vm.showCompare = true;
-          console.log("added: " + vm.selectedObjects.length );
         }
-        console.log("after add");
+      }
+      vm.removeCompareMovie = function(movie) {
+        var removeIndex = vm.selectedObjects.indexOf(movie);
+        if(removeIndex >= 0)
+          vm.selectedObjects.splice(removeIndex, 1);
       }
 
       vm.ableToCompare = function(movie) {
@@ -99,6 +103,22 @@
             return true;
         }
         return false;
+      }
+
+      vm.getMovieIndex = function(movie) {
+        var index = vm.selectedObjects.indexOf(movie);
+        if(index >= 0)
+          return index;
+        else
+          return 0;
+      }
+      vm.toggleSlider = function(movie) {
+          var movieIndex = vm.getMovieIndex(movie);
+          vm.slider[movieIndex] = !vm.slider[movieIndex];
+      }
+      vm.getSliderStatus = function(movie) {
+        var movieIndex = vm.getMovieIndex(movie);
+        return vm.slider[movieIndex];
       }
 
     }]);
