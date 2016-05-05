@@ -52,11 +52,24 @@
             <div class="info-slide" ng-class="{'comp-slide':!mc.getSliderStatus(movie)}">
               <p ng-click="mc.toggleSlider(movie)"><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Movie Information</span><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
               <div>Overview: {{movie.overview}}</div>
-              <div>Production Companies: <span ng-repeat="comp in movie.production_companies">{{comp.name}} </span></div>
+              <div>Production Companies: <span ng-repeat="comp in movie.production_companies">{{comp.name}}<span ng-if="!$last">, </span></div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <br style="clear: both">
   </div>
+
+  <!--Compare Buttons & Results -->
+  <div class="compare-results" ng-if="mc.selectedObjects.length > 1">
+    <div class="btn-section"><md-button class="md-raised compare-button" ng-click="mc.compareSelectedMovies()">Compare Selected Movies</md-button></div>
+  </div>
+
+  <!--About Text-->
+  <div class="about-section">
+    <h2>Movie Comparison</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>
+<!--End of Section Body-->
 </div>
