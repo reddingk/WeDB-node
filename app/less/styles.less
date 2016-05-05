@@ -1,4 +1,9 @@
 @font-size: 16px;
+@cast: rgba(0,0,255,1);
+@movie: rgba(255,0,0,1);
+@tv: rgba(0,153,0,1);
+@special: rgba(255,102,0,1);
+@grey: rgba(204,204,204,1);
 .pagewidth {  width: 80%;  max-width: 1500px; }
 
 html, body {
@@ -11,17 +16,20 @@ html, body {
 
   height: 100%;
   margin: 0 auto;
+  padding-top: 50px;
   .page {
     border: 1px solid #000;
     border-bottom: none;
     border-radius: 5px 5px 0px 0px;
-    height: 1000px;
-    margin-top:50px;
+    height: 100%;
+    min-height: 1000px;
+    padding-botton: 30px;
   }
 }
-
+/*Navigation*/
 .we-nav {
   background-color: rgba(0,0,0,0.7);
+  z-index:50;
   &.screenPass {
     position: fixed;
     top:0px;
@@ -37,6 +45,97 @@ html, body {
         padding-top: 5px;
         li {
           border-left: 2px solid #000;
+        }
+      }
+    }
+  }
+}
+.section-body {
+  padding: 10px;
+}
+.btn-section {
+  .md-button {
+    font-weight: bold;
+    &.view-button{  }
+    &.add-button { background-color: @movie;}
+  }
+
+}
+.selected-movie {
+  padding:20px;
+  .selected-container {
+    display: inline-block;
+    width: 100%;
+    padding:10px;
+    border: 5px dashed #ccc;
+    img {
+      float: left;
+      max-width: 200px;
+      margin-right: 10px;
+    }
+    .selected-info {
+      padding: 10px;
+
+      .selected-title {
+        font-size: 1.44rem;
+        font-weight: bold;
+      }
+      .selected-overiview {
+        font-size: 1.rem;
+      }
+      .selected-cast {
+        .cast-member {
+          padding: 3px;
+          border: 1px solid #000;
+          max-height: 200px;
+          overflow-y: scroll;
+
+          .selected-cast-members {
+            max-width: 20%;
+            display: inline-block;
+            float: left;
+            padding: 0px 4px 4px 0px;
+
+            img { max-width: 30%;  }
+            .no-poster { background-color: @grey; max-width: 30%;}
+
+            .selected-character {
+              max-width: 60%;
+              display: inline-block;
+              .character { font-weight: bold; font-size: .8rem; color: @movie;}
+              .name {font-size: .8rem; margin-left: 3px;}
+            }
+          }
+        }
+      }
+
+    }
+  }
+}
+
+.compare-movies {
+  .compare-movies-container {
+    position: relative;
+    .movie-display {
+      width: 33%;
+      float: left;
+      &+.movie-display {
+        padding-left: 5px;
+      }
+      .movie-container {
+        padding:10px;
+        border: 5px dashed #ccc;
+        .movie-edits {
+          position: absolute;
+          top: 2px;
+          .movie-remove { float: left; }
+          .movie-info { float: right; }
+        }
+        .movie-poster {
+          width: 100%;
+          img {
+            width: 100%;
+          }
         }
       }
     }
