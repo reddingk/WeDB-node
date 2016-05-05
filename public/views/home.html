@@ -1,0 +1,19 @@
+
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as hc" nav-hold>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">WeDB</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <input type="text" ng-model="sc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" class="form-control">
+      <!--<input type="text" ng-model="sc.selected" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue) | limitTo:8" typeahead-min-length="3" class="form-control">-->
+      <ul class="nav navbar-nav">
+        <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="section-body">
+  <h1>HOME - {{sc.title}}<h1>
+</div>
