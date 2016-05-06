@@ -131,13 +131,11 @@
       vm.compareSelectedMovies = function() {
         vm.getCompareCasts().then(function(){
           vm.compareMovieCasts();
-          console.log(vm.compared);
         });
       }
 
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
-        console.log("STEP1");
         var promises = [];
 
         function fullCastInfo(mInfo) {
@@ -155,8 +153,6 @@
             promises.push(fullCastInfo(vm.selectedObjects[i]));
         }
         return $q.all(promises).then(function(data){
-          console.log("PROMISE OUT");
-          console.log(data);
           var def = $q.defer();
           def.resolve(true);
           return def.promise;
@@ -166,7 +162,6 @@
 
       /*Compare casts for each movie and return all cast members that appear in movies together*/
       vm.compareMovieCasts = function() {
-        console.log("STEP2");
         var castList = movieData.comparedCasts;
         var compareResults = [];
         // compare one to one
@@ -185,7 +180,6 @@
         vm.compared = movieData.comparedResults;
         var def = $q.defer();
         def.resolve();
-        console.log("STEP2-END");
         return def.promise;
       }
 
@@ -221,6 +215,12 @@
           }
         }
         return comparedCasts;
+      }
+      vm.clearResults = function() {
+        movieData.comparedCasts = [];
+        movieData.comparedResults = [];
+        vm.compared = [];
+        vm.selectedObjects = [];
       }
 
     }]);

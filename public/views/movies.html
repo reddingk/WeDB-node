@@ -15,7 +15,6 @@
 </nav>
 
 <div class="section-body">
-  <h1>MOVIE - {{mc.title}}</h1>
   <!--SELECTED MOVIE-->
   <div ng-if="mc.showSelected" class="selected-movie">
     <div class="selected-container">
@@ -51,8 +50,8 @@
             <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}">
             <div class="info-slide" ng-class="{'comp-slide':!mc.getSliderStatus(movie)}">
               <p ng-click="mc.toggleSlider(movie)"><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Movie Information</span><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
-              <div>Overview: {{movie.overview}}</div>
-              <div>Production Companies: <span ng-repeat="comp in movie.production_companies">{{comp.name}}<span ng-if="!$last">, </span></div>
+              <div><span class="info-header">Overview</span> <span class="info-content">{{movie.overview}}</span></div>
+              <div><span class="info-header">Production Companies</span> <span class="info-content"> <span ng-repeat="comp in movie.production_companies">{{comp.name}}<span ng-if="!$last">, </span> </span></div>
             </div>
           </div>
         </div>
@@ -61,20 +60,29 @@
     <br style="clear: both">
   </div>
 
-  <!--Compare Buttons & Results -->
+  <!--Compare Buttons -->
   <div class="compare-results" ng-if="mc.selectedObjects.length > 1">
-    <div class="btn-section"><md-button class="md-raised compare-button" ng-click="mc.compareSelectedMovies()">Compare Selected Movies</md-button></div>
+    <div class="btn-section">
+      <md-button class="md-raised compare-button" ng-click="mc.compareSelectedMovies()">Compare Selected Movies</md-button>
+      <md-button class="md-raised clear-button" ng-click="mc.clearResults()">Clear Results</md-button>
+    </div>
   </div>
 
   <!--About Text-->
   <div class="about-section" ng-if="mc.compared.length == 0">
-    <h2>Movie Comparison</h2>
+    <h1>Movie Comparison</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
 
   <!--Compared Results-->
-  <div ng-if="mc.compared.length > 0">
-    <p>RESULTS AVALIABLE</p>
+  <div class="results" ng-if="mc.compared.length > 0">
+    <div class="results-list" ng-repeat="compare in mc.compared">
+      <p><span>{{compare.movie1.title}}</span><span> & {{compare.movie2.title}}</span> <span ng-if="compare.movie3 != null">& {{compare.movie3.title}}</span></p>
+      <ul>
+        <li ng-repeat="cast in compare.matchedCast"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null"><span>{{cast.name}}</span></li>
+      </ul>
+    </div>
+    <br style="clear: both">
   </div>
 <!--End of Section Body-->
 </div>

@@ -267,13 +267,11 @@
       vm.compareSelectedMovies = function() {
         vm.getCompareCasts().then(function(){
           vm.compareMovieCasts();
-          console.log(vm.compared);
         });
       }
 
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
-        console.log("STEP1");
         var promises = [];
 
         function fullCastInfo(mInfo) {
@@ -287,43 +285,19 @@
           return def.promise;
         }
 
-        /*function returnList() {
-          var def = $q.defer();
-
-          for(var i =0; i < vm.selectedObjects.length; i++) {
-              fullCastInfo(vm.selectedObjects[i]).then(function(data){
-                def.resolve(data);
-                promises.push(def.promise);
-              });
-          }
-          def.resolve();
-          return def.promise;
-        }
-
-        return returnList().then(function(data){
-          var def = $q.defer();
-          def.resolve(data);
-          console.log("STEP1-END");
-          return def.promise;
-        });*/
-
-
         for(var i =0; i < vm.selectedObjects.length; i++) {
             promises.push(fullCastInfo(vm.selectedObjects[i]));
         }
         return $q.all(promises).then(function(data){
-          console.log("PROMISE OUT");
-          console.log(data);
           var def = $q.defer();
           def.resolve(true);
           return def.promise;
         });
-        
+
       }
 
       /*Compare casts for each movie and return all cast members that appear in movies together*/
       vm.compareMovieCasts = function() {
-        console.log("STEP2");
         var castList = movieData.comparedCasts;
         var compareResults = [];
         // compare one to one
@@ -342,7 +316,6 @@
         vm.compared = movieData.comparedResults;
         var def = $q.defer();
         def.resolve();
-        console.log("STEP2-END");
         return def.promise;
       }
 
@@ -378,6 +351,12 @@
           }
         }
         return comparedCasts;
+      }
+      vm.clearResults = function() {
+        movieData.comparedCasts = [];
+        movieData.comparedResults = [];
+        vm.compared = [];
+        vm.selectedObjects = [];
       }
 
     }]);
@@ -418,21 +397,32 @@
 })();
 
 (function(){
-  'use strict';
-  //angular.module('directives', []);
+   "use strict";
 
-})();
+    angular.module('directives').directive('navHold', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
 
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
+          angular.element($window).bind("scroll", function() {
 
-})();
+            var topSection = angular.element(document.getElementsByClassName("page"))[0];
+            var windowp = angular.element($window)[0];          
 
-(function(){
-  'use strict';
+            if(windowp.pageYOffset >= topSection.offsetTop ){
+              if(!element.hasClass("screenPass"))
+                element.addClass("screenPass");
+            }
+            else {
+              if(element.hasClass("screenPass")){
+                element.removeClass("screenPass");
+              }
+            }
+          });
+        }
+      }
 
-  //angular.module('services', []);
+    }]);
 
 })();
 
@@ -516,31 +506,20 @@
 })();
 
 (function(){
-   "use strict";
+  'use strict';
+  //angular.module('directives', []);
 
-    angular.module('directives').directive('navHold', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
+})();
 
-          angular.element($window).bind("scroll", function() {
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
 
-            var topSection = angular.element(document.getElementsByClassName("page"))[0];
-            var windowp = angular.element($window)[0];          
+})();
 
-            if(windowp.pageYOffset >= topSection.offsetTop ){
-              if(!element.hasClass("screenPass"))
-                element.addClass("screenPass");
-            }
-            else {
-              if(element.hasClass("screenPass")){
-                element.removeClass("screenPass");
-              }
-            }
-          });
-        }
-      }
+(function(){
+  'use strict';
 
-    }]);
+  //angular.module('services', []);
 
 })();
