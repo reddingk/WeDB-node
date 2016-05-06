@@ -1,7 +1,9 @@
 (function(){
    "use strict";
 
-    angular.module('movieCtrl', ['ui.bootstrap']).controller('MovieController', ['movieServices','MovieData', '$filter', '$q', function(movieServices, MovieData, $filter, $q){
+    //angular.module('movieCtrl', ['ui.bootstrap'])
+    angular.module('weMovies')
+    .controller('MovieController', ['movieServices','movieData', '$filter', '$q', function(movieServices, movieData, $filter, $q){
       var vm = this;
       vm.title = "Movie";
 
@@ -127,95 +129,72 @@
 
       /*Compare Movies*/
       vm.compareSelectedMovies = function() {
-        console.log("-- COMPARE --");
-        var deferred = $q.defer();
-
-        vm.getCompareCasts().then(function (data){
-          console.log("Cast List: ");
-          deferred.resolve(data);
-          console.log(deferred.promise);
-          vm.compared = vm.compareMovieCasts(deferred.promise);
-          console.log("Finished: ");
+        vm.getCompareCasts().then(function(){
+          vm.compareMovieCasts();
           console.log(vm.compared);
         });
-
-        //vm.compared = vm.compareMovieCasts(castList);
-        //console.log("Finished: ");
-        //console.log(vm.compared);
 
       }
 
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
-        var deferred = $q.defer();
+        console.log("STEP1");
 
         function fullCastInfo(mInfo) {
-          var fullCast =[];
-          var deferred = $q.defer();
-          return vm.getMovieCredits(mInfo.id).then(function(data){
-            fullCast.push({movieinfo: mInfo, cast: data });
-            deferred.resolve(fullCast);
-            return deferred.promise;
-          });
+          if(movieData.comparedCasts.length < 1){
+            return vm.getMovieCredits(mInfo.id).then(function(data){
+              movieData.comparedCasts.push({movieinfo: mInfo, cast: data });
+            });
+          }
+          else { return; }
         }
 
         function returnList() {
-          var compareCasts = [];
-
           for(var i =0; i < vm.selectedObjects.length; i++) {
-            fullCastInfo(vm.selectedObjects[i]).then(function(data){
-              compareCasts.push(data);
-              console.log(compareCasts);
-            });
+            fullCastInfo(vm.selectedObjects[i]);
           }
-
-          deferred.resolve(compareCasts);
-          return deferred.promise;
         }
-
-        return returnList().then(function(data){
-          deferred.resolve(data);
-          console.log("data: ");
-          console.log(deferred.promise);
-          return deferred.promise;
-        });
+        var def = $q.defer();
+        def.resolve(returnList());
+        console.log("STEP1-END");
+        return def.promise;
       }
 
       /*Compare casts for each movie and return all cast members that appear in movies together*/
-      vm.compareMovieCasts = function(castList) {
-
-        console.log("COMPARE LIST-" + castList.length);
-        console.log(castList);
-
+      vm.compareMovieCasts = function() {
+        console.log("STEP2");
+        var castList = movieData.comparedCasts;
         var compareResults = [];
         // compare one to one
         if(castList.length > 1){
           for(var i=0; i < castList.length; i++) {
             for(var j=i+1; j < castList.length; j++) {
-              compareResults.push({movie1: castList[i].movieinfo, movie2:castList[j].movieinfo, matchedCast:vm.compareMovies(castList[i].cast, castList[j].cast, null) });
+              movieData.comparedResults.push({movie1: castList[i].movieinfo, movie2:castList[j].movieinfo, matchedCast:vm.compareMovies(castList[i].cast, castList[j].cast, null) });
             }
           }
         }
         // compare all 3 items
         if(castList.length == 3){
-          compareResults.push({movie1: castList[0].movieinfo, movie2:castList[1].movieinfo, movie3:castList[2].movieinfo, matchedCast:vm.compareMovies(castList[0], castList[1], castList[2]) });
+          movieData.comparedResults.push({movie1: castList[0].movieinfo, movie2:castList[1].movieinfo, movie3:castList[2].movieinfo, matchedCast:vm.compareMovies(castList[0].cast, castList[1].cast, castList[2].cast) });
         }
-        console.log("COMPARE RESULTS");
-        deferred.resolve(compareResults);
-        console.log(deferred.promise);
-        return deferred.promise;
+
+        vm.compared = movieData.comparedResults;
+        var def = $q.defer();
+        def.resolve();
+        console.log("STEP2-END");
+        return def.promise;
       }
 
       /*Compare movies and return cast in each movie*/
-      vm.compareMovies = function(movieA, movieB, movieC) {
-        console.log("movieA: " + movieA.length);
-        console.log(movieA);
-        console.log("movieB: " + movieB.length);
-        console.log(movieB);
-        console.log("movieC");
-        console.log(movieC);
+      vm.compareMovies = function(mA, mB, mC) {
+        var movieA = (mA == null ? null : mA.cast);
+        var movieB = (mB == null ? null : mB.cast);
+        var movieC = (mC == null ? null : mC.cast);
 
         var comparedCasts = [];
+
+        if (movieA == null || movieB == null)
+          return;
         // Only compare 2
         if(movieC == null) {
           for(var i=0; i < movieA.length; i++) {
@@ -230,17 +209,15 @@
           for(var i=0; i < movieA.length; i++) {
             for(var j=0; j < movieB.length; j++) {
               for(var k=0; k < movieC.length; k++) {
-                if((movieA[i].id == movieB[j].id) && (movieB[i].id == movieC[k].id)) {
+                if((movieA[i].id == movieB[j].id) && (movieB[j].id == movieC[k].id)) {
                   comparedCasts.push(movieA[i]);
                 }
               }
             }
           }
         }
-
         return comparedCasts;
       }
-
 
     }]);
 

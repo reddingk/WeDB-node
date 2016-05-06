@@ -1,7 +1,8 @@
 (function(){
    "use strict";
 
-   angular.module('services', [])
+   //angular.module('services', [])
+   angular.module('weMovies')
     .service('movieServices', ['$q', '$http','api', function MovieService($q, $http, api) {
       return {
         names: function($str){
@@ -43,18 +44,31 @@
 
       }
     }])
-   .factory("MovieData", ['$q', function($q){
+   .factory("movieData", ['$q', function($q){
      function movieCompareData() {
-       var self = this;
+       var vm = this;
 
-       self.selectedMovies =[];
-       self.selectedMoviesInfo = [];
-       self.comparedMoviesInfo = [];
+       vm.selectedMovies = [];
+       vm.selectedMoviesInfo = [];
+       vm.comparedCasts = [];
+       vm.comparedResults = [];
 
-       self.addSeleectedMovie = function() {}
-       self.compareMoviesList = function () {}
-       self.compareTwoMovies = function(movieA, movieB) {}
-       self.compareAllMovies = function() {}
+       vm.addSelectedMovie = function() {}
+       vm.compareMoviesList = function () {}
+       vm.compareTwoMovies = function(movieA, movieB) {}
+       vm.compareAllMovies = function() {}
+
+       vm.addCastCompare = function(castObject) {
+         console.log("HERE ---");
+         console.log(castObject);
+         vm.comparedCasts.push(castObject);
+       }
+       vm.getCastCompare = function() {
+         console.log("Return cast compare");
+         console.log(vm.comparedCasts);
+
+         return vm.comparedCasts;
+       }
      }
 
      return new movieCompareData();
