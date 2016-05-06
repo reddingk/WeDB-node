@@ -133,7 +133,6 @@
           vm.compareMovieCasts();
           console.log(vm.compared);
         });
-
       }
 
       /*Get movie cast for each compared movie*/
@@ -141,23 +140,33 @@
         console.log("STEP1");
 
         function fullCastInfo(mInfo) {
+          var def = $q.defer();
           if(movieData.comparedCasts.length < 1){
             return vm.getMovieCredits(mInfo.id).then(function(data){
               movieData.comparedCasts.push({movieinfo: mInfo, cast: data });
             });
           }
-          else { return; }
+          else { return def.promise; }
         }
 
         function returnList() {
+          var def = $q.defer();
+
           for(var i =0; i < vm.selectedObjects.length; i++) {
-            fullCastInfo(vm.selectedObjects[i]);
+              fullCastInfo(vm.selectedObjects[i]).then(function(){ });
           }
+
+          def.resolve();
+          return def.promise;
         }
-        var def = $q.defer();
-        def.resolve(returnList());
-        console.log("STEP1-END");
-        return def.promise;
+
+        return returnList().then(function(data){
+          var def = $q.defer();
+          def.resolve(data);
+          console.log("STEP1-END");
+          return def.promise;
+        });
+
       }
 
       /*Compare casts for each movie and return all cast members that appear in movies together*/
