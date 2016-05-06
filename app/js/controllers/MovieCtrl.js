@@ -138,32 +138,27 @@
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
         console.log("STEP1");
+        var promises = [];
 
         function fullCastInfo(mInfo) {
           var def = $q.defer();
           if(movieData.comparedCasts.length < 1){
             return vm.getMovieCredits(mInfo.id).then(function(data){
               movieData.comparedCasts.push({movieinfo: mInfo, cast: data });
+               def.resolve(true);
             });
           }
-          else { return def.promise; }
-        }
-
-        function returnList() {
-          var def = $q.defer();
-
-          for(var i =0; i < vm.selectedObjects.length; i++) {
-              fullCastInfo(vm.selectedObjects[i]).then(function(){ });
-          }
-
-          def.resolve();
           return def.promise;
         }
 
-        return returnList().then(function(data){
+        for(var i =0; i < vm.selectedObjects.length; i++) {
+            promises.push(fullCastInfo(vm.selectedObjects[i]));
+        }
+        return $q.all(promises).then(function(data){
+          console.log("PROMISE OUT");
+          console.log(data);
           var def = $q.defer();
-          def.resolve(data);
-          console.log("STEP1-END");
+          def.resolve(true);
           return def.promise;
         });
 

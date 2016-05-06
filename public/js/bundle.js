@@ -110,134 +110,6 @@
 (function(){
    "use strict";
 
-    angular.module('directives').directive('navHold', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-
-          angular.element($window).bind("scroll", function() {
-
-            var topSection = angular.element(document.getElementsByClassName("page"))[0];
-            var windowp = angular.element($window)[0];          
-
-            if(windowp.pageYOffset >= topSection.offsetTop ){
-              if(!element.hasClass("screenPass"))
-                element.addClass("screenPass");
-            }
-            else {
-              if(element.hasClass("screenPass")){
-                element.removeClass("screenPass");
-              }
-            }
-          });
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-   //angular.module('services', [])
-   angular.module('weMovies')
-    .service('movieServices', ['$q', '$http','api', function MovieService($q, $http, api) {
-      return {
-        names: function($str){
-          var def = $q.defer();
-          $http({
-            method: 'GET',
-            url: api.movie.searchname($str)
-          }).then(function successCallback(response) {
-            def.resolve(response.data);
-          }, function errorCallback(response) {
-            def.reject(response);
-          });
-          return def.promise;
-        },
-        credits: function($mid){
-          var def = $q.defer();
-          $http({
-            method: 'GET',
-            url: api.movie.getMovieCredits($mid)
-          }).then(function successCallback(response) {
-            def.resolve(response.data);
-          }, function errorCallback(response) {
-            def.reject(response);
-          });
-          return def.promise;
-        },
-        info: function($mid) {
-          var def = $q.defer();
-          $http({
-            method: 'GET',
-            url: api.movie.getMovieInfo($mid)
-          }).then(function successCallback(response) {
-            def.resolve(response.data);
-          }, function errorCallback(response) {
-            def.reject(response);
-          });
-          return def.promise;
-        }
-
-      }
-    }])
-   .factory("movieData", ['$q', function($q){
-     function movieCompareData() {
-       var vm = this;
-
-       vm.selectedMovies = [];
-       vm.selectedMoviesInfo = [];
-       vm.comparedCasts = [];
-       vm.comparedResults = [];
-
-       vm.addSelectedMovie = function() {}
-       vm.compareMoviesList = function () {}
-       vm.compareTwoMovies = function(movieA, movieB) {}
-       vm.compareAllMovies = function() {}
-
-       vm.addCastCompare = function(castObject) {
-         console.log("HERE ---");
-         console.log(castObject);
-         vm.comparedCasts.push(castObject);
-       }
-       vm.getCastCompare = function() {
-         console.log("Return cast compare");
-         console.log(vm.comparedCasts);
-
-         return vm.comparedCasts;
-       }
-     }
-
-     return new movieCompareData();
-   }]);
-
-
-})();
-
-(function(){
-  'use strict';
-  //angular.module('directives', []);
-
-})();
-
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
-
-})();
-
-(function(){
-  'use strict';
-
-  //angular.module('services', []);
-
-})();
-
-(function(){
-   "use strict";
-
     angular.module('castCtrl', []).controller('CastController', function($scope){
       var vm = this;
       vm.title = "Cast";
@@ -402,24 +274,28 @@
       /*Get movie cast for each compared movie*/
       vm.getCompareCasts = function() {
         console.log("STEP1");
+        var promises = [];
 
         function fullCastInfo(mInfo) {
           var def = $q.defer();
           if(movieData.comparedCasts.length < 1){
             return vm.getMovieCredits(mInfo.id).then(function(data){
               movieData.comparedCasts.push({movieinfo: mInfo, cast: data });
+               def.resolve(true);
             });
           }
-          else { return def.promise; }
+          return def.promise;
         }
 
-        function returnList() {
+        /*function returnList() {
           var def = $q.defer();
 
           for(var i =0; i < vm.selectedObjects.length; i++) {
-              fullCastInfo(vm.selectedObjects[i]).then(function(){ });
+              fullCastInfo(vm.selectedObjects[i]).then(function(data){
+                def.resolve(data);
+                promises.push(def.promise);
+              });
           }
-
           def.resolve();
           return def.promise;
         }
@@ -429,8 +305,20 @@
           def.resolve(data);
           console.log("STEP1-END");
           return def.promise;
-        });
+        });*/
 
+
+        for(var i =0; i < vm.selectedObjects.length; i++) {
+            promises.push(fullCastInfo(vm.selectedObjects[i]));
+        }
+        return $q.all(promises).then(function(data){
+          console.log("PROMISE OUT");
+          console.log(data);
+          var def = $q.defer();
+          def.resolve(true);
+          return def.promise;
+        });
+        
       }
 
       /*Compare casts for each movie and return all cast members that appear in movies together*/
@@ -526,5 +414,133 @@
       vm.title = "Tv";
 
     });
+
+})();
+
+(function(){
+  'use strict';
+  //angular.module('directives', []);
+
+})();
+
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
+
+})();
+
+(function(){
+  'use strict';
+
+  //angular.module('services', []);
+
+})();
+
+(function(){
+   "use strict";
+
+   //angular.module('services', [])
+   angular.module('weMovies')
+    .service('movieServices', ['$q', '$http','api', function MovieService($q, $http, api) {
+      return {
+        names: function($str){
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.movie.searchname($str)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        },
+        credits: function($mid){
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.movie.getMovieCredits($mid)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        },
+        info: function($mid) {
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.movie.getMovieInfo($mid)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        }
+
+      }
+    }])
+   .factory("movieData", ['$q', function($q){
+     function movieCompareData() {
+       var vm = this;
+
+       vm.selectedMovies = [];
+       vm.selectedMoviesInfo = [];
+       vm.comparedCasts = [];
+       vm.comparedResults = [];
+
+       vm.addSelectedMovie = function() {}
+       vm.compareMoviesList = function () {}
+       vm.compareTwoMovies = function(movieA, movieB) {}
+       vm.compareAllMovies = function() {}
+
+       vm.addCastCompare = function(castObject) {
+         console.log("HERE ---");
+         console.log(castObject);
+         vm.comparedCasts.push(castObject);
+       }
+       vm.getCastCompare = function() {
+         console.log("Return cast compare");
+         console.log(vm.comparedCasts);
+
+         return vm.comparedCasts;
+       }
+     }
+
+     return new movieCompareData();
+   }]);
+
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('navHold', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+
+          angular.element($window).bind("scroll", function() {
+
+            var topSection = angular.element(document.getElementsByClassName("page"))[0];
+            var windowp = angular.element($window)[0];          
+
+            if(windowp.pageYOffset >= topSection.offsetTop ){
+              if(!element.hasClass("screenPass"))
+                element.addClass("screenPass");
+            }
+            else {
+              if(element.hasClass("screenPass")){
+                element.removeClass("screenPass");
+              }
+            }
+          });
+        }
+      }
+
+    }]);
 
 })();
