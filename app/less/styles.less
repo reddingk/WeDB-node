@@ -1,11 +1,13 @@
 @font-size: 16px;
-@poster-size: 600px;
+@poster-size: 400px;
 @cast: rgba(0,0,255,1);
 @movie: rgba(255,0,0,1);
 @tv: rgba(0,153,0,1);
 @special: rgba(255,102,0,1);
 @grey: rgba(204,204,204,1);
+
 .pagewidth {  width: 80%;  max-width: 1500px; }
+.default-postersize { width: 200px; height: 300px; }
 
 html, body {
   font-size: @font-size;
@@ -36,6 +38,13 @@ html, body {
   }
   .search-autofill {
     overflow-x: hidden;
+    .no-cover {
+      background-color: #000;
+      height: 45px;
+      width: 30px;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
   .container-fluid {
     padding-top: 15px;
@@ -72,6 +81,12 @@ html, body {
     img {
       float: left;
       max-width: 200px;
+      margin-right: 10px;
+    }
+    .no-cover {
+      background-color: #000;
+      .default-postersize;
+      float: left;
       margin-right: 10px;
     }
     .selected-info {
@@ -148,8 +163,16 @@ html, body {
           height: @poster-size;
 
           img {
+            height: 100%;
             width: 100%;
             z-index: 1;
+          }
+          .no-cover {
+            background-color: #000;
+            width:100%;
+            height: 100%;
+            float: left;
+            margin-right: 10px;
           }
           .info-slide {
             background-color: rgba(0,0,0,0.7);
@@ -199,31 +222,6 @@ html, body {
   p { line-height: 3em;}
 }
 
-.results {
-  .results-list {
-    width: 25%;
-    height: 500px;
-    position: relative;
-    overflow-y: hidden;
-    display:inline-block;
-    padding: 5px;
-
-    ul {
-      overflow-y: auto;
-      height: 80%;
-      background-color: rgba(255,0,0,0.5);
-      border: 4px solid @grey;
-
-      li {
-        list-style-type: none;
-        padding: 3px 0px;
-        img { max-width: 30%; }
-        span {}
-      }
-    }
-  }
-}
-
 .results-pill {
   border: 1px solid #ddd;
   .pill-container {
@@ -257,6 +255,7 @@ html, body {
       overflow-y: auto;
       border-left: 1px solid #ddd;
       padding: 20px 0px;
+      .default { text-align: center;}
       div {
         ul {
           li {

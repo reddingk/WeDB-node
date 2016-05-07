@@ -27,7 +27,8 @@ var config = {
       'app/libs/angular-messages/angular-messages.min.js',
       'app/libs/angular-ui-router/release/angular-ui-router.min.js',
       'app/libs/angular-bootstrap/ui-bootstrap.min.js',
-      'app/libs/angular-bootstrap/ui-bootstrap-tpls.min.js'
+      'app/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
+      'app/libs/randomcolor/randomColor.js'
     ],
     libsCSS: [
       'app/libs/angular-material/angular-material.min.css',

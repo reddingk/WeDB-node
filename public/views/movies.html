@@ -6,7 +6,6 @@
     </div>
     <div class="nav navbar-nav navbar-right">
       <input type="text" ng-model="mc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in mc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" typeahead-on-select="mc.viewMovieInfo($item)" class="form-control">
-      <!--<input type="text" ng-model="sc.selected" uib-typeahead="movie.title for movie in sc.movieSearch($viewValue) | limitTo:8" typeahead-min-length="3" class="form-control">-->
       <ul class="nav navbar-nav">
         <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
       </ul>
@@ -18,7 +17,8 @@
   <!--SELECTED MOVIE-->
   <div ng-if="mc.showSelected" class="selected-movie">
     <div class="selected-container">
-      <img ng-src="http://image.tmdb.org/t/p/w500{{mc.selectedMovie.poster_path}}">
+      <img ng-src="http://image.tmdb.org/t/p/w500{{mc.selectedMovie.poster_path}}" ng-if="mc.selectedMovie.poster_path != null">
+      <div class="no-cover" ng-if="mc.selectedMovie.poster_path == null"></div>
       <div class="selected-info">
         <p class="selected-title">{{mc.selectedMovie.title}} <span class="selected-year">({{mc.selectedMovie.release_date | date:'yyyy'}})</span></p>
         <p class="selected-overview">{{mc.selectedMovie.overview}}</p>
@@ -31,7 +31,7 @@
           <div class="cast-member" ng-show="mc.showSelectedCredit">
             <div class="selected-cast-members" ng-repeat="cast in mc.selectedCredit">
               <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
-              <div class="no-poster" ng-if="cast.profile_path == null"></div>
+              <div class="no-cover" ng-if="cast.profile_path == null"></div>
               <div class="selected-character"><div class="character">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
             </div>
           </div>
@@ -45,9 +45,10 @@
     <div class="compare-movies-container">
       <div class="movie-display" ng-repeat="movie in mc.selectedObjects">
         <div class="movie-container">
-          <div class="remove-movie" ng-click="mc.removeCompareMovie(movie)"><i class="fa fa-minus-circle"></i></div>
+          <div class="remove-movie" ng-click="mc.removeCompareMovie(movie)" ng-if="mc.compared.length == 0"><i class="fa fa-minus-circle"></i></div>
           <div class="movie-poster">
-            <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}">
+            <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null">
+            <div class="no-cover" ng-if="movie.poster_path == null"></div>
             <div class="info-slide" ng-class="{'comp-slide':!mc.getSliderStatus(movie)}">
               <p ng-click="mc.toggleSlider(movie)"><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Movie Information</span><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
               <div><span class="info-header">Overview</span> <span class="info-content">{{movie.overview}}</span></div>
@@ -63,7 +64,7 @@
   <!--Compare Buttons -->
   <div class="compare-results" ng-if="mc.selectedObjects.length > 1">
     <div class="btn-section">
-      <md-button class="md-raised compare-button" ng-click="mc.compareSelectedMovies()">Compare Selected Movies</md-button>
+      <md-button class="md-raised compare-button" ng-click="mc.compareSelectedMovies()" ng-disabled="mc.compared.length > 0">Compare Selected Movies</md-button>
       <md-button class="md-raised clear-button" ng-click="mc.clearResults()">Clear Results</md-button>
     </div>
   </div>
@@ -73,17 +74,6 @@
     <h1>Movie Comparison</h1>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
-
-  <!--Compared Results-->
-  <!--<div class="results" ng-if="mc.compared.length > 0">
-    <div class="results-list" ng-repeat="compare in mc.compared">
-      <p><span>{{compare.movie1.title}}</span><span> & {{compare.movie2.title}}</span> <span ng-if="compare.movie3 != null">& {{compare.movie3.title}}</span></p>
-      <ul>
-        <li ng-repeat="cast in compare.matchedCast"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null"><span>{{cast.name}}</span></li>
-      </ul>
-    </div>
-    <br style="clear: both">
-  </div>-->
 
   <!--Compare Results Pills-->
   <div class="results-pill" ng-if="mc.compared.length > 0">
@@ -99,7 +89,7 @@
         </div>
       </div>
       <div class="pill-right">
-        <div ng-if="mc.selectedList==undefined">Please Select</div>
+        <div class="default" ng-if="mc.selectedList==undefined">Please Select</div>
         <div ng-if="mc.selectedList!=undefined">
           <ul>
             <li ng-repeat="cast in mc.selectedList.matchedCast"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':mc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>

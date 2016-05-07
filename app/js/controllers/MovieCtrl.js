@@ -231,6 +231,7 @@
         vm.compared = [];
         vm.selectedObjects = [];
         vm.comparedVisuals = [];
+        vm.selectedList = undefined;
       }
 
       vm.getListClass = function(compare) {
@@ -243,14 +244,6 @@
       vm.resultsVisuals = function() {
           var idList = [];
           vm.comparedVisuals = [];
-          function decToRGB(dec) {
-            var bin = (dec).toString(2);
-            var pbin = parseInt(bin,2);
-            var r = pbin >> 16;
-            var g = pbin >> 8 & 0xFF;
-            var b = pbin & 0xFF;
-            return [r,g,b];
-          }
 
           for(var i=0; i < vm.compared.length; i++) {
             for(var j=0; j < vm.compared[i].matchedCast.length; j++) {
@@ -260,17 +253,17 @@
             }
           }
 
-          var colorSpace = Math.round(16777215 / idList.length);
+          var colorArray = randomColor({ count: idList.length + 1, luminosity: 'bright', format: 'rgb'});
           for(var i=0; i < idList.length; i++) {
-            vm.comparedVisuals.push({id: idList[i], color:decToRGB((i)*colorSpace)});
+            vm.comparedVisuals.push({id: idList[i], color:colorArray[i]});
           }
       }
-      vm.getIdColor = function(cid) {
 
+      vm.getIdColor = function(cid) {
         var color = "rgba(0,0,0,1)";
         var found = $filter('filter')(vm.comparedVisuals, {id: cid});
         if(found != undefined && found.length != 0)
-          color = "rgba("+found[0].color[0]+","+found[0].color[1]+","+found[0].color[2]+",1)";
+          color = found[0].color;
 
         return color;
       }
