@@ -22,7 +22,7 @@ html, body {
     border-radius: 5px 5px 0px 0px;
     height: 100%;
     min-height: 1000px;
-    padding-botton: 30px;
+    padding-bottom: 30px;
   }
 }
 /*Navigation*/
@@ -188,7 +188,7 @@ html, body {
   margin: 20px 0px;
   .btn-section {
     text-align: center;
-    .compare-button { }
+    .compare-button { background-color: @movie; }
   }
 }
 .about-section {
@@ -219,6 +219,57 @@ html, body {
         padding: 3px 0px;
         img { max-width: 30%; }
         span {}
+      }
+    }
+  }
+}
+
+.results-pill {
+  border: 1px solid #ddd;
+  .pill-container {
+    max-height: 300px;
+    overflow-y: hidden;
+    .pill-left {
+      width: 60%;
+      float:left;
+      border-right: 1px solid #ddd;
+      .compare-select {
+        float: none;
+        border-bottom: 1px solid #ddd;
+        padding: 5px;
+
+        &:hover {background-color: #ddd; }
+        &.active{ background-color: @movie; color:#fff;}
+        .titles {
+          width: 90%;
+          display: inline-block;
+          div { display: block;}
+        }
+        i {
+          display: inline-block;
+          float: right;
+          line-height: 3rem;
+        }
+      }
+    }
+    .pill-right {
+      max-height: 300px;
+      overflow-y: auto;
+      border-left: 1px solid #ddd;
+      padding: 20px 0px;
+      div {
+        ul {
+          li {
+            list-style-type: none;
+            padding: 3px 0px;
+            img {
+              border-radius: 50px;
+              width: 50px;
+              margin-right: 5px;
+              border: .25rem solid #000;
+            }
+          }
+        }
       }
     }
   }

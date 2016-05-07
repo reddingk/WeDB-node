@@ -75,7 +75,7 @@
   </div>
 
   <!--Compared Results-->
-  <div class="results" ng-if="mc.compared.length > 0">
+  <!--<div class="results" ng-if="mc.compared.length > 0">
     <div class="results-list" ng-repeat="compare in mc.compared">
       <p><span>{{compare.movie1.title}}</span><span> & {{compare.movie2.title}}</span> <span ng-if="compare.movie3 != null">& {{compare.movie3.title}}</span></p>
       <ul>
@@ -83,6 +83,31 @@
       </ul>
     </div>
     <br style="clear: both">
+  </div>-->
+
+  <!--Compare Results Pills-->
+  <div class="results-pill" ng-if="mc.compared.length > 0">
+    <div class="pill-container">
+      <div class="pill-left">
+        <div ng-repeat="compare in mc.compared" class="compare-select" ng-click="mc.selectedList = compare;" ng-class="mc.getListClass(compare)">
+          <div class="titles">
+            <div>{{compare.movie1.title}}</div>
+            <div>{{compare.movie2.title}}</div>
+            <div ng-if="compare.movie3 != null">{{compare.movie3.title}}</div>
+          </div>
+          <i class="fa fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="pill-right">
+        <div ng-if="mc.selectedList==undefined">Please Select</div>
+        <div ng-if="mc.selectedList!=undefined">
+          <ul>
+            <li ng-repeat="cast in mc.selectedList.matchedCast"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':mc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>
+          </ul>
+        </div>
+      </div>
+      <br style="clear: both;">
+    </div>
   </div>
 <!--End of Section Body-->
 </div>

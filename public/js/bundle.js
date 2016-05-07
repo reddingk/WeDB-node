@@ -157,6 +157,10 @@
       vm.slider = [false, false, false];
       vm.compared = [];
 
+      // Select Compare List
+      vm.selectedList = undefined;
+      vm.comparedVisuals = [];
+
       vm.movieSearch = function(query) {
         var cleanString = query;
         cleanString = cleanString.replace("&", "and");
@@ -267,6 +271,10 @@
       vm.compareSelectedMovies = function() {
         vm.getCompareCasts().then(function(){
           vm.compareMovieCasts();
+          console.log(vm.compared);
+          // Get color code for all casts members
+          vm.resultsVisuals();
+          console.log(vm.comparedVisuals);
         });
       }
 
@@ -352,11 +360,55 @@
         }
         return comparedCasts;
       }
+
       vm.clearResults = function() {
         movieData.comparedCasts = [];
         movieData.comparedResults = [];
         vm.compared = [];
         vm.selectedObjects = [];
+        vm.comparedVisuals = [];
+      }
+
+      vm.getListClass = function(compare) {
+        if(vm.selectedList == compare)
+          return "active";
+        else
+          return "";
+      }
+
+      vm.resultsVisuals = function() {
+          var idList = [];
+          vm.comparedVisuals = [];
+          function decToRGB(dec) {
+            var bin = (dec).toString(2);
+            var pbin = parseInt(bin,2);
+            var r = pbin >> 16;
+            var g = pbin >> 8 & 0xFF;
+            var b = pbin & 0xFF;
+            return [r,g,b];
+          }
+
+          for(var i=0; i < vm.compared.length; i++) {
+            for(var j=0; j < vm.compared[i].matchedCast.length; j++) {
+              if(idList.indexOf(vm.compared[i].matchedCast[j].id) < 0) {
+                idList.push(vm.compared[i].matchedCast[j].id);
+              }
+            }
+          }
+
+          var colorSpace = Math.round(16777215 / idList.length);
+          for(var i=0; i < idList.length; i++) {
+            vm.comparedVisuals.push({id: idList[i], color:decToRGB((i)*colorSpace)});
+          }
+      }
+      vm.getIdColor = function(cid) {
+
+        var color = "rgba(0,0,0,1)";
+        var found = $filter('filter')(vm.comparedVisuals, {id: cid});
+        if(found != undefined && found.length != 0)
+          color = "rgba("+found[0].color[0]+","+found[0].color[1]+","+found[0].color[2]+",1)";
+
+        return color;
       }
 
     }]);
@@ -423,6 +475,25 @@
       }
 
     }]);
+
+})();
+
+(function(){
+  'use strict';
+  //angular.module('directives', []);
+
+})();
+
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
+
+})();
+
+(function(){
+  'use strict';
+
+  //angular.module('services', []);
 
 })();
 
@@ -502,24 +573,5 @@
      return new movieCompareData();
    }]);
 
-
-})();
-
-(function(){
-  'use strict';
-  //angular.module('directives', []);
-
-})();
-
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
-
-})();
-
-(function(){
-  'use strict';
-
-  //angular.module('services', []);
 
 })();
