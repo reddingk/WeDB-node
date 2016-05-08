@@ -6,8 +6,8 @@
     </div>
     <div class="nav navbar-nav navbar-right">
       <input type="text" ng-model="mc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in mc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" typeahead-on-select="mc.viewMovieInfo($item)" class="form-control">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="section in hc.sections" class="{{section.type}}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      <ul class="nav navbar-nav" id="movie-nav">
+        <li ng-repeat="section in hc.sections" class="{{section.type}}" ng-class="{'active':section.state == mc.title}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
       </ul>
     </div>
   </div>
@@ -49,6 +49,12 @@
           <div class="movie-poster">
             <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null">
             <div class="no-cover" ng-if="movie.poster_path == null"></div>
+            <!--Add actor/actress compare bubbles-->
+            <div class="visual-bubbles" ng-if="mc.comparedVisuals.length > 0">
+              <div ng-repeat="visuals in mc.comparedVisuals" ng-if="visuals.more_info.movies.indexOf(movie.id) > -1">
+                  <img ng-src="http://image.tmdb.org/t/p/w500{{visuals.more_info.profile_path}}" ng-if="visuals.more_info.profile_path != null" ng-style="{'border-color':mc.getIdColor(visuals.id)}" width="30" ng-class="{'highlighted':mc.highlight.id == visuals.id}" random-motion>
+              </div>
+            </div>
             <div class="info-slide" ng-class="{'comp-slide':!mc.getSliderStatus(movie)}">
               <p ng-click="mc.toggleSlider(movie)"><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Movie Information</span><i class="fa" ng-class="mc.getSliderStatus(movie) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
               <div><span class="info-header">Overview</span> <span class="info-content">{{movie.overview}}</span></div>
@@ -92,7 +98,7 @@
         <div class="default" ng-if="mc.selectedList==undefined">Please Select</div>
         <div ng-if="mc.selectedList!=undefined">
           <ul>
-            <li ng-repeat="cast in mc.selectedList.matchedCast"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':mc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>
+            <li ng-repeat="cast in mc.selectedList.matchedCast" ng-click="mc.highlightCast(cast)" ng-class="{'highlighted':mc.highlight.id == cast.id}"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':mc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>
           </ul>
         </div>
       </div>

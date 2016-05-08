@@ -19,7 +19,7 @@
 <body ng-app="WeDBApp">
   <div class="page-wrapper">
     <div class="page">
-      <div class="mainBody" ui-view></div>
+      <div class="mainBody" ng-class="$state.current.data.bodyClass" ui-view></div>
     </div>
   </div>
 

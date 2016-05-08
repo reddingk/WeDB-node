@@ -1,109 +1,46 @@
 (function () {
 	"use strict";
 		angular.module('weMovies', ['ui.bootstrap']);
+		angular.module('weSpecial', ['ui.bootstrap']);
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'specialCtrl', 'castCtrl','tvCtrl', 'weMovies']);
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'castCtrl','tvCtrl', 'weMovies'])
+		.run(function($rootScope){
+	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+	        //change body background
+	        //document.body.style.background = 'red';
+	    });
+	    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+	        //reset body background
+					if (angular.isDefined(toState.data.bodyClass)) {
+						document.body.style.backgroundPosition = "center bottom";
+						document.body.style.backgroundRepeat = "no-repeat";
+						document.body.style.backgroundSize = "100%";
 
-})();
+						switch(toState.data.bodyClass) {
+							case "movieBody":
+								document.body.style.backgroundImage = "url('img/movie_back.png')";
+								break;
+							case "specialBody":
+								document.body.style.backgroundImage = "url('img/special_back.png')";
+								break;
+							case "tvBody":
+								document.body.style.background = 'green';
+								break;
+							case "castBody":
+								document.body.style.background = 'yellow';
+								break;
+							default:
+								document.body.style.background = 'white';
+						}
+					}
+					else {
+						document.body.style.background = 'white';
+					}
 
-(function(){
-  'use strict';
-
-  // Prepare the 'users' module for subsequent registration of controllers and delegates
-  angular.module('config', [ 'ngMaterial' ]);
-
-
-})();
-
-(function(){
-
-  angular
-    .module('config')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-      $stateProvider
-      .state('home', {
-        url: "/",
-        templateUrl: 'views/home.html',
-        controller: 'SpecialController as sc'
-      })
-      .state('movies', {
-        url: "/movies",
-        templateUrl: 'views/movies.html',
-        controller: 'MovieController as mc'
-      })
-      .state('tv', {
-        url: "/tv-shows",
-        templateUrl: 'views/tv.html',
-        controller: 'TvController as tc'
-      })
-      .state('cast', {
-        url: "/cast",
-        templateUrl: 'views/cast.html',
-        controller: 'CastController as cc'
-      });
-
-      $urlRouterProvider.otherwise('/');
-    }]);
-
-
-})();
-
-(function(){
-  'use strict';
-
-  angular
-    .module('config')
-    .factory('api', function(){
-      var baseurl = "https://api.themoviedb.org/3/";
-      var apikey = "8af02f398b3ff990bab4f71c247c640a";
-
-      return {
-         movie: {
-             searchname: function(query){
-                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getMovieCredits: function(id) {
-                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
-             },
-             getMovieInfo: function(id) {
-                 return baseurl + "movie/"+id+"?api_key="+apikey;
-             }
-         },
-         cast : {
-             searchname: function(query) {
-                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getCastCredits: function(id) {
-                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
-             },
-             getCastInfo: function(id) {
-                 return baseurl + "person/"+id+"?api_key="+apikey;
-             }
-         },
-         tv : {
-             searchname: function(query){
-                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getTvCredits: function(id) {
-                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
-             },
-             getTvInfo: function(id) {
-                 return baseurl + "tv/"+id+"?api_key="+apikey;
-             }
-         }
-      }
-    });
+	    });
+		});
 
 })();
 
@@ -121,7 +58,7 @@
 (function(){
    "use strict";
 
-    angular.module('homeCtrl', []).controller('HomeController', function($scope){
+    angular.module('homeCtrl', []).controller('HomeController', ['$state',function($state){
       var vm = this;
       vm.title = "Home";
       vm.sections = [
@@ -130,18 +67,18 @@
            {order:'1', title:'Movie', controller:'MovieController', state:'movies', type:'movie-tab' },
            {order:'2', title:'Tv Shows', controller:'TvController', state:'tv', type:'tv-tab' }
        ];
-    });
+
+    }]);
 
 })();
 
 (function(){
    "use strict";
 
-    //angular.module('movieCtrl', ['ui.bootstrap'])
     angular.module('weMovies')
     .controller('MovieController', ['movieServices','movieData', '$filter', '$q', function(movieServices, movieData, $filter, $q){
       var vm = this;
-      vm.title = "Movie";
+      vm.title = "movies";
 
       // Select movie
       vm.resultsLimit = 8;
@@ -160,6 +97,7 @@
       // Select Compare List
       vm.selectedList = undefined;
       vm.comparedVisuals = [];
+      vm.highlight = undefined;
 
       vm.movieSearch = function(query) {
         var cleanString = query;
@@ -381,6 +319,28 @@
           var idList = [];
           vm.comparedVisuals = [];
 
+          function CastVisuals (castId) {
+              var profile = null;
+              var movieids = [];
+              for(var i=0; i < vm.compared.length; i++) {
+                if(vm.compared[i].movie3 == null){
+                  var found = $filter('filter')(vm.compared[i].matchedCast, {id: castId});
+                  if(found != undefined && found.length > 0) {
+                    // Profile
+                    if(profile == null)
+                      profile = found[0].profile_path;
+                    // Check Movie 1
+                    if(movieids.indexOf(vm.compared[i].movie1.id) < 0)
+                      movieids.push(vm.compared[i].movie1.id);
+                    // Check Movie 2
+                    if(movieids.indexOf(vm.compared[i].movie2.id) < 0)
+                      movieids.push(vm.compared[i].movie2.id);
+                  }
+                }
+              }
+              return {profile_path:profile, movies: movieids};
+          }
+
           for(var i=0; i < vm.compared.length; i++) {
             for(var j=0; j < vm.compared[i].matchedCast.length; j++) {
               if(idList.indexOf(vm.compared[i].matchedCast[j].id) < 0) {
@@ -391,7 +351,7 @@
 
           var colorArray = randomColor({ count: idList.length + 1, luminosity: 'bright', format: 'rgb'});
           for(var i=0; i < idList.length; i++) {
-            vm.comparedVisuals.push({id: idList[i], color:colorArray[i]});
+            vm.comparedVisuals.push({id: idList[i], color:colorArray[i], more_info:CastVisuals(idList[i])});
           }
       }
 
@@ -403,6 +363,9 @@
 
         return color;
       }
+      vm.highlightCast = function(cast) {
+        vm.highlight = cast;
+      }
 
     }]);
 
@@ -411,20 +374,13 @@
 (function(){
    "use strict";
 
-    angular.module('specialCtrl', ['ui.bootstrap']).controller('SpecialController', [ 'movieServices','MovieData', function(movieServices, MovieData){
+    //angular.module('specialCtrl', ['ui.bootstrap'])
+    angular.module('weSpecial')
+    .controller('SpecialController', [ 'movieServices','movieData', function(movieServices, movieData){
       var vm = this;
       vm.title = "Special";
       vm.resultsLimit = 8;
       vm.selected = undefined;
-
-      vm.movieSearch = function(query) {
-        return movieServices.names(query).then(function (results) {
-          var moviedata = results.results;
-          return (moviedata.length > vm.resultsLimit ? moviedata.slice(0, vm.resultsLimit) : moviedata);  ;
-        }, function (error) {
-          console.log("ERROR NO RESULTS");
-        });
-      }
 
     }]);
 
@@ -468,6 +424,176 @@
       }
 
     }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.10;
+            var borderY = parentContainer.clientHeight *.10;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
+        }
+      }
+    }]);
+
+})();
+
+(function(){
+  'use strict';
+
+  // Prepare the 'users' module for subsequent registration of controllers and delegates
+  angular.module('config', [ 'ngMaterial' ]);
+
+
+})();
+
+(function(){
+
+  angular
+    .module('config')
+    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+      $stateProvider
+      .state('home', {
+        url: "/",
+        templateUrl: 'views/home.html',
+        controller: 'SpecialController as sc',
+        data: {
+           bodyClass: 'specialBody'
+        }
+      })
+      .state('movies', {
+        url: "/movies",
+        templateUrl: 'views/movies.html',
+        controller: 'MovieController as mc',
+        data: {
+           bodyClass: 'movieBody'
+        }
+      })
+      .state('tv', {
+        url: "/tv-shows",
+        templateUrl: 'views/tv.html',
+        controller: 'TvController as tc',
+        data: {
+           bodyClass: 'tvBody'
+        }
+      })
+      .state('cast', {
+        url: "/cast",
+        templateUrl: 'views/cast.html',
+        controller: 'CastController as cc',
+        data: {
+           bodyClass: 'castBody'
+        }
+      });
+
+      $urlRouterProvider.otherwise('/');
+    }]);
+
+
+})();
+
+(function(){
+  'use strict';
+
+  angular
+    .module('config')
+    .factory('api', function(){
+      var baseurl = "https://api.themoviedb.org/3/";
+      var apikey = "8af02f398b3ff990bab4f71c247c640a";
+
+      return {
+         movie: {
+             searchname: function(query){
+                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getMovieCredits: function(id) {
+                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
+             },
+             getMovieInfo: function(id) {
+                 return baseurl + "movie/"+id+"?api_key="+apikey;
+             }
+         },
+         cast : {
+             searchname: function(query) {
+                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getCastCredits: function(id) {
+                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
+             },
+             getCastInfo: function(id) {
+                 return baseurl + "person/"+id+"?api_key="+apikey;
+             }
+         },
+         tv : {
+             searchname: function(query){
+                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getTvCredits: function(id) {
+                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
+             },
+             getTvInfo: function(id) {
+                 return baseurl + "tv/"+id+"?api_key="+apikey;
+             }
+         }
+      }
+    });
 
 })();
 

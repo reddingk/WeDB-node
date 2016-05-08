@@ -1,11 +1,10 @@
 (function(){
    "use strict";
 
-    //angular.module('movieCtrl', ['ui.bootstrap'])
     angular.module('weMovies')
     .controller('MovieController', ['movieServices','movieData', '$filter', '$q', function(movieServices, movieData, $filter, $q){
       var vm = this;
-      vm.title = "Movie";
+      vm.title = "movies";
 
       // Select movie
       vm.resultsLimit = 8;
@@ -24,6 +23,7 @@
       // Select Compare List
       vm.selectedList = undefined;
       vm.comparedVisuals = [];
+      vm.highlight = undefined;
 
       vm.movieSearch = function(query) {
         var cleanString = query;
@@ -245,6 +245,28 @@
           var idList = [];
           vm.comparedVisuals = [];
 
+          function CastVisuals (castId) {
+              var profile = null;
+              var movieids = [];
+              for(var i=0; i < vm.compared.length; i++) {
+                if(vm.compared[i].movie3 == null){
+                  var found = $filter('filter')(vm.compared[i].matchedCast, {id: castId});
+                  if(found != undefined && found.length > 0) {
+                    // Profile
+                    if(profile == null)
+                      profile = found[0].profile_path;
+                    // Check Movie 1
+                    if(movieids.indexOf(vm.compared[i].movie1.id) < 0)
+                      movieids.push(vm.compared[i].movie1.id);
+                    // Check Movie 2
+                    if(movieids.indexOf(vm.compared[i].movie2.id) < 0)
+                      movieids.push(vm.compared[i].movie2.id);
+                  }
+                }
+              }
+              return {profile_path:profile, movies: movieids};
+          }
+
           for(var i=0; i < vm.compared.length; i++) {
             for(var j=0; j < vm.compared[i].matchedCast.length; j++) {
               if(idList.indexOf(vm.compared[i].matchedCast[j].id) < 0) {
@@ -255,7 +277,7 @@
 
           var colorArray = randomColor({ count: idList.length + 1, luminosity: 'bright', format: 'rgb'});
           for(var i=0; i < idList.length; i++) {
-            vm.comparedVisuals.push({id: idList[i], color:colorArray[i]});
+            vm.comparedVisuals.push({id: idList[i], color:colorArray[i], more_info:CastVisuals(idList[i])});
           }
       }
 
@@ -266,6 +288,9 @@
           color = found[0].color;
 
         return color;
+      }
+      vm.highlightCast = function(cast) {
+        vm.highlight = cast;
       }
 
     }]);

@@ -1,7 +1,7 @@
 (function(){
    "use strict";
 
-    angular.module('homeCtrl', []).controller('HomeController', function($scope){
+    angular.module('homeCtrl', []).controller('HomeController', ['$state',function($state){
       var vm = this;
       vm.title = "Home";
       vm.sections = [
@@ -10,6 +10,7 @@
            {order:'1', title:'Movie', controller:'MovieController', state:'movies', type:'movie-tab' },
            {order:'2', title:'Tv Shows', controller:'TvController', state:'tv', type:'tv-tab' }
        ];
-    });
+
+    }]);
 
 })();
