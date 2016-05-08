@@ -5,7 +5,7 @@
       <a class="navbar-brand" ui-sref="home">WeDB</a>
     </div>
     <div class="nav navbar-nav navbar-right">
-      <input type="text" ng-model="mc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in mc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="3" typeahead-on-select="mc.viewMovieInfo($item)" class="form-control">
+      <input type="text" ng-model="mc.selected" placeholder="Search For Movie Title" uib-typeahead="movie.title for movie in mc.movieSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="0" typeahead-wait-ms="500" typeahead-on-select="mc.viewMovieInfo($item)" class="form-control">
       <ul class="nav navbar-nav" id="movie-nav">
         <li ng-repeat="section in hc.sections" class="{{section.type}}" ng-class="{'active':section.state == mc.title}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
       </ul>
@@ -83,6 +83,10 @@
 
   <!--Compare Results Pills-->
   <div class="results-pill" ng-if="mc.compared.length > 0">
+    <div class="compare-header">
+      <h2>Comparison Results</h2>
+      <p>Please movie titles to get list of cast members in those movies.</p>
+    </div>
     <div class="pill-container">
       <div class="pill-left">
         <div ng-repeat="compare in mc.compared" class="compare-select" ng-click="mc.selectedList = compare;" ng-class="mc.getListClass(compare)">
@@ -105,5 +109,6 @@
       <br style="clear: both;">
     </div>
   </div>
+
 <!--End of Section Body-->
 </div>

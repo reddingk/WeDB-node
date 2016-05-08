@@ -45,6 +45,206 @@
 })();
 
 (function(){
+  'use strict';
+
+  // Prepare the 'users' module for subsequent registration of controllers and delegates
+  angular.module('config', [ 'ngMaterial' ]);
+
+
+})();
+
+(function(){
+
+  angular
+    .module('config')
+    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+      $stateProvider
+      .state('home', {
+        url: "/",
+        templateUrl: 'views/home.html',
+        controller: 'SpecialController as sc',
+        data: {
+           bodyClass: 'specialBody'
+        }
+      })
+      .state('movies', {
+        url: "/movies",
+        templateUrl: 'views/movies.html',
+        controller: 'MovieController as mc',
+        data: {
+           bodyClass: 'movieBody'
+        }
+      })
+      .state('tv', {
+        url: "/tv-shows",
+        templateUrl: 'views/tv.html',
+        controller: 'TvController as tc',
+        data: {
+           bodyClass: 'tvBody'
+        }
+      })
+      .state('cast', {
+        url: "/cast",
+        templateUrl: 'views/cast.html',
+        controller: 'CastController as cc',
+        data: {
+           bodyClass: 'castBody'
+        }
+      });
+
+      $urlRouterProvider.otherwise('/');
+    }]);
+
+
+})();
+
+(function(){
+  'use strict';
+
+  angular
+    .module('config')
+    .factory('api', function(){
+      var baseurl = "https://api.themoviedb.org/3/";
+      var apikey = "8af02f398b3ff990bab4f71c247c640a";
+
+      return {
+         movie: {
+             searchname: function(query){
+                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getMovieCredits: function(id) {
+                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
+             },
+             getMovieInfo: function(id) {
+                 return baseurl + "movie/"+id+"?api_key="+apikey;
+             }
+         },
+         cast : {
+             searchname: function(query) {
+                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getCastCredits: function(id) {
+                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
+             },
+             getCastInfo: function(id) {
+                 return baseurl + "person/"+id+"?api_key="+apikey;
+             }
+         },
+         tv : {
+             searchname: function(query){
+                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getTvCredits: function(id) {
+                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
+             },
+             getTvInfo: function(id) {
+                 return baseurl + "tv/"+id+"?api_key="+apikey;
+             }
+         }
+      }
+    });
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('navHold', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+
+          angular.element($window).bind("scroll", function() {
+
+            var topSection = angular.element(document.getElementsByClassName("page"))[0];
+            var windowp = angular.element($window)[0];          
+
+            if(windowp.pageYOffset >= topSection.offsetTop ){
+              if(!element.hasClass("screenPass"))
+                element.addClass("screenPass");
+            }
+            else {
+              if(element.hasClass("screenPass")){
+                element.removeClass("screenPass");
+              }
+            }
+          });
+        }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.10;
+            var borderY = parentContainer.clientHeight *.10;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
+        }
+      }
+    }]);
+
+})();
+
+(function(){
    "use strict";
 
     angular.module('castCtrl', []).controller('CastController', function($scope){
@@ -393,206 +593,6 @@
       var vm = this;
       vm.title = "Tv";
 
-    });
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('navHold', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-
-          angular.element($window).bind("scroll", function() {
-
-            var topSection = angular.element(document.getElementsByClassName("page"))[0];
-            var windowp = angular.element($window)[0];          
-
-            if(windowp.pageYOffset >= topSection.offsetTop ){
-              if(!element.hasClass("screenPass"))
-                element.addClass("screenPass");
-            }
-            else {
-              if(element.hasClass("screenPass")){
-                element.removeClass("screenPass");
-              }
-            }
-          });
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          console.log("Start Motion");
-          // Randomly Set Postion & Velocity
-          var maxVelocity = 100;
-          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
-          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
-          var velX = (Math.random() * maxVelocity);
-          var velY = (Math.random() * maxVelocity);
-          var timestamp = null;
-
-          var parentContainer = element[0].offsetParent;
-
-          // Move Object
-          (function tick() {
-            var now = new Date().getTime();
-            var borderX = parentContainer.clientWidth *.10;
-            var borderY = parentContainer.clientHeight *.10;
-
-            var maxX = parentContainer.clientWidth - borderX;
-            var maxY = parentContainer.clientHeight - borderY;
-
-            var elapsed = (timestamp || now) - now;
-            timestamp = now;
-            posX += elapsed * velX / 1000;
-            posY += elapsed * velY / 1000;
-
-            if (posX > maxX) {
-                posX = 2 * maxX - posX;
-                velX *= -1;
-            }
-            if (posX < 10) {
-                posX = 10;
-                velX *= -1;
-            }
-            if (posY > maxY) {
-                posY = 2 * maxY - posY;
-                velY *= -1;
-            }
-            if (posY < 10) {
-                posY = 10;
-                velY *= -1;
-            }
-            element.css({ "top": posY, "left": posX });
-            // Set Position to $element top and left
-            // Loop to Move object
-            $timeout(tick, 30);
-          })();
-        }
-      }
-    }]);
-
-})();
-
-(function(){
-  'use strict';
-
-  // Prepare the 'users' module for subsequent registration of controllers and delegates
-  angular.module('config', [ 'ngMaterial' ]);
-
-
-})();
-
-(function(){
-
-  angular
-    .module('config')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-      $stateProvider
-      .state('home', {
-        url: "/",
-        templateUrl: 'views/home.html',
-        controller: 'SpecialController as sc',
-        data: {
-           bodyClass: 'specialBody'
-        }
-      })
-      .state('movies', {
-        url: "/movies",
-        templateUrl: 'views/movies.html',
-        controller: 'MovieController as mc',
-        data: {
-           bodyClass: 'movieBody'
-        }
-      })
-      .state('tv', {
-        url: "/tv-shows",
-        templateUrl: 'views/tv.html',
-        controller: 'TvController as tc',
-        data: {
-           bodyClass: 'tvBody'
-        }
-      })
-      .state('cast', {
-        url: "/cast",
-        templateUrl: 'views/cast.html',
-        controller: 'CastController as cc',
-        data: {
-           bodyClass: 'castBody'
-        }
-      });
-
-      $urlRouterProvider.otherwise('/');
-    }]);
-
-
-})();
-
-(function(){
-  'use strict';
-
-  angular
-    .module('config')
-    .factory('api', function(){
-      var baseurl = "https://api.themoviedb.org/3/";
-      var apikey = "8af02f398b3ff990bab4f71c247c640a";
-
-      return {
-         movie: {
-             searchname: function(query){
-                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getMovieCredits: function(id) {
-                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
-             },
-             getMovieInfo: function(id) {
-                 return baseurl + "movie/"+id+"?api_key="+apikey;
-             }
-         },
-         cast : {
-             searchname: function(query) {
-                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getCastCredits: function(id) {
-                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
-             },
-             getCastInfo: function(id) {
-                 return baseurl + "person/"+id+"?api_key="+apikey;
-             }
-         },
-         tv : {
-             searchname: function(query){
-                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getTvCredits: function(id) {
-                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
-             },
-             getTvInfo: function(id) {
-                 return baseurl + "tv/"+id+"?api_key="+apikey;
-             }
-         }
-      }
     });
 
 })();
