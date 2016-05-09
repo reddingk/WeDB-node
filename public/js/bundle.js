@@ -509,6 +509,25 @@
 })();
 
 (function(){
+  'use strict';
+  //angular.module('directives', []);
+
+})();
+
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
+
+})();
+
+(function(){
+  'use strict';
+
+  //angular.module('services', []);
+
+})();
+
+(function(){
    "use strict";
 
     angular.module('directives').directive('navHold', ['$window', function($window) {
@@ -594,25 +613,6 @@
         }
       }
     }]);
-
-})();
-
-(function(){
-  'use strict';
-  //angular.module('directives', []);
-
-})();
-
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
-
-})();
-
-(function(){
-  'use strict';
-
-  //angular.module('services', []);
 
 })();
 

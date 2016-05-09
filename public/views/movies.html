@@ -23,7 +23,7 @@
         <p class="selected-title">{{mc.selectedMovie.title}} <span class="selected-year">({{mc.selectedMovie.release_date | date:'yyyy'}})</span></p>
         <p class="selected-overview">{{mc.selectedMovie.overview}}</p>
 
-        <div class="selected-cast">
+        <div class="selected-details">
           <div class="btn-section">
             <md-button class="md-raised view-button" ng-click="mc.viewMovieCredits(mc.selectedMovie.id)">View Top Billed Cast </md-button>
             <md-button class="md-raised add-button" ng-click="mc.addMovieToCompare(mc.selectedMovie)" ng-disabled="!mc.ableToCompare(mc.selectedMovie)">Add To Compare</md-button>
@@ -41,12 +41,12 @@
   </div>
 
   <!-- LIST OF MOVIES TO COMPARE-->
-  <div class="compare-movies" ng-if="mc.showCompare">
-    <div class="compare-movies-container">
-      <div class="movie-display" ng-repeat="movie in mc.selectedObjects">
-        <div class="movie-container">
-          <div class="remove-movie" ng-click="mc.removeCompareMovie(movie)" ng-if="mc.compared.length == 0"><i class="fa fa-minus-circle"></i></div>
-          <div class="movie-poster">
+  <div class="compare-object" ng-if="mc.showCompare">
+    <div class="compare-object-container">
+      <div class="object-display" ng-repeat="movie in mc.selectedObjects">
+        <div class="object-container">
+          <div class="remove-object" ng-click="mc.removeCompareMovie(movie)" ng-if="mc.compared.length == 0"><i class="fa fa-minus-circle"></i></div>
+          <div class="object-poster">
             <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null">
             <div class="no-cover" ng-if="movie.poster_path == null"></div>
             <!--Add actor/actress compare bubbles-->
