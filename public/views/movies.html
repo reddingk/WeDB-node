@@ -15,7 +15,7 @@
 
 <div class="section-body">
   <!--SELECTED MOVIE-->
-  <div ng-if="mc.showSelected" class="selected-movie">
+  <div ng-if="mc.showSelected" class="selected-object">
     <div class="selected-container">
       <img ng-src="http://image.tmdb.org/t/p/w500{{mc.selectedMovie.poster_path}}" ng-if="mc.selectedMovie.poster_path != null">
       <div class="no-cover" ng-if="mc.selectedMovie.poster_path == null"></div>

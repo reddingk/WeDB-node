@@ -1,0 +1,5 @@
+<a class="search-autofill">
+  <img ng-src="http://image.tmdb.org/t/p/w500{{match.model.profile_path}}" ng-if="match.model.profile_path != null" width="30">
+  <div class="no-cover" ng-if="match.model.profile_path == null" width="30"></div>
+  <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+</a>

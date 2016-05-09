@@ -1,1 +1,45 @@
-<p>Cast - {{title}}</p>
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as hc" nav-hold>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">WeDB</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <input type="text" ng-model="cc.selected" placeholder="Search For Actor/Actress Name" uib-typeahead="cast.name for cast in cc.castSearch($viewValue)" typeahead-template-url="views/templates/search_cast.html" typeahead-min-length="0" typeahead-wait-ms="500" typeahead-on-select="cc.viewCastInfo($item)" class="form-control">
+      <ul class="nav navbar-nav" id="cast-nav">
+        <li ng-repeat="section in hc.sections" class="{{section.type}}" ng-class="{'active':section.state == cc.title}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="section-body">
+  <!--SELECTED CAST-->
+  <div ng-if="cc.showSelected" class="selected-object">
+    <div class="selected-container">
+      <img ng-src="http://image.tmdb.org/t/p/w500{{cc.selectedCast.profile_path}}" ng-if="cc.selectedCast.profile_path != null">
+      <div class="no-cover" ng-if="cc.selectedCast.profile_path == null"></div>
+      <div class="selected-info">
+        <p class="selected-title">{{cc.selectedCast.name}} <span class="selected-year">({{cc.selectedCast.birthday | date:'MMM d, yyyy'}})</span></p>
+        <p class="selected-bio">{{cc.selectedCast.biography}}</p>
+
+        <div class="selected-details">
+          <!--<div class="btn-section">
+            <md-button class="md-raised view-button" ng-click="mc.viewMovieCredits(mc.selectedMovie.id)">View Movies Known For </md-button>
+            <md-button class="md-raised add-button" ng-click="mc.addMovieToCompare(mc.selectedMovie)" ng-disabled="!mc.ableToCompare(mc.selectedMovie)">Add To Compare</md-button>
+          </div>
+          <div class="cast-member" ng-show="mc.showSelectedCredit">
+            <div class="selected-cast-members" ng-repeat="cast in mc.selectedCredit">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
+              <div class="no-cover" ng-if="cast.profile_path == null"></div>
+              <div class="selected-character"><div class="character">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
+            </div>
+          </div>-->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+<!--End of Section Body-->
+</div>

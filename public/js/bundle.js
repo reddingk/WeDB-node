@@ -2,10 +2,11 @@
 	"use strict";
 		angular.module('weMovies', ['ui.bootstrap']);
 		angular.module('weSpecial', ['ui.bootstrap']);
+		angular.module('weCast', ['ui.bootstrap']);
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'castCtrl','tvCtrl', 'weMovies'])
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','tvCtrl', 'weMovies'])
 		.run(function($rootScope){
 	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 	        //change body background
@@ -122,7 +123,7 @@
                  return baseurl + "movie/"+id+"?api_key="+apikey;
              }
          },
-         cast : {
+         cast: {
              searchname: function(query) {
                  return  baseurl + "search/person?api_key="+apikey+"&query="+query;
              },
@@ -136,7 +137,7 @@
                  return baseurl + "person/"+id+"?api_key="+apikey;
              }
          },
-         tv : {
+         tv: {
              searchname: function(query){
                  return baseurl + "search/tv?api_key="+apikey+"&query="+query;
              },
@@ -158,11 +159,59 @@
 (function(){
    "use strict";
 
-    angular.module('castCtrl', []).controller('CastController', function($scope){
-      var vm = this;
-      vm.title = "Cast";
+   angular.module('weCast')
+   .controller('CastController', ['castServices','castData', '$filter', '$q', function(castServices, castData, $filter, $q){
+     var vm = this;
+      vm.title = "cast";
 
-    });
+      // Select cast member
+      vm.resultsLimit = 8;
+      vm.selected = undefined;
+      vm.selectedCast = undefined;
+      vm.showSelected = false;
+      vm.selectedMovieList = undefined;
+      vm.showSelectedMovieList = false;
+
+      vm.castSearch = function(query) {
+        if(query != undefined) {
+          var cleanString = query;
+          cleanString = cleanString.replace("&", "and");
+
+          return castServices.names(cleanString).then(function (results) {
+            var castdata = results.results;
+            return (castdata.length > vm.resultsLimit ? castdata.slice(0, vm.resultsLimit) : castdata);  ;
+          }, function (error) {
+            console.log("ERROR NO RESULTS");
+          });
+        }
+        return;
+      }
+      vm.getCastInfo = function(castid) {
+        return castServices.info(castid).then(function (results) {
+          return results;
+        }, function (error) {
+          console.log("ERROR NO MOVIE INFO");
+        });
+      }
+
+      vm.viewCastInfo = function(item) {
+        vm.showSelected = false;
+        var castid = item.id;
+        if((vm.selectedCast == undefined) || (castid != vm.selectedCast.id)) {
+          vm.showSelectedMovieList = false;
+          vm.selectedMovieList = undefined;
+          vm.getCastInfo(castid).then(function(retResults) {
+            vm.showSelected = true;
+            vm.selectedCast = retResults;
+            vm.selectedMovieList = item.known_for;
+          });
+        }
+        else {
+          vm.showSelected = true;
+        }
+      }
+
+    }]);
 
 })();
 
@@ -509,25 +558,6 @@
 })();
 
 (function(){
-  'use strict';
-  //angular.module('directives', []);
-
-})();
-
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
-
-})();
-
-(function(){
-  'use strict';
-
-  //angular.module('services', []);
-
-})();
-
-(function(){
    "use strict";
 
     angular.module('directives').directive('navHold', ['$window', function($window) {
@@ -617,6 +647,98 @@
 })();
 
 (function(){
+  'use strict';
+  //angular.module('directives', []);
+
+})();
+
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
+
+})();
+
+(function(){
+  'use strict';
+
+  //angular.module('services', []);
+
+})();
+
+(function(){
+   "use strict";
+
+   angular.module('weCast')
+    .service('castServices', ['$q', '$http','api', function CastService($q, $http, api) {
+      return {
+        names: function($str){
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.cast.searchname($str)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        },
+        credits: function($mid){
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.cast.getCastCredits($mid)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        },
+        info: function($mid) {
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.cast.getCastInfo($mid)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
+        }
+
+      }
+    }])
+   .factory("castData", ['$q', function($q){
+     function castCompareData() {
+       var vm = this;
+
+       vm.selectedCast = [];
+       vm.selectedCastInfo = [];
+       vm.comparedMovies = [];
+       vm.comparedResults = [];
+
+       vm.addMovieCompare = function(castObject) {
+         console.log("HERE ---");
+         console.log(castObject);
+         vm.comparedMovies.push(castObject);
+       }
+       vm.getMovieCompare = function() {
+         console.log("Return cast compare");
+         console.log(vm.comparedCasts);
+
+         return vm.comparedMovies;
+       }
+     }
+
+     return new castCompareData();
+   }]);
+
+
+})();
+
+(function(){
    "use strict";
 
    //angular.module('services', [])
@@ -670,11 +792,6 @@
        vm.selectedMoviesInfo = [];
        vm.comparedCasts = [];
        vm.comparedResults = [];
-
-       vm.addSelectedMovie = function() {}
-       vm.compareMoviesList = function () {}
-       vm.compareTwoMovies = function(movieA, movieB) {}
-       vm.compareAllMovies = function() {}
 
        vm.addCastCompare = function(castObject) {
          console.log("HERE ---");

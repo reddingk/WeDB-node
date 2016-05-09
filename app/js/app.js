@@ -2,10 +2,11 @@
 	"use strict";
 		angular.module('weMovies', ['ui.bootstrap']);
 		angular.module('weSpecial', ['ui.bootstrap']);
+		angular.module('weCast', ['ui.bootstrap']);
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'castCtrl','tvCtrl', 'weMovies'])
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','tvCtrl', 'weMovies'])
 		.run(function($rootScope){
 	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 	        //change body background

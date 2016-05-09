@@ -61,6 +61,7 @@ html, body {
       .navbar-nav {
         padding-top: 5px;
         &#movie-nav {  .active { a { color:#fff; background-color: @movie;} } }
+        &#cast-nav {  .active { a { color:#fff; background-color: @cast;} } }
 
         li {
           border-left: 2px solid #000;
@@ -80,7 +81,7 @@ html, body {
   }
 
 }
-.selected-movie {
+.selected-object {
   padding:20px;
   .selected-container {
     display: inline-block;
@@ -105,15 +106,22 @@ html, body {
         font-size: 1.44rem;
         font-weight: bold;
       }
-      .selected-overiview {
-        font-size: 1.rem;
+      .selected-overview {
+        font-size: 1rem;
+      }
+      .selected-bio {
+        font-size: 1rem;
+        max-height: 150px;
+        overflow-y: auto;
+        padding: 2%;
+        border: 2px solid #000;
       }
       .selected-details {
         .cast-member {
-          padding: 3px;
+          padding: 1%;
           border: 1px solid #000;
           max-height: 200px;
-          overflow-y: scroll;
+          overflow-y: auto;
 
           .selected-cast-members {
             max-width: 20%;

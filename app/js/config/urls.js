@@ -22,7 +22,7 @@
                  return baseurl + "movie/"+id+"?api_key="+apikey;
              }
          },
-         cast : {
+         cast: {
              searchname: function(query) {
                  return  baseurl + "search/person?api_key="+apikey+"&query="+query;
              },
@@ -36,7 +36,7 @@
                  return baseurl + "person/"+id+"?api_key="+apikey;
              }
          },
-         tv : {
+         tv: {
              searchname: function(query){
                  return baseurl + "search/tv?api_key="+apikey+"&query="+query;
              },
