@@ -104,6 +104,7 @@
           <ul>
             <li ng-repeat="cast in mc.selectedList.matchedCast" ng-click="mc.highlightCast(cast)" ng-class="{'highlighted':mc.highlight.id == cast.id}"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':mc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>
           </ul>
+          <div class="no-matches" ng-if="mc.selectedList.matchedCast.length == 0"><i class="fa fa-ban"></i> No matching cast members for these movies</div>
         </div>
       </div>
       <br style="clear: both;">
