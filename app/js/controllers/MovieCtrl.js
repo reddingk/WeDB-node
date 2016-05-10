@@ -13,6 +13,7 @@
       vm.showSelected = false;
       vm.selectedCredit = undefined;
       vm.showSelectedCredit = false;
+      vm.showBio = false;
 
       // Compare movies
       vm.showCompare = false;
@@ -71,6 +72,7 @@
 
       vm.viewMovieCredits = function(movieid) {
         if(vm.showSelectedCredit == false){
+          vm.showBio = false;
           if(vm.selectedCredit == undefined) {
             vm.getMovieCredits(movieid).then(function(retResults) {
               vm.selectedCredit = retResults.cast;
@@ -88,7 +90,12 @@
         }
 
       }
-      vm.addMovieToCompare = function(movie) {
+      vm.viewBio = function() {
+        vm.showSelectedCredit = false;
+        vm.showBio = !vm.showBio;
+      }
+
+      vm.addToCompare = function(movie) {
         if(vm.ableToCompare(movie)){
           vm.selectedObjects.push(movie);
           vm.showSelected = false;
@@ -233,7 +240,7 @@
         vm.comparedVisuals = [];
         vm.selectedList = undefined;
       }
-
+      // Visuals
       vm.getListClass = function(compare) {
         if(vm.selectedList == compare)
           return "active";

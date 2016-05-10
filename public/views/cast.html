@@ -20,23 +20,92 @@
       <div class="no-cover" ng-if="cc.selectedCast.profile_path == null"></div>
       <div class="selected-info">
         <p class="selected-title">{{cc.selectedCast.name}} <span class="selected-year">({{cc.selectedCast.birthday | date:'MMM d, yyyy'}})</span></p>
-        <p class="selected-bio">{{cc.selectedCast.biography}}</p>
-
         <div class="selected-details">
-          <!--<div class="btn-section">
-            <md-button class="md-raised view-button" ng-click="mc.viewMovieCredits(mc.selectedMovie.id)">View Movies Known For </md-button>
-            <md-button class="md-raised add-button" ng-click="mc.addMovieToCompare(mc.selectedMovie)" ng-disabled="!mc.ableToCompare(mc.selectedMovie)">Add To Compare</md-button>
+          <div class="btn-section">
+            <md-button class="md-raised we-btn" ng-click="cc.viewCastMovies(cc.selectedCast.id)">View Movies Known For </md-button>
+            <md-button class="md-raised we-btn" ng-click="cc.viewBio()">View Biography </md-button>
+            <md-button class="md-raised we-btn cast-btn" ng-click="cc.addToCompare(cc.selectedCast)" ng-disabled="!cc.ableToCompare(cc.selectedCast)">Add To Compare</md-button>
           </div>
-          <div class="cast-member" ng-show="mc.showSelectedCredit">
-            <div class="selected-cast-members" ng-repeat="cast in mc.selectedCredit">
-              <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
-              <div class="no-cover" ng-if="cast.profile_path == null"></div>
-              <div class="selected-character"><div class="character">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
+          <div class="selected-about" ng-show="cc.showBio">{{cc.selectedCast.biography}}</div>
+          <div class="movie-list" ng-show="cc.showSelectedMovieList">
+            <div class="selected-movie-list" ng-repeat="movie in cc.selectedMovieList">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null">
+              <div class="no-cover" ng-if="movie.poster_path == null"></div>
+              <div class="selected-movie"><div class="title">{{movie.title}}</div><div class="date">{{movie.release_date | date:'yyyy'}}</div></div>
             </div>
-          </div>-->
+          </div>
         </div>
 
       </div>
+    </div>
+  </div>
+
+  <!-- LIST OF CAST TO COMPARE-->
+  <div class="compare-object" ng-if="cc.showCompare">
+    <div class="compare-object-container">
+      <div class="object-display" ng-repeat="cast in cc.selectedObjects">
+        <div class="object-container">
+          <div class="remove-object" ng-click="cc.removeCompareCast(cast)" ng-if="cc.compared.length == 0"><i class="fa fa-minus-circle"></i></div>
+          <div class="object-poster">
+            <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
+            <div class="no-cover" ng-if="cast.profile_path == null"></div>
+            <!--Add movie compare bubbles-->
+            <div class="visual-bubbles cast-visual" ng-if="cc.comparedVisuals.length > 0">
+              <div ng-repeat="visuals in cc.comparedVisuals" ng-if="visuals.more_info.movies.indexOf(cast.id) > -1">
+                  <img ng-src="http://image.tmdb.org/t/p/w500{{visuals.more_info.poster_path}}" ng-if="visuals.more_info.poster_path != null" ng-style="{'border-color':cc.getIdColor(visuals.id)}" width="30" ng-class="{'highlighted':cc.highlight.id == visuals.id}" random-motion>
+              </div>
+            </div>
+            <div class="info-slide" ng-class="{'comp-slide':!cc.getSliderStatus(cast)}">
+              <p ng-click="cc.toggleSlider(cast)"><i class="fa" ng-class="cc.getSliderStatus(cast) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Cast Biography</span><i class="fa" ng-class="cc.getSliderStatus(cast) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
+              <div><span class="info-header">Bio</span> <span class="info-content">{{cast.biography}}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br style="clear: both">
+  </div>
+  <!--Compare Buttons -->
+  <div class="compare-results" ng-if="cc.selectedObjects.length > 1">
+    <div class="btn-section">
+      <md-button class="md-raised we-btn cast-btn" ng-click="cc.compareSelectedMovies()" ng-disabled="mc.compared.length > 0">Compare Selected Cast</md-button>
+      <md-button class="md-raised we-btn" ng-click="cc.clearResults()">Clear Results</md-button>
+    </div>
+  </div>
+
+  <!--About Text-->
+  <div class="about-section" id="cast-about" ng-if="cc.compared.length == 0">
+    <h1>Actor/Actress Comparison</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>
+
+  <!--Compare Results Pills-->
+  <div class="results-pill" ng-if="cc.compared.length > 0">
+    <div class="compare-header">
+      <h2>Comparison Results</h2>
+      <p>Please select cast names to get list of matching movies they appeared in.</p>
+    </div>
+    <div class="pill-container">
+      <div class="pill-left">
+        <div ng-repeat="compare in cc.compared" class="compare-select cast-select" ng-click="cc.selectedList = compare;" ng-class="cc.getListClass(compare)">
+          <div class="titles">
+            <div>{{compare.cast1.name}}</div>
+            <div>{{compare.cast2.name}}</div>
+            <div ng-if="compare.cast3 != null">{{compare.cast3.name}}</div>
+          </div>
+          <i class="fa fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="pill-right">
+        <div class="default" ng-if="cc.selectedList==undefined">Please Select</div>
+        <div ng-if="cc.selectedList!=undefined">
+          <ul>
+            <li ng-repeat="movie in cc.selectedList.matchedMovies" ng-click="cc.highlightCast(movie)" ng-class="{'highlighted':cc.highlight.id == movie.id}"><img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null" ng-style="{'border-color':cc.getIdColor(movie.id)}"><span>{{movie.title}}</span></li>
+          </ul>
+          <div class="no-matches" ng-if="cc.selectedList.matchedMovies.length == 0"><i class="fa fa-ban"></i> No matching movies for these cast members</div>
+        </div>
+      </div>
+      <br style="clear: both;">
     </div>
   </div>
 

@@ -30,7 +30,7 @@
 								document.body.style.background = 'green';
 								break;
 							case "castBody":
-								document.body.style.background = 'yellow';
+								document.body.style.backgroundImage = "url('img/cast_back.png')";
 								break;
 							default:
 								document.body.style.background = 'white';
