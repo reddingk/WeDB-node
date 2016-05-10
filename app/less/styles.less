@@ -60,6 +60,9 @@ html, body {
       display: inline-block;
       vertical-align: middle;
     }
+    .cast {color: @cast;}
+    .tv {color: @tv;}
+    .movie {color: @movie;}
   }
   .container-fluid {
     padding-top: 15px;
@@ -75,6 +78,10 @@ html, body {
         li {
           border-left: 2px solid #000;
         }
+      }
+      &.in, &.collapsing {
+        padding-top: 3%;
+        .navbar-nav { li { border-left: none; }}
       }
     }
   }

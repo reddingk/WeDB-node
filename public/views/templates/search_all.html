@@ -1,0 +1,10 @@
+<a class="search-autofill">
+  <img ng-src="http://image.tmdb.org/t/p/w500{{match.model.profile_path}}" ng-if="match.model.profile_path != null" width="30">
+  <img ng-src="http://image.tmdb.org/t/p/w500{{match.model.poster_path}}" ng-if="match.model.poster_path != null" width="30">
+
+  <div class="no-cover" ng-if="match.model.profile_path == null && match.model.poster_path == null" width="30"></div>
+
+  <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query" ng-if="match.model.media_type == 'tv'" class="tv"></span>
+  <span ng-bind-html="match.model.name | uibTypeaheadHighlight:query" ng-if="match.model.media_type == 'person'" class="cast"></span>
+  <span ng-bind-html="match.model.title | uibTypeaheadHighlight:query" ng-if="match.model.media_type == 'movie'" class="movie"></span>
+</a>

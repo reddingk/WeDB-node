@@ -39,8 +39,19 @@
             def.reject(response);
           });
           return def.promise;
+        },
+        anyItem: function($str) {
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.any.all($str)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
         }
-
       }
     }])
    .factory("movieData", ['$q', function($q){

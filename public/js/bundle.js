@@ -7,7 +7,7 @@
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','weTv', 'weMovies'])
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'homeCtrl', 'weSpecial', 'weCast','weTv', 'weMovies'])
 		.run(function($rootScope){
 	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 	        //change body background
@@ -43,6 +43,122 @@
 
 	    });
 		});
+
+})();
+
+(function(){
+  'use strict';
+
+  // Prepare the 'users' module for subsequent registration of controllers and delegates
+  angular.module('config', [ 'ngMaterial' ]);
+
+
+})();
+
+(function(){
+
+  angular
+    .module('config')
+    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+      $stateProvider
+      .state('home', {
+        url: "/",
+        templateUrl: 'views/home.html',
+        controller: 'SpecialController as sc',
+        data: {
+           bodyClass: 'specialBody'
+        }
+      })
+      .state('movies', {
+        url: "/movies",
+        templateUrl: 'views/movies.html',
+        controller: 'MovieController as mc',
+        data: {
+           bodyClass: 'movieBody'
+        }
+      })
+      .state('tv', {
+        url: "/tv-shows",
+        templateUrl: 'views/tv.html',
+        controller: 'TvController as tc',
+        data: {
+           bodyClass: 'tvBody'
+        }
+      })
+      .state('cast', {
+        url: "/cast",
+        templateUrl: 'views/cast.html',
+        controller: 'CastController as cc',
+        data: {
+           bodyClass: 'castBody'
+        }
+      });
+
+      $urlRouterProvider.otherwise('/');
+    }]);
+
+
+})();
+
+(function(){
+  'use strict';
+
+  angular
+    .module('config')
+    .factory('api', function(){
+      var baseurl = "https://api.themoviedb.org/3/";
+      var apikey = "8af02f398b3ff990bab4f71c247c640a";
+
+      return {
+        any: {
+          all: function(query){
+            return baseurl + "search/multi?api_key="+apikey+"&query="+query;
+          }
+        },
+         movie: {
+             searchname: function(query){
+                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getMovieCredits: function(id) {
+                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
+             },
+             getMovieInfo: function(id) {
+                 return baseurl + "movie/"+id+"?api_key="+apikey;
+             }
+         },
+         cast: {
+             searchname: function(query) {
+                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getCastCredits: function(id) {
+                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
+             },
+             getCastInfo: function(id) {
+                 return baseurl + "person/"+id+"?api_key="+apikey;
+             }
+         },
+         tv: {
+             searchname: function(query){
+                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
+             },
+             searchName_Page: function(query, page){
+                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
+             },
+             getTvCredits: function(id) {
+                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
+             },
+             getTvInfo: function(id) {
+                 return baseurl + "tv/"+id+"?api_key="+apikey;
+             }
+         }
+      }
+    });
 
 })();
 
@@ -682,13 +798,29 @@
 (function(){
    "use strict";
 
-    //angular.module('specialCtrl', ['ui.bootstrap'])
     angular.module('weSpecial')
     .controller('SpecialController', [ 'movieServices','movieData', function(movieServices, movieData){
       var vm = this;
-      vm.title = "Special";
-      vm.resultsLimit = 8;
-      vm.selected = undefined;
+      vm.title = "special";
+      vm.resultsLimit = 10;
+      vm.randomid = undefined;
+
+      vm.multiSearch = function(query) {
+        if(query != undefined) {
+          var cleanString = query;
+          cleanString = cleanString.replace("&", "and");
+
+          return movieServices.anyItem(cleanString).then(function (results) {
+            var alldata = results.results;
+            return (alldata.length > vm.resultsLimit ? alldata.slice(0, vm.resultsLimit) : alldata);  ;
+          }, function (error) {
+            console.log("ERROR NO RESULTS");
+          });
+        }
+        return;
+      }
+
+      // Random Fact Generator
 
     }]);
 
@@ -1004,117 +1136,6 @@
 })();
 
 (function(){
-  'use strict';
-
-  // Prepare the 'users' module for subsequent registration of controllers and delegates
-  angular.module('config', [ 'ngMaterial' ]);
-
-
-})();
-
-(function(){
-
-  angular
-    .module('config')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-      $stateProvider
-      .state('home', {
-        url: "/",
-        templateUrl: 'views/home.html',
-        controller: 'SpecialController as sc',
-        data: {
-           bodyClass: 'specialBody'
-        }
-      })
-      .state('movies', {
-        url: "/movies",
-        templateUrl: 'views/movies.html',
-        controller: 'MovieController as mc',
-        data: {
-           bodyClass: 'movieBody'
-        }
-      })
-      .state('tv', {
-        url: "/tv-shows",
-        templateUrl: 'views/tv.html',
-        controller: 'TvController as tc',
-        data: {
-           bodyClass: 'tvBody'
-        }
-      })
-      .state('cast', {
-        url: "/cast",
-        templateUrl: 'views/cast.html',
-        controller: 'CastController as cc',
-        data: {
-           bodyClass: 'castBody'
-        }
-      });
-
-      $urlRouterProvider.otherwise('/');
-    }]);
-
-
-})();
-
-(function(){
-  'use strict';
-
-  angular
-    .module('config')
-    .factory('api', function(){
-      var baseurl = "https://api.themoviedb.org/3/";
-      var apikey = "8af02f398b3ff990bab4f71c247c640a";
-
-      return {
-         movie: {
-             searchname: function(query){
-                 return baseurl + "search/movie?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/movie?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getMovieCredits: function(id) {
-                 return baseurl + "movie/"+id+"/credits?api_key="+apikey;
-             },
-             getMovieInfo: function(id) {
-                 return baseurl + "movie/"+id+"?api_key="+apikey;
-             }
-         },
-         cast: {
-             searchname: function(query) {
-                 return  baseurl + "search/person?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getCastCredits: function(id) {
-                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
-             },
-             getCastInfo: function(id) {
-                 return baseurl + "person/"+id+"?api_key="+apikey;
-             }
-         },
-         tv: {
-             searchname: function(query){
-                 return baseurl + "search/tv?api_key="+apikey+"&query="+query;
-             },
-             searchName_Page: function(query, page){
-                 return baseurl + "search/tv?api_key="+apikey+"&page="+ page +"&query="+query;
-             },
-             getTvCredits: function(id) {
-                 return baseurl + "tv/"+id+"/credits?api_key="+apikey;
-             },
-             getTvInfo: function(id) {
-                 return baseurl + "tv/"+id+"?api_key="+apikey;
-             }
-         }
-      }
-    });
-
-})();
-
-(function(){
    "use strict";
 
     angular.module('directives').directive('navHold', ['$window', function($window) {
@@ -1200,25 +1221,6 @@
         }
       }
     }]);
-
-})();
-
-(function(){
-  'use strict';
-  //angular.module('directives', []);
-
-})();
-
-(function(){
-  "use strict";
-  //angular.module('weMovies', ['ui.bootstrap']);
-
-})();
-
-(function(){
-  'use strict';
-
-  //angular.module('services', []);
 
 })();
 
@@ -1336,8 +1338,19 @@
             def.reject(response);
           });
           return def.promise;
+        },
+        anyItem: function($str) {
+          var def = $q.defer();
+          $http({
+            method: 'GET',
+            url: api.any.all($str)
+          }).then(function successCallback(response) {
+            def.resolve(response.data);
+          }, function errorCallback(response) {
+            def.reject(response);
+          });
+          return def.promise;
         }
-
       }
     }])
    .factory("movieData", ['$q', function($q){
@@ -1438,5 +1451,24 @@
      return new tvCompareData();
    }]);
 
+
+})();
+
+(function(){
+  'use strict';
+  //angular.module('directives', []);
+
+})();
+
+(function(){
+  "use strict";
+  //angular.module('weMovies', ['ui.bootstrap']);
+
+})();
+
+(function(){
+  'use strict';
+
+  //angular.module('services', []);
 
 })();

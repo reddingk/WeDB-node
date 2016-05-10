@@ -7,7 +7,7 @@
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','weTv', 'weMovies'])
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'homeCtrl', 'weSpecial', 'weCast','weTv', 'weMovies'])
 		.run(function($rootScope){
 	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 	        //change body background

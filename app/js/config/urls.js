@@ -8,6 +8,11 @@
       var apikey = "8af02f398b3ff990bab4f71c247c640a";
 
       return {
+        any: {
+          all: function(query){
+            return baseurl + "search/multi?api_key="+apikey+"&query="+query;
+          }
+        },
          movie: {
              searchname: function(query){
                  return baseurl + "search/movie?api_key="+apikey+"&query="+query;
