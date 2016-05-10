@@ -33,7 +33,7 @@
             <div class="selected-cast-members" ng-repeat="cast in mc.selectedCredit">
               <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
               <div class="no-cover" ng-if="cast.profile_path == null"></div>
-              <div class="selected-character"><div class="character">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
+              <div class="selected-character"><div class="character movie">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
             </div>
           </div>
         </div>

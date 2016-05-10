@@ -27,15 +27,18 @@
       vm.highlight = undefined;
 
       vm.movieSearch = function(query) {
-        var cleanString = query;
-        cleanString = cleanString.replace("&", "and");
+        if(query != undefined) {
+          var cleanString = query;
+          cleanString = cleanString.replace("&", "and");
 
-        return movieServices.names(cleanString).then(function (results) {
-          var moviedata = results.results;
-          return (moviedata.length > vm.resultsLimit ? moviedata.slice(0, vm.resultsLimit) : moviedata);  ;
-        }, function (error) {
-          console.log("ERROR NO RESULTS");
-        });
+          return movieServices.names(cleanString).then(function (results) {
+            var moviedata = results.results;
+            return (moviedata.length > vm.resultsLimit ? moviedata.slice(0, vm.resultsLimit) : moviedata);  ;
+          }, function (error) {
+            console.log("ERROR NO RESULTS");
+          });
+        }
+        return;
       }
 
       vm.getMovieInfo = function(movieid) {
@@ -95,6 +98,7 @@
         vm.showBio = !vm.showBio;
       }
 
+      /*Control Compare List*/
       vm.addToCompare = function(movie) {
         if(vm.ableToCompare(movie)){
           vm.selectedObjects.push(movie);

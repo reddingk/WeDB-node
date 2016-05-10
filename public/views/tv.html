@@ -1,1 +1,119 @@
-<p>TV - {{title}}</p>
+<nav class="navbar navbar-default we-nav" ng-controller="HomeController as hc" nav-hold>
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" ui-sref="home">WeDB</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <input type="text" ng-model="tc.selected" placeholder="Search For TV Show Title" uib-typeahead="tv.name for tv in tc.tvSearch($viewValue)" typeahead-template-url="views/templates/search_movies.html" typeahead-min-length="0" typeahead-wait-ms="500" typeahead-on-select="tc.viewTvInfo($item)" class="form-control">
+      <ul class="nav navbar-nav" id="tv-nav">
+        <li ng-repeat="section in hc.sections" class="{{section.type}}" ng-class="{'active':section.state == tc.title}"><a ui-sref="{{section.state}}">{{section.title}}</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div class="section-body">
+
+  <!--SELECTED TV SHOW-->
+  <div ng-if="tc.showSelected" class="selected-object">
+    <div class="selected-container">
+      <img ng-src="http://image.tmdb.org/t/p/w500{{tc.selectedTv.poster_path}}" ng-if="tc.selectedTv.poster_path != null">
+      <div class="no-cover" ng-if="tc.selectedTv.poster_path == null"></div>
+      <div class="selected-info">
+        <p class="selected-title">{{tc.selectedTv.name}} <span class="selected-year">({{tc.selectedTv.first_air_date | date:'yyyy'}})</span></p>
+        <p class="selected-seasons"><span>Seasons:</span> {{tc.selectedTv.number_of_seasons}} <span>Total Episodes:</span> {{tc.selectedTv.number_of_episodes}}</span></p>
+        <div class="selected-details">
+          <div class="btn-section">
+            <md-button class="md-raised we-btn" ng-click="tc.viewTvCredits(tc.selectedTv.id)">View Top Billed Cast </md-button>
+            <md-button class="md-raised we-btn" ng-click="tc.viewBio()">View Overview </md-button>
+            <md-button class="md-raised we-btn tv-btn" ng-click="tc.addToCompare(tc.selectedTv)" ng-disabled="!tc.ableToCompare(tc.selectedTv)">Add To Compare</md-button>
+          </div>
+          <div class="selected-about" ng-show="tc.showBio">{{tc.selectedTv.overview}}</div>
+          <div class="cast-member" ng-show="tc.showSelectedCredit">
+            <div class="selected-cast-members" ng-repeat="cast in tc.selectedCredit">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null">
+              <div class="no-cover" ng-if="cast.profile_path == null"></div>
+              <div class="selected-character"><div class="character tv">{{cast.character}}</div><div class="name">{{cast.name}}</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST OF TV SHOWS TO COMPARE-->
+  <div class="compare-object" ng-if="tc.showCompare">
+    <div class="compare-object-container">
+      <div class="object-display" ng-repeat="tvshow in tc.selectedObjects">
+        <div class="object-container">
+          <div class="remove-object" ng-click="tc.removeCompareTv(tvshow)" ng-if="tc.compared.length == 0"><i class="fa fa-minus-circle"></i></div>
+          <div class="object-poster">
+            <img ng-src="http://image.tmdb.org/t/p/w500{{tvshow.poster_path}}" ng-if="tvshow.poster_path != null">
+            <div class="no-cover" ng-if="movie.poster_path == null"></div>
+            <!--Add actor/actress compare bubbles-->
+            <div class="visual-bubbles tv-visual" ng-if="tc.comparedVisuals.length > 0">
+              <div ng-repeat="visuals in tc.comparedVisuals" ng-if="visuals.more_info.tvshow.indexOf(tvshow.id) > -1">
+                  <img ng-src="http://image.tmdb.org/t/p/w500{{visuals.more_info.profile_path}}" ng-if="visuals.more_info.profile_path != null" ng-style="{'border-color':tc.getIdColor(visuals.id)}" width="30" ng-class="{'highlighted':tc.highlight.id == visuals.id}" random-motion>
+              </div>
+            </div>
+            <div class="info-slide" ng-class="{'comp-slide':!tc.getSliderStatus(tvshow)}">
+              <p ng-click="tc.toggleSlider(tvshow)"><i class="fa" ng-class="tc.getSliderStatus(tvshow) ? 'fa-angle-double-down':'fa-angle-double-up'"></i><span>Tv Show Information</span><i class="fa" ng-class="tc.getSliderStatus(tvshow) ? 'fa-angle-double-down':'fa-angle-double-up'"></i></p>
+              <div><span class="info-header">Overview</span> <span class="info-content">{{tvshow.overview}}</span></div>
+              <div><span class="info-header">Seasons</span> <span class="info-content">Seasons: {{tvshow.number_of_seasons}}, Episodes: {{tvshow.number_of_episodes}}</span></div>
+              <div><span class="info-header">Networks</span> <span class="info-content"> <span ng-repeat="comp in tvshow.networks">{{comp.name}}<span ng-if="!$last">, </span> </span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br style="clear: both">
+  </div>
+
+  <!--Compare Buttons -->
+  <div class="compare-results" ng-if="tc.selectedObjects.length > 1">
+    <div class="btn-section">
+      <md-button class="md-raised we-btn tv-btn" ng-click="tc.compareSelectedTv()" ng-disabled="tc.compared.length > 0">Compare Selected Tv Shows</md-button>
+      <md-button class="md-raised we-btn" ng-click="tc.clearResults()">Clear Results</md-button>
+    </div>
+  </div>
+
+  <!--About Text-->
+  <div class="about-section" id="tv-about" ng-if="tc.compared.length == 0">
+    <h1>Tv Show Comparison</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>
+
+  <!--Compare Results Pills-->
+  <div class="results-pill" ng-if="tc.compared.length > 0">
+    <div class="compare-header">
+      <h2>Comparison Results</h2>
+      <p>Please select tv show titles to get list of matching cast members in those shows.</p>
+    </div>
+    <div class="pill-container">
+      <div class="pill-left">
+        <div ng-repeat="compare in tc.compared" class="compare-select tv-select" ng-click="tc.selectedList = compare;" ng-class="tc.getListClass(compare)">
+          <div class="titles">
+            <div>{{compare.tv1.name}}</div>
+            <div>{{compare.tv2.name}}</div>
+            <div ng-if="compare.tv3 != null">{{compare.tv3.name}}</div>
+          </div>
+          <i class="fa fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="pill-right">
+        <div class="default" ng-if="tc.selectedList==undefined">Please Select</div>
+        <div ng-if="tc.selectedList!=undefined">
+          <ul>
+            <li ng-repeat="cast in tc.selectedList.matchedCast" ng-click="tc.highlightCast(cast)" ng-class="{'highlighted':tc.highlight.id == cast.id}"><img ng-src="http://image.tmdb.org/t/p/w500{{cast.profile_path}}" ng-if="cast.profile_path != null" ng-style="{'border-color':tc.getIdColor(cast.id)}"><span>{{cast.name}}</span></li>
+          </ul>
+          <div class="no-matches" ng-if="tc.selectedList.matchedCast.length == 0"><i class="fa fa-ban"></i> No matching cast members for these tv shows</div>
+        </div>
+      </div>
+      <br style="clear: both;">
+    </div>
+  </div>
+
+<!--End of Section Body-->
+
+</div>

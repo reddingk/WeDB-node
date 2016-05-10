@@ -3,10 +3,11 @@
 		angular.module('weMovies', ['ui.bootstrap']);
 		angular.module('weSpecial', ['ui.bootstrap']);
 		angular.module('weCast', ['ui.bootstrap']);
+		angular.module('weTv', ['ui.bootstrap']);
 		angular.module('directives', []);
 		angular.module('services', []);
 
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','tvCtrl', 'weMovies'])
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'directives', 'config', 'services','homeCtrl', 'weSpecial', 'weCast','weTv', 'weMovies'])
 		.run(function($rootScope){
 	    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 	        //change body background
@@ -27,7 +28,7 @@
 								document.body.style.backgroundImage = "url('img/special_back.png')";
 								break;
 							case "tvBody":
-								document.body.style.background = 'green';
+								document.body.style.backgroundImage = "url('img/tv_back.png')";
 								break;
 							case "castBody":
 								document.body.style.backgroundImage = "url('img/cast_back.png')";

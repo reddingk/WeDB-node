@@ -1,14 +1,14 @@
 (function(){
    "use strict";
 
-   angular.module('weMovies')
-    .service('movieServices', ['$q', '$http','api', function MovieService($q, $http, api) {
+   angular.module('weTv')
+    .service('tvServices', ['$q', '$http','api', function TvService($q, $http, api) {
       return {
         names: function($str){
           var def = $q.defer();
           $http({
             method: 'GET',
-            url: api.movie.searchname($str)
+            url: api.tv.searchname($str)
           }).then(function successCallback(response) {
             def.resolve(response.data);
           }, function errorCallback(response) {
@@ -20,7 +20,7 @@
           var def = $q.defer();
           $http({
             method: 'GET',
-            url: api.movie.getMovieCredits($mid)
+            url: api.tv.getTvCredits($mid)
           }).then(function successCallback(response) {
             def.resolve(response.data);
           }, function errorCallback(response) {
@@ -32,7 +32,7 @@
           var def = $q.defer();
           $http({
             method: 'GET',
-            url: api.movie.getMovieInfo($mid)
+            url: api.tv.getTvInfo($mid)
           }).then(function successCallback(response) {
             def.resolve(response.data);
           }, function errorCallback(response) {
@@ -43,8 +43,8 @@
 
       }
     }])
-   .factory("movieData", ['$q', function($q){
-     function movieCompareData() {
+   .factory("tvData", ['$q', function($q){
+     function tvCompareData() {
        var vm = this;
 
        vm.selectedMovies = [];
@@ -65,7 +65,7 @@
        }
      }
 
-     return new movieCompareData();
+     return new tvCompareData();
    }]);
 
 
