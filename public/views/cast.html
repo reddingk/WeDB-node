@@ -105,7 +105,7 @@
       <div class="pill-right">
         <div class="default" ng-if="cc.selectedList==undefined">Please Select</div>
         <div ng-if="cc.selectedList!=undefined">
-          <ul>
+          <ul class="movie-list">
             <li ng-repeat="movie in cc.selectedList.matchedMovies" ng-click="cc.highlightCast(movie)" ng-class="{'highlighted':cc.highlight.id == movie.id}"><img ng-src="http://image.tmdb.org/t/p/w500{{movie.poster_path}}" ng-if="movie.poster_path != null" ng-style="{'border-color':cc.getIdColor(movie.id)}"><span>{{movie.title}}</span></li>
           </ul>
           <div class="no-matches" ng-if="cc.selectedList.matchedMovies.length == 0"><i class="fa fa-ban"></i> No matching movies for these cast members</div>
