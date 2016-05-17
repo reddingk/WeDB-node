@@ -2,7 +2,7 @@
 
   angular
     .module('config')
-    .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    .config(['$stateProvider', '$urlRouterProvider','$locationProvider', function($stateProvider, $urlRouterProvider, $locationProvider) {
       $stateProvider
       .state('home', {
         url: "/",
@@ -38,6 +38,7 @@
       });
 
       $urlRouterProvider.otherwise('/');
+      $locationProvider.html5Mode(true);
     }]);
 
 
