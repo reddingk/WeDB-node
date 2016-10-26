@@ -1,4 +1,5 @@
 .page-container {
+
   .home-img {
     height: 500px;
     overflow: hidden;
@@ -58,9 +59,98 @@
 
         .item-title { text-transform: capitalize; text-align: center; font-size: 2rem; font-weight: bold; }
         .item-text { font-size: 1.5rem; text-align: center; }
-        .fa { font-size: 5rem; }
+        .fa { font-size: 7rem; transition: all 0.7s ease-in-out; }
       }
     }
-    &:hover { .mask { opacity: 0.8; }}
+    &:hover, &:focus { .mask { opacity: 0.8; } .item-content { .content { .fa { transform: scale(1.5); }} } }
+  }
+
+  .blog-post {
+    height: 300px;
+    padding: 30px;
+    background-color: rgba(150,150,150,1);
+    .img-section {
+      display: inline-block;
+      width: 25%;
+      position: relative;
+      height: 100%;
+      //overflow: hidden;
+      .images {
+        position: absolute;
+        top: 0;
+        background-color: rgba(255,255,255,1);
+        overflow: hidden;
+        height: 100%;
+        width: 45%;
+        border: 1px solid rgba(0,0,0,0.3);
+        &.image1 {
+          left: 15%;
+          -ms-transform: rotate(-15deg); /* IE 9 */
+          -webkit-transform: rotate(-15deg); /* Chrome, Safari, Opera */
+          transform: rotate(-15deg);
+        }
+        &.image2 {
+          left: 45%;
+          -ms-transform: rotate(7deg); /* IE 9 */
+          -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
+          transform: rotate(7deg);
+        }
+        img { padding: 20px 20px 50px 20px; height: 100%; width: 100%;}
+      }
+    }
+    .content-section {
+      display: inline-block;
+      padding: 10px;
+      font-size: 1.1rem;
+      width: 65%;
+      height: 100%;
+      overflow: auto;
+
+      .read-more { color: orange; }
+    }
+    .content-more {
+      position: absolute;
+      right: 3%;
+      top: 50%;
+      transform: translateY(-50%);
+      .text { display: inline-block; font-size: 1.2rem; padding-right: 20px;}
+      .arrow {
+      	position: absolute;
+      	top: 50%;
+        transform: translateY(-50%);
+      	width: 7rem;
+      	height: 7rem;
+      	background: transparent;
+      	border-top: .4rem solid black;
+      	border-right: .4rem solid black;
+      	box-shadow: 0 0 0 lightgray;
+      	transition: all .5s ease;
+
+      	&.left {
+      		left: 0;
+      		transform: translate3d(0,-50%,0) rotate(-135deg);
+      	}
+
+      	&.right {
+      		right: 0;
+      		transform: translate3d(0,-50%,0) rotate(45deg);
+      	}
+
+      	&:hover {
+      		border-top: .4rem solid orange;
+      		border-right: .4rem solid orange;
+      		box-shadow: .2rem -.2rem 0 black;
+
+      		&.left {
+      			left: -.2rem;
+      		}
+
+      		&.right {
+      			right: -.2rem;
+      		}
+      	}
+      }
+
+    }
   }
 }

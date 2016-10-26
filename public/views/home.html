@@ -16,4 +16,13 @@
     </div>
   </div>
 
+  <div class="blog-post card crd-1">
+    <div class="img-section">
+      <div class="images image1"><img ng-src="{{sc.latestBlog.img1}}"></div>
+      <div class="images image2"><img ng-src="{{sc.latestBlog.img2}}"></div>
+    </div>
+    <div class="content-section">{{sc.latestBlog.text | limitTo: 600}} .... <span class="read-more">Read More</span></div>
+    <div class="content-more"><div class="text">Read More</div><a href="#" class="arrow right"></a></div>
+  </div>
+
 </div>
