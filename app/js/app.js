@@ -1,7 +1,7 @@
 (function () {
 	"use strict";
 		angular.module('dataconfig', []);
-		angular.module('config', [ 'ngMaterial' ]);
+		angular.module('config', [ 'ngMaterial']);
 		angular.module('directives', []);
 		angular.module('homeCtrl', ['ui.bootstrap', 'ngAnimate']);
 		/**/
