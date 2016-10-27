@@ -99,7 +99,32 @@ html, body {
           display: inline-block;
           input { width: 100%; background-color: rgba(0,0,0,0); border: none;}
         }
+      }
+    }
 
+    .search-results{
+      background-color: rgba(50,50,50,0.9);
+      width: 100%;
+      padding: 5px 10%;
+      max-height: 400px;
+      .list-container {
+        max-height: 380px;
+        overflow: auto;
+        .list-item {
+          width: 100%;
+          min-height: 50px;
+          text-align: left;
+          &+.list-item { border-top: 1px solid rgba(200,200,200,0.7);}
+          .result-item {
+            padding: 10px;
+            &.movie-item { &:hover { background-color: @color-movie; }}
+            &.tv-item { &:hover { background-color: @color-tv; }}
+            &.cast-item { &:hover { background-color: @color-cast; }}
+
+            .item-img { padding: 5px; width: 75px; img { width: 100%; } display: inline-block; }
+            .item-info { padding: 5px; display: inline-block; vertical-align: top;}
+          }
+        }
       }
     }
   }

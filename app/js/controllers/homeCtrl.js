@@ -7,6 +7,9 @@
 
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
+      vm.searchQuery = "";
+      vm.displayResults = { "max":10, "display":[]};
+      vm.allResults = [];
 
       vm.homeImg = "imgs/siteart/Home6.jpg";
       vm.pageCards = [
@@ -19,6 +22,17 @@
 
       /*Functions*/
       vm.toggleSearch = toggleSearch;
+      vm.search = search;
+
+      function search() {
+        var query = vm.searchQuery;
+        if(query.length > 1){
+          weInfo.search.all(query, function(results){
+            vm.allResults = results;
+            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);            
+          });
+        }
+      }
 
       function toggleSearch(control){
         if(control == "open")
