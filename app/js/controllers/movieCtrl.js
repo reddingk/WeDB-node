@@ -22,6 +22,7 @@
       vm.addItem = addItem;
 
       function addItem(item) {
+        // DO ID check to see if it is already added
         vm.comparisonMovies.push(item);
         clearDetails();
       }
