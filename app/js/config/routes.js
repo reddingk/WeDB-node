@@ -16,14 +16,24 @@
           }
         }
       })
+      .state('app.movie', {
+        url: "movie?id1&id2&id3",
+        views: {
+          'content@': {
+            templateUrl: 'views/movie.html',
+            controller: 'MovieController as sc'
+          }
+        }
+      })
       .state('app.construction', {
         url: "underconstruction",
         views: {
           'content@': {
-            templateUrl: 'views/construction.html'
+            templateUrl: 'views/construction.html',
+            controller: 'HomeController as sc'
           }
         }
-      })
+      });
 
 
 

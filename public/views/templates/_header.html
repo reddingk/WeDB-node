@@ -11,9 +11,9 @@
       </div>
       <div class="collapse navbar-collapse" id="weNavbar">
         <ul class="nav navbar-nav pull-right">
-          <li><a ui-sref="app.construction" class="movie" ng-class="{'active':sc.checkActivePage('construction')}">Movies</a></li>
-          <li><a ui-sref="app.construction" class="tv" ng-class="{'active':sc.checkActivePage('construction')}">Tv shows</a></li>
-          <li><a ui-sref="app.construction" class="cast" ng-class="{'active':sc.checkActivePage('construction')}">Cast & Crew</a></li>
+          <li><a ui-sref="app.movie" class="movie" ui-sref-active="active">Movies</a></li>
+          <li><a ui-sref="app.construction" class="tv" ui-sref-active="active">Tv shows</a></li>
+          <li><a ui-sref="app.construction" class="cast" ui-sref-active="active">Cast & Crew</a></li>
           <li><a ng-click="sc.toggleSearch('toggle')" ng-hide="sc.searchOpen"><i class="fa fa-search" aria-hidden="true"></i></a></li>
         </ul>
       </div>
@@ -26,7 +26,7 @@
       <div class="search-container">
         <div class="search-icon search" ng-click="sc.search()"><i class="fa fa-search"></i></div>
         <div class="search-bar"><input type="text" name="search" ng-model="sc.searchQuery"></div>
-        <div class="search-icon clear"><i class="fa fa-times"></i></div>
+        <div class="search-icon clear" ng-click="sc.clearSearch()"><i class="fa fa-times"></i></div>
       </div>
     </div>
 
@@ -34,17 +34,22 @@
       <div class="list-container">
         <div class="list-item" ng-repeat="item in sc.displayResults.display">
           <!--Movie Result-->
-          <div class="result-item movie-item" ng-if="item.media_type == 'movie'">
+          <div class="result-item movie-item" ui-sref="app.movie({id1: item.id})" ng-if="item.media_type == 'movie'">
+            <div class="item-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}" /></div>
+            <div class="item-info"><div class="item-title">{{item.title}} <span class="item-year">({{item.release_date | date:"yyyy"}})</span></div></div>
+          </div>
+          <!-- Add Result-->
+          <div class="result-item movie-item" ng-click="" ng-if="sc.title == 'movie'">
             <div class="item-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}" /></div>
             <div class="item-info"><div class="item-title">{{item.title}} <span class="item-year">({{item.release_date | date:"yyyy"}})</span></div></div>
           </div>
           <!--TV Result-->
-          <div class="result-item tv-item" ng-if="item.media_type == 'tv'">
+          <div class="result-item tv-item" ng-if="item.media_type == 'tv' || sc.title == 'tv'">
             <div class="item-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}" /></div>
             <div class="item-info"><div class="item-title">{{item.name}} <span class="item-year">({{item.first_air_date | date:"MM/dd/yyyy"}})</span></div></div>
           </div>
           <!--Person Result-->
-          <div class="result-item cast-item" ng-if="item.media_type == 'person'">
+          <div class="result-item cast-item" ng-if="item.media_type == 'person' || sc.title == 'cast'">
             <div class="item-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.profile_path}}" /></div>
             <div class="item-info"><div class="item-title">{{item.name}}</div></div>
           </div>

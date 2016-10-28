@@ -15,7 +15,9 @@
         search: {
           all: function(query, callback) {
             movieServices.anyItem(query, function(res) { callback(res); } );
-            //return demo;
+          },
+          movies: function(query, callback) {
+            movieServices.names(query, function(res) { callback(res); } );
           }
         }
       }

@@ -23,13 +23,20 @@
       /*Functions*/
       vm.toggleSearch = toggleSearch;
       vm.search = search;
+      vm.clearSearch = clearSearch;
+
+      function clearSearch() {
+        vm.searchQuery = "";
+        vm.allResults = [];
+        vm.displayResults.display = [];
+      }
 
       function search() {
         var query = vm.searchQuery;
         if(query.length > 1){
           weInfo.search.all(query, function(results){
             vm.allResults = results;
-            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);            
+            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
           });
         }
       }

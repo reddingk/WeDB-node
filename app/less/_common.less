@@ -24,112 +24,122 @@ html, body {
 }
 
 /*Navigation*/
-.nav-container {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 100;
-	width: 100%;
-  .navbar {
-    border-radius: 0px;
-    margin-bottom: 0px;
-    position: relative;
-    z-index: 90;
-    .container-fluid {
-      .navbar-header {
-        .navbar-brand {
-          .logo { height: 100%; }
+.header-container {
+
+  &.construction { .nav-container { .navbar { background: linear-gradient(to left, rgba(34,34,34,1) , rgba(200,200,200,1)); } } }
+  &.movie { .nav-container { .navbar { background: linear-gradient(to left, rgba(34,34,34,1) , @color-movie); } } }
+
+  .nav-container {
+  	position: fixed;
+  	top: 0;
+  	left: 0;
+  	z-index: 100;
+  	width: 100%;
+
+
+    .navbar {
+      border-radius: 0px;
+      margin-bottom: 0px;
+      position: relative;
+      z-index: 90;
+      .container-fluid {
+        .navbar-header {
+          .navbar-brand {
+            .logo { height: 100%; }
+          }
+          .navbar-toggle {
+            border-color: rgba(255,255,255,0);
+            .icon-bar {
+              width: 30px;
+            }
+          }
         }
-        .navbar-toggle {
-          border-color: rgba(255,255,255,0);
-          .icon-bar {
-            width: 30px;
+        #weNavbar {
+          &.collapsing, &.in {
+            .nav { width: 100%;}
+          }
+          .nav {
+            li {
+              a {
+                &:hover { opacity: 0.8;}
+
+                &.movie { color: @color-movie; }
+                &.tv { color: @color-tv; }
+                &.cast { color: @color-cast;}
+                &.active { color: rgba(0,0,0,1); }
+              }
+            }
           }
         }
       }
-      #weNavbar {
-        &.collapsing, &.in {
-          .nav { width: 100%;}
+    }
+    .nav-bottom {
+      position: relative;
+      z-index: 20;
+      overflow: hidden;
+      -webkit-animation:0.5s slideInDown  ease;
+      animation:0.5s slideInDown  ease;
+
+
+      /* when showing the thing */
+      &.ng-hide  {
+        -webkit-animation:0.7s slideOutUp ease;
+        animation:0.7s slideOutUp ease;
+      }
+      .drop-search {
+        background-color: rgba(50,50,50,0.9);
+        min-height: 30px;
+        padding: 10px 15px;
+        .nav-close { display: inline-block; width: 10%; transition: all 0.7s ease; &:hover { color:  rgba(200,200,200,1);}}
+        .search-container {
+          padding: 3px;
+          display: inline-block;
+          width: 85%;
+          border-bottom: 1px solid rgba(255,255,255,1);
+          .search-icon {
+            width: 3%;
+            display: inline-block;
+            transition: all 0.7s ease;
+            &.search { }
+            &.clear { text-align: right; }
+            &:hover { color:  rgba(100,100,100,1);}
+          }
+          .search-bar {
+            width: 93%;
+            display: inline-block;
+            input { width: 100%; background-color: rgba(0,0,0,0); border: none;}
+          }
         }
-        .nav {
-          li {
-            a {
-              &.movie { color: @color-movie;}
-              &.tv { color: @color-tv;}
-              &.cast { color: @color-cast;}
+      }
+
+      .search-results{
+        background-color: rgba(50,50,50,0.9);
+        width: 100%;
+        padding: 10px 0px;
+        max-height: 400px;
+        .list-container {
+          max-height: 380px;
+          overflow: auto;
+          .list-item {
+            width: 100%;
+            min-height: 50px;
+            text-align: left;
+            &+.list-item { border-top: 1px solid rgba(200,200,200,0.7);}
+            .result-item {
+              padding: 10px 10%;
+              &.movie-item { &:hover { background-color: @color-movie; }}
+              &.tv-item { &:hover { background-color: @color-tv; }}
+              &.cast-item { &:hover { background-color: @color-cast; }}
+
+              .item-img { padding: 5px; width: 75px; img { width: 100%; } display: inline-block; }
+              .item-info { padding: 5px; display: inline-block; vertical-align: top;}
             }
           }
         }
       }
     }
   }
-  .nav-bottom {
-    position: relative;
-    z-index: 20;
-    overflow: hidden;
-    -webkit-animation:0.5s slideInDown  ease;
-    animation:0.5s slideInDown  ease;
-
-
-    /* when showing the thing */
-    &.ng-hide  {
-      -webkit-animation:0.7s slideOutUp ease;
-      animation:0.7s slideOutUp ease;
-    }
-    .drop-search {
-      background-color: rgba(50,50,50,0.9);
-      min-height: 30px;
-      padding: 10px 15px;
-      .nav-close { display: inline-block; width: 10%; transition: all 0.7s ease; &:hover { color:  rgba(200,200,200,1);}}
-      .search-container {
-        padding: 3px;
-        display: inline-block;
-        width: 85%;
-        border-bottom: 1px solid rgba(255,255,255,1);
-        .search-icon {
-          width: 3%;
-          display: inline-block;
-          transition: all 0.7s ease;
-          &.search { }
-          &.clear { text-align: right; }
-          &:hover { color:  rgba(100,100,100,1);}
-        }
-        .search-bar {
-          width: 93%;
-          display: inline-block;
-          input { width: 100%; background-color: rgba(0,0,0,0); border: none;}
-        }
-      }
-    }
-
-    .search-results{
-      background-color: rgba(50,50,50,0.9);
-      width: 100%;
-      padding: 5px 10%;
-      max-height: 400px;
-      .list-container {
-        max-height: 380px;
-        overflow: auto;
-        .list-item {
-          width: 100%;
-          min-height: 50px;
-          text-align: left;
-          &+.list-item { border-top: 1px solid rgba(200,200,200,0.7);}
-          .result-item {
-            padding: 10px;
-            &.movie-item { &:hover { background-color: @color-movie; }}
-            &.tv-item { &:hover { background-color: @color-tv; }}
-            &.cast-item { &:hover { background-color: @color-cast; }}
-
-            .item-img { padding: 5px; width: 75px; img { width: 100%; } display: inline-block; }
-            .item-info { padding: 5px; display: inline-block; vertical-align: top;}
-          }
-        }
-      }
-    }
-  }
 }
-
 /*Main Body*/
 .mainBody {
   padding-top: 50px;
@@ -139,7 +149,10 @@ html, body {
   .header-container {
 
   }
-  .page-container { padding-bottom: 30px; }
+  .page-container {
+    padding-bottom: 30px;
+    .construction-txt { text-align: center; padding-top: 30px; }
+  }
 
   .card {
     display: inline-block;

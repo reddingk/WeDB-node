@@ -5,7 +5,8 @@
 		angular.module('services', []);
 		angular.module('directives', []);
 		angular.module('homeCtrl', ['ui.bootstrap', 'ngAnimate']);
+		angular.module('movieCtrl', ['ui.bootstrap', 'ngAnimate']);
 		/**/
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl']);
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieCtrl']);
 
 })();
