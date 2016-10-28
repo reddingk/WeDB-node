@@ -33,6 +33,7 @@
   .page-cards {
     height: 300px;
     padding: 30px;
+    cursor: pointer;
     &.movie { .mask { background-color: @color-movie; }}
     &.tv { .mask { background-color: @color-tv;}}
     &.cast { .mask { background-color: @color-cast;}}
@@ -74,37 +75,34 @@
       width: 25%;
       position: relative;
       height: 100%;
-      //overflow: hidden;
+      overflow: hidden;
       .images {
-        position: absolute;
-        top: 0;
-        background-color: rgba(255,255,255,1);
-        overflow: hidden;
-        height: 100%;
-        width: 45%;
-        border: 1px solid rgba(0,0,0,0.3);
-        &.image1 {
-          left: 15%;
-          -ms-transform: rotate(-15deg); /* IE 9 */
-          -webkit-transform: rotate(-15deg); /* Chrome, Safari, Opera */
-          transform: rotate(-15deg);
-        }
-        &.image2 {
-          left: 45%;
-          -ms-transform: rotate(7deg); /* IE 9 */
-          -webkit-transform: rotate(7deg); /* Chrome, Safari, Opera */
-          transform: rotate(7deg);
-        }
-        img { padding: 20px 20px 50px 20px; height: 100%; width: 100%;}
+        display: inline-block;
+        width: 50%;
+        height: 50%;
+        padding: 1px;
+        text-align: center;
+        img { height: 100%; max-width: 100%;}
       }
     }
     .content-section {
       display: inline-block;
       padding: 10px;
-      font-size: 1.1rem;
       width: 65%;
       height: 100%;
       overflow: auto;
+      color: rgba(0,0,0,1);
+      border: dashed 5px rgba(230,230,230,1);
+
+      .content-title {
+        font-size: 2rem;
+        font-weight: bold;
+        display: block;
+      }
+      .content-text {
+        font-size: 1.1rem;
+        line-height: 1.7rem;
+      }
 
       .read-more { color: orange; }
     }

@@ -8,6 +8,7 @@
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
       vm.searchQuery = "";
+      vm.searchIcon = "fa-search-plus";
       vm.displayResults = { "max":10, "display":[]};
       vm.allResults = [];
 
@@ -20,7 +21,10 @@
       vm.toggleSearch = toggleSearch;
       vm.search = search;
       vm.clearSearch = clearSearch;
+      vm.itemAction = itemAction;
 
+      function itemAction(item, type) { }
+      
       function clearSearch() {
         vm.searchQuery = "";
         vm.allResults = [];
