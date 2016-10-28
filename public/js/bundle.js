@@ -258,13 +258,21 @@
       var id3 = $stateParams.id3;
 
       vm.selectedMovie = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
+      vm.comparisonMovies = [];
 
       if(id1 != undefined && (id2 == undefined && id3 == undefined)){
-        getDetails(id1);
+        displayDetails(id1);
       }
       /*Functions*/
-      vm.getDetails = getDetails;
+      vm.clearDetails = clearDetails;
+      vm.displayDetails = displayDetails;
       vm.getAdditionalSelectedInfo = getAdditionalSelectedInfo;
+      vm.addItem = addItem;
+
+      function addItem(item) {
+        vm.comparisonMovies.push(item);
+        clearDetails();
+      }
 
       function getAdditionalSelectedInfo(type){
         if(Object.keys(vm.selectedMovie[type]).length == 0) {
@@ -287,7 +295,7 @@
 
       }
 
-      function getDetails(id){
+      function displayDetails(id){
         weInfo.search.movies.byId(id, function(results){
           vm.selectedMovie.id = id;
           vm.selectedMovie.details = results;
@@ -296,6 +304,15 @@
           vm.selectedMovie.infoview = 'details';
           vm.selectedMovie.display = (results != null);
         });
+      }
+      function clearDetails(){
+        vm.selectedMovie.id = -1;
+        vm.selectedMovie.details = {};
+        vm.selectedMovie.credits = {};
+        vm.selectedMovie.suggestions = {};
+        vm.selectedMovie.infoview = 'details';
+        vm.selectedMovie.display = false;
+
       }
 
       /*Header*/
@@ -312,7 +329,11 @@
       vm.clearSearch = clearSearch;
       vm.itemAction = itemAction;
 
-      function itemAction(item, type) { }
+      function itemAction(item, type) {
+        displayDetails(item.id);
+        clearSearch();
+        toggleSearch("close");
+      }
 
       function clearSearch() {
         vm.searchQuery = "";
@@ -334,22 +355,6 @@
         if(control == "open") { vm.searchOpen = true; }
         else if(control == "close") { vm.searchOpen = false; }
         else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('backImg', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          var url = attrs.backImg;
-          element.css({'background-image': 'url(' + url +')'});
-        }
       }
 
     }]);
@@ -413,6 +418,22 @@
           });
         }
       }
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('backImg', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          var url = attrs.backImg;
+          element.css({'background-image': 'url(' + url +')'});
+        }
+      }
+
     }]);
 
 })();

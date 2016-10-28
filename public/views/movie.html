@@ -7,7 +7,7 @@
       <div class="details-section blk-section blk-left">
         <div class="details-img">
           <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovie.details.poster_path}}">
-          <div class="add-item"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
+          <div class="add-item" ng-click="sc.addItem(sc.selectedMovie)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
         </div>
       </div>
 
@@ -42,7 +42,7 @@
             </div>
             <div class="info-section" ng-if="sc.selectedMovie.infoview == 'suggestions' ? 'selected' : ''">
               <div class="info-sugggestions-container">
-                <div class="suggestions-item" ng-repeat="item in sc.selectedMovie.suggestions.results" ng-click="sc.getDetails(item.id)";>
+                <div class="suggestions-item" ng-repeat="item in sc.selectedMovie.suggestions.results" ng-click="sc.displayDetails(item.id)";>
                   <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
                   <div class="suggestion-title">{{item.title}}</div>
                 </div>
@@ -53,4 +53,6 @@
       </div>
     </div>
   </div>
+
+  <!-- Comparison Section -->
 </div>
