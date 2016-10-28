@@ -1,0 +1,27 @@
+.page-container {
+  .movie {
+    .details-container {
+      .details-section {
+        .details-img {
+          .add-item { background-color: @color-movie-back !important; &:hover { background-color: @color-movie !important;} }
+        }
+        .item-row {
+          .item-details-container {
+            .info-section {
+              .info-credits {
+                .credits-item {
+                  .item-character, .item-job {color: @color-movie;}
+                }
+              }
+              .info-sugggestions-container {
+                .suggestions-item {
+                  &:hover { background-color: @color-movie-back; }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -24,6 +24,16 @@
             callback(response);
           });
         },
+        similar: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.movie.getSimilarMovies($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
         info: function($mid, callback) {
           $http({
             method: 'GET',

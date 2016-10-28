@@ -19,8 +19,19 @@
           all: function(query, callback) {
             movieServices.anyItem(query, function(res) { callback(res); } );
           },
-          movies: function(query, callback) {
-            movieServices.names(query, function(res) { callback(res); } );
+          movies:  {
+            byName: function(query, callback) {
+              movieServices.names(query, function(res) { callback(res); } );
+            },
+            byId: function(id, callback){
+              movieServices.info(id, function(res) { callback(res); } );
+            },
+            credits: function(id, callback){
+              movieServices.credits(id, function(res) { callback(res); } );
+            },
+            suggestions: function(id, callback){
+              movieServices.similar(id, function(res) { callback(res); } );
+            }
           }
         }
       }

@@ -25,6 +25,9 @@
              },
              getMovieInfo: function(id) {
                  return baseurl + "movie/"+id+"?api_key="+apikey;
+             },
+             getSimilarMovies: function(id) {
+               return baseurl + "movie/"+id+"/similar?api_key="+apikey;
              }
          },
          cast: {
