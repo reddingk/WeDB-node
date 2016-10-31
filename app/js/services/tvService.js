@@ -8,9 +8,9 @@
           $http({
             method: 'GET',
             url: api.tv.searchname($str)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         },
@@ -18,19 +18,29 @@
           $http({
             method: 'GET',
             url: api.tv.getTvCredits($mid)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         },
-        info: function($mid) {
+        similar: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.tv.getSimilarTv($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
+        info: function($mid, callback) {
           $http({
             method: 'GET',
             url: api.tv.getTvInfo($mid)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         }

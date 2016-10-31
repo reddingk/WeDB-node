@@ -1,0 +1,115 @@
+<div class="header-container movie" ng-include="sc.headerTemplate"></div>
+
+<div class="page-container">
+  <!--Details Page-->
+  <div class="details movietv card crd-1" ng-show="sc.selectedMovieTv.display">
+    <div class="details-container">
+      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>
+      <div class="details-section blk-section blk-left">
+        <div class="details-img">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovieTv.details.poster_path}}">
+          <div class="add-item {{sc.selectedMovieTv.details.type}}" ng-click="sc.addItem(sc.selectedMovieTv)" ng-show="sc.addCheck(sc.selectedMovieTv.id)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
+        </div>
+      </div>
+
+      <div class="details-section blk-section blk-right">
+        <div class="item-title">{{sc.selectedMovieTv.details.title}}</div>
+        <div class="item-row">
+          <div class="item-details-container">
+            <div class="item-section-seperation"><a ng-href="{{sc.selectedMovieTv.details.homepage}}" target="_blank">Website</a></div>
+            <div class="item-section-seperation"><div class="genres" ng-repeat="genre in sc.selectedMovieTv.details.genres">{{genre.name}}</div></div>
+            <div class="item-section-seperation"><div class="runtime">{{sc.selectedMovieTv.details.runtime}} minutes</div></div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-details-container options">
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details', sc.selectedMovieTv.details.type)">Overview</div>
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits', sc.selectedMovieTv.details.type)">Credits</div>
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'suggestions' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('suggestions', sc.selectedMovieTv.details.type)">Suggestions</div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-details-container info">
+            <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''">{{sc.selectedMovieTv.details.overview}}</div>
+            <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'credits' ? 'selected' : ''">
+              <div class="info-credits">
+                <div class="credits-title">Cast</div>
+                <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.cast"><div class="item-name">{{item.name}}</div> <div class="item-character">{{item.character}}</div></div>
+              </div>
+              <div class="info-credits">
+                <div class="credits-title">Crew</div>
+                <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.crew"><div class="item-name">{{item.name}}</div> <div class="item-job">{{item.job}}</div></div>
+              </div>
+            </div>
+            <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'suggestions' ? 'selected' : ''">
+              <div class="info-sugggestions-container">
+                <div class="suggestions-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.suggestions.results" ng-click="sc.displayDetails(item.id, sc.selectedMovieTv.details.type)";>
+                  <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
+                  <div class="suggestion-title" ng-if="sc.selectedMovieTv.details.type == 'movie'">{{item.title}}</div>
+                  <div class="suggestion-title" ng-if="sc.selectedMovieTv.details.type == 'tv'">{{item.name}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison movietv card crd-1">
+    <div class="comparison-container">
+      <div class="comparison-header">
+        <div class="comparison-title">Movies & Tv Shows Comparision</div>
+        <div class="comparison-ctrls" ng-if="sc.comparisonMoviesTv.length > 1">
+          <div class="ctrl-btn compare-btn" ng-click="sc.compareObjects()"><div class="icon"><i class="fa fa-balance-scale"></i></div> <span>Compare</span></div>
+          <div class="ctrl-btn clear-btn" ng-click=""><div class="icon"><i class="fa fa-minus"></i></div> <span>Clear</span></div>
+        </div>
+      </div>
+      <div class="compare-objects" ng-if="sc.comparisonMoviesTv.length > 0">
+        <div class="comparison-item" ng-repeat="item in sc.comparisonMoviesTv">
+          <div class="compare-mask" ng-class="{'active':sc.isResultsViewed(item.id)}" ng-if="sc.resultsMovieTv.visuals.view == true" ng-click="sc.toggleResultViews(item.id)">
+            <i class="fa fa-eye" ng-if="sc.isResultsViewed(item.id)"></i>
+            <i class="fa fa-eye-slash" ng-if="!sc.isResultsViewed(item.id)"></i>
+          </div>
+          <div class="compare-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.details.poster_path}}"></div>
+          <div class="compare-text" ng-if="item.details.type == 'movie'">{{item.details.title}}</div>
+          <div class="compare-text" ng-if="item.details.type == 'tv'">{{item.details.name}}</div>
+        </div>
+      </div>
+      <div class="compare-results" ng-if="sc.resultsMovieTv.visuals.view == true">
+        <div class="full-results">
+          <div class="detail-results">
+            <div class="details-title">Cast</div>
+            <div class="details-container">
+              <div class="details-item" ng-repeat="item in sc.resultsMovieTv.visuals.cast">
+                <div class="item-img" ng-style="{'background-color':item.color}"><img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null"></div>
+                <div class="item-title">{{item.name}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-results">
+            <div class="details-title">Crew</div>
+            <div class="details-container">
+              <div class="details-item" ng-repeat="item in sc.resultsMovieTv.visuals.crew">
+                <div class="item-img" ng-style="{'background-color':item.color}"><img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null"></div>
+                <div class="item-title">{{item.name}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="visual-results">
+          <div class="visual-container">
+            <div class="item-visual" ng-repeat="item in sc.resultsMovieTv.visuals.crew" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
+              <img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null">
+            </div>
+            <div class="item-visual" ng-repeat="item in sc.resultsMovieTv.visuals.cast" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
+              <img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

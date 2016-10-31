@@ -177,6 +177,8 @@ html, body {
       animation: appear 2s 1;
       .details-container {
         padding: 30px 50px;
+        position: relative;
+        .clearDetails { font-size: 4rem; position: absolute; right: 15px; color:rgba(50,50,50,0.7);}
         .details-section {
           padding: 20px;
           &.blk-section {
@@ -251,6 +253,117 @@ html, body {
                     .suggestion-title { font-weight: bold;}
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .comparison {
+      .comparison-container {
+        width: 100%;
+        padding: 30px 50px;
+        background-color: rgba(200,200,200,0.7);
+        .comparison-header {
+          .comparison-title { display: block; text-align: center; font-size: 3rem; }
+          .comparison-ctrls {
+            .ctrl-btn {
+              color:rgba(255,255,255,1);
+              display: inline-block;
+              background-color: rgba(200,200,200,0.8);
+              margin: 10px 0px;
+              min-width: 300px;
+              .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px;}
+              span { padding-left: 5px;}
+
+              &+.ctrl-btn { margin-left: 5%;}
+            }
+          }
+        }
+        .compare-objects {
+          height: 250px;
+          width: 100%;
+          overflow-x: auto;
+          white-space:nowrap;
+          text-align: center;
+          .comparison-item {
+            position: relative;
+            padding: 10px;
+            border: 4px dashed rgba(230,230,230,1);
+            text-align: center;
+            display: inline-block;
+            width: 250px;
+            height: 100%;
+            z-index: 0;
+            .compare-mask {
+              position: absolute;
+              top: 0;
+              left: 0;
+              background-color: rgba(0,0,0,0.5);
+              width: 100%;
+              height: 100%;
+              text-align: center;
+              i {
+                font-size: 5rem;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+                width: 100%;
+              }
+            }
+            .compare-img { height: 85%; img { height: 100%;}}
+            .compare-text { }
+            &+.comparison-item { margin-left: 20%; }
+          }
+        }
+        .compare-results {
+          min-height: 500px;
+          .full-results {
+            width: 55%;
+            display: inline-block;
+            .detail-results {
+              padding: 10px;
+              .details-title {font-size: 3rem; width: 100%; display: block; border-bottom: 1px solid @color-movie;}
+              .details-container {
+                height: 250px;
+                width: 100%;
+                overflow-x: auto;
+                white-space:nowrap;
+                text-align: center;
+                overflow-y: hidden;
+                .details-item {
+                  text-align: center;
+                  width: 100px;
+                  padding: 10px;
+                  display: inline-block;
+                  width: 200px;
+                  height: 250px;
+                  .item-img{ height: 85%; img { height: 100%;}}
+                  .item-title { }
+                }
+              }
+            }
+          }
+          .visual-results {
+            width:44%;
+            display: inline-block;
+            height: 600px;
+            background-color: @color-movie-back;
+            .visual-container {
+              height: 100%;
+              position: relative;
+              .item-visual {
+                height: 50px;
+                width: 50px;
+                overflow: hidden;
+                border-radius: 50%;
+                border: 2px solid;
+                position: absolute;
+                top: 0;
+                left: 0;
+                img { width: 100%;}
               }
             }
           }

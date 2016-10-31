@@ -1,0 +1,46 @@
+.page-container {
+  .details {
+    &.movietv {
+      .details-container {
+        .details-section {
+          .details-img {
+            .add-item {
+              &.movie {  background-color: @color-movie-back !important; &:hover { background-color: @color-movie !important;} }
+              &.tv {  background-color: @color-tv-back !important; &:hover { background-color: @color-tv !important;} }
+            }
+          }
+          .item-row {
+            .item-details-container {
+              .info-section {
+                .info-credits {
+                  .credits-item {
+                    &.movie { .item-character, .item-job {color: @color-movie;} }
+                    &.tv { .item-character, .item-job {color: @color-tv;} }
+                  }
+                }
+                .info-sugggestions-container {
+                  .suggestions-item {
+                    &.movie {  &:hover { background-color: @color-movie-back; } }
+                    &.tv {  &:hover { background-color: @color-tv-back; } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .comparison {
+    &.movietv {
+      .comparison-container {
+        .comparison-header { }
+        .compare-objects {
+          .comparison-item {
+            .compare-mask { &.active { background-color:@color-movie-back; }}
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,9 +5,9 @@
 		angular.module('services', []);
 		angular.module('directives', []);
 		angular.module('homeCtrl', ['ui.bootstrap', 'ngAnimate']);
-		angular.module('movieCtrl', ['ui.bootstrap', 'ngAnimate']);
+		angular.module('movieTvCtrl', ['ui.bootstrap', 'ngAnimate']);
 		/**/
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieCtrl']);
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieTvCtrl']);
 
 })();
 
@@ -18,6 +18,34 @@
     .module('dataconfig')
     .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices', function MCEInfo(WEData, $filter, movieServices, tvServices){
       var blogs = WEData.siteData.blogs;
+
+      function getAllMovieTvCredits(item, list, callback){
+        var objectMT = list[item];
+        if(Object.keys(objectMT.credits).length == 0){
+          if(objectMT.details.type == 'movie'){
+            movieServices.credits(objectMT.id, function(res) {
+              list[item].credits = res;
+              if((item-1) < 0) {
+                callback(list);
+              }
+              else {
+                getAllMovieTvCredits(item-1, list, callback);
+              }
+            });
+          }
+          else if(objectMT.details.type == 'tv'){
+            tvServices.credits(objectMT.id, function(res) {
+              list[item].credits = res;
+              if((item-1) < 0) { callback(list); }
+              else { getAllMovieTvCredits(item-1, list, callback);}
+            });
+          }
+        }
+        else {
+          if((item-1) < 0) { callback(list); }
+          else { getAllMovieTvCredits(item-1, list, callback);}
+        }
+      }
 
       return {
         blogs: {
@@ -46,6 +74,20 @@
               movieServices.similar(id, function(res) { callback(res); } );
             }
           },
+          tv: {
+            byName: function(query, callback){
+              tvServices.names(query, function(res) { callback(res); } );
+            },
+            byId: function(id, callback){
+              tvServices.info(id, function(res) { callback(res); } );
+            },
+            credits: function(id, callback){
+              tvServices.credits(id, function(res) { callback(res); } );
+            },
+            suggestions: function(id, callback){
+              tvServices.similar(id, function(res) { callback(res); } );
+            }
+          },
           movies_Tv: {
             byName: function(query, callback){
               movieServices.anyItem(query, function(res) {
@@ -68,6 +110,49 @@
               });
 
             }
+          }
+        },
+        compare: {
+          movieTv: function(compareList, callback){
+            getAllMovieTvCredits(compareList.length-1, compareList, function(res){
+              var tmpResults = {"moviestv":[], "cast":[], "crew":[]};
+              for(var i=0; i < res.length; i++){
+                tmpResults.moviestv.push({"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type});
+                //Add Cast
+                for(var j=0; j < res[i].credits.cast.length; j++){
+                  var added = false;
+                  for(var k=0; k < tmpResults.cast.length; k++){
+                    if(res[i].credits.cast[j].id == tmpResults.cast[k].id) {
+                      tmpResults.cast[k].MTIDS.push(res[i].id);
+                      added = true;
+                      break;
+                    }
+                  }
+                  if(!added) {
+                    var tmpCast = {"id":res[i].credits.cast[j].id, "name":res[i].credits.cast[j].name, "image_path":res[i].credits.cast[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.cast.push(tmpCast);
+                  }
+                }
+
+                //Add Crew
+                for(var j=0; j < res[i].credits.crew.length; j++){
+                  var added = false;
+                  for(var k=0; k < tmpResults.crew.length; k++){
+                    if(res[i].credits.crew[j].id == tmpResults.crew[k].id) {
+                      tmpResults.crew[k].MTIDS.push(res[i].id);
+                      added = true;
+                      break;
+                    }
+                  }
+                  if(!added) {
+                    var tmpCast = {"id":res[i].credits.crew[j].id, "name":res[i].credits.crew[j].name, "image_path":res[i].credits.crew[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.crew.push(tmpCast);
+                  }
+                }
+              }
+
+              callback(tmpResults);
+            });
           }
         }
       }
@@ -103,12 +188,12 @@
           }
         }
       })
-      .state('app.movie', {
-        url: "movie?id1&id2&id3",
+      .state('app.movie_tv', {
+        url: "movie_tv?id1&id2&id3",
         views: {
           'content@': {
-            templateUrl: 'views/movie.html',
-            controller: 'MovieController as sc'
+            templateUrl: 'views/movie_tv.html',
+            controller: 'MovieTvController as sc'
           }
         }
       })
@@ -189,6 +274,9 @@
              },
              getTvInfo: function(id) {
                  return baseurl + "tv/"+id+"?api_key="+apikey;
+             },
+             getSimilarTv: function(id) {
+               return baseurl + "tv/"+id+"/similar?api_key="+apikey;
              }
          }
       }
@@ -212,7 +300,7 @@
 
       vm.homeImg = "imgs/siteart/Home6.jpg";
       vm.pageCards = [
-        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie_tv","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
         {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
         {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
       ];
@@ -231,8 +319,8 @@
           // Add
         }
         else {
-          if(type == 'movie')
-          {$state.go('app.movie',{id1: item.id});}
+          if(type == 'movie' || type == 'tv')
+          {$state.go('app.movie_tv',{id1: item.id});}
           /*else if(type == 'tv')
           {$state.go(app.movie({id1: item.id}));}
           else if(type == 'cast')
@@ -272,7 +360,7 @@
 (function(){
    "use strict";
 
-    angular.module('movieCtrl').controller('MovieController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
+    angular.module('movieTvCtrl').controller('MovieTvController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
       var vm = this;
       vm.title = "movietv";
       /*Movie Ctrl*/
@@ -280,63 +368,173 @@
       var id2 = $stateParams.id2;
       var id3 = $stateParams.id3;
 
-      vm.selectedMovie = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
-      vm.comparisonMovies = [];
+      vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
+      vm.comparisonMoviesTv = [];
+      vm.resultsMovieTv = {};
+      vm.resultsMovieTv.visuals = {};
+      vm.resultsMovieTv.visuals.view = false;
 
       if(id1 != undefined && (id2 == undefined && id3 == undefined)){
-        displayDetails(id1);
+        displayDetails(id1,"");
       }
       /*Functions*/
       vm.clearDetails = clearDetails;
       vm.displayDetails = displayDetails;
       vm.getAdditionalSelectedInfo = getAdditionalSelectedInfo;
+      vm.addCheck = addCheck;
       vm.addItem = addItem;
+      vm.compareObjects = compareObjects;
+      vm.displayResultsCheck = displayResultsCheck;
+      vm.isResultsViewed = isResultsViewed;
+      vm.toggleResultViews = toggleResultViews;
 
-      function addItem(item) {
-        // DO ID check to see if it is already added
-        vm.comparisonMovies.push(item);
-        clearDetails();
+      function toggleResultViews(id){
+        var pos = -1;
+        if(vm.resultsMovieTv.viewIds.length > 1){
+          for(var i =0; i < vm.resultsMovieTv.viewIds.length; i++){
+            if(vm.resultsMovieTv.viewIds[i] == id){
+              pos = i;
+            }
+          }
+          if(pos < 0) { vm.resultsMovieTv.viewIds.push(id); }
+          else { vm.resultsMovieTv.viewIds.splice(pos, 1); }
+          // Set Visuals
+          setVisuals();
+        }
       }
 
-      function getAdditionalSelectedInfo(type){
-        if(Object.keys(vm.selectedMovie[type]).length == 0) {
-          if(type == 'credits') {
-            weInfo.search.movies.credits(vm.selectedMovie.id, function(results){
-              vm.selectedMovie.credits = results;
-              vm.selectedMovie.infoview = type
-            });
+      function isResultsViewed(id) {
+        for(var i =0; i < vm.resultsMovieTv.viewIds.length; i++){
+          if(vm.resultsMovieTv.viewIds[i] == id){
+            return true;
           }
-          else if(type == 'suggestions') {
-            weInfo.search.movies.suggestions(vm.selectedMovie.id, function(results){
-              vm.selectedMovie.suggestions = results;
-              vm.selectedMovie.infoview = type
-            });
+        }
+        return false;
+      }
+
+      function setVisuals() {
+        // Cast
+        vm.resultsMovieTv.visuals.cast = [];
+        for(var i=0; i < vm.resultsMovieTv.results.cast.length; i++) {
+          if(displayResultsCheck(vm.resultsMovieTv.results.cast[i].MTIDS)){  vm.resultsMovieTv.visuals.cast.push(vm.resultsMovieTv.results.cast[i]);    }
+        }
+        var colorArrayCast = randomColor({ count: vm.resultsMovieTv.visuals.cast.length + 1, luminosity: 'bright', format: 'rgb'});
+        for(var i=0; i < vm.resultsMovieTv.visuals.cast.length; i++) { vm.resultsMovieTv.visuals.cast[i].color = colorArrayCast[i]; }
+
+        // Crew
+        vm.resultsMovieTv.visuals.crew = [];
+        for(var i=0; i < vm.resultsMovieTv.results.crew.length; i++) {
+          if(displayResultsCheck(vm.resultsMovieTv.results.crew[i].MTIDS)) {  vm.resultsMovieTv.visuals.crew.push(vm.resultsMovieTv.results.crew[i]); }
+        }
+        var colorArrayCrew = randomColor({ count: vm.resultsMovieTv.visuals.crew.length + 1, luminosity: 'bright', format: 'rgb'});
+        for(var i=0; i < vm.resultsMovieTv.visuals.crew.length; i++) { vm.resultsMovieTv.visuals.crew[i].color = colorArrayCrew[i]; }
+        vm.resultsMovieTv.visuals.view = true;
+      }
+
+      function displayResultsCheck(ids){
+        var inAll = true;
+        for(var i =0; i < vm.resultsMovieTv.viewIds.length; i++){
+          var idActive = false;
+          for(var j =0; j < ids.length; j++){
+            if(ids[j] == vm.resultsMovieTv.viewIds[i]){idActive = true;  break; }
+          }
+          if(idActive == false) { inAll = false;  break; }
+        }
+        return inAll;
+      }
+
+      function compareObjects() {
+        weInfo.compare.movieTv(vm.comparisonMoviesTv, function(res){
+          vm.resultsMovieTv.results = res;
+          // Set View Ids
+          vm.resultsMovieTv.viewIds = [];
+          for(var i=0; i < res.moviestv.length; i++){
+            vm.resultsMovieTv.viewIds.push(res.moviestv[i].id);
+          }
+          // Set Visuals
+          setVisuals();
+        });
+      }
+
+      function addItem(item) {
+        if(addCheck(item.id)) {
+          var tmpMovieTv = {};
+          tmpMovieTv.id = item.id;
+          tmpMovieTv.details = item.details;
+          tmpMovieTv.credits = item.credits;
+          tmpMovieTv.suggestions = item.suggestions;
+
+          vm.comparisonMoviesTv.push(tmpMovieTv);
+          clearDetails();
+        }
+      }
+      function addCheck(id){
+        if(vm.comparisonMoviesTv.length >= 3){ return false;}
+
+        for(var i=0; i < vm.comparisonMoviesTv.length; i++){
+          if(vm.comparisonMoviesTv[i].id == id) {  return false;  }
+        }
+
+        return true;
+      }
+
+      function getAdditionalSelectedInfo(type, media_type){
+        if(Object.keys(vm.selectedMovieTv[type]).length == 0) {
+          if(type == 'credits' || type == 'suggestions') {
+            if(media_type == 'movie'){
+              //weInfo.search.movies.credits(vm.selectedMovieTv.id, function(results){
+              weInfo.search.movies[type](vm.selectedMovieTv.id, function(results){
+                vm.selectedMovieTv[type] = results;
+                vm.selectedMovieTv.infoview = type
+              });
+            }
+            else if(media_type == 'tv'){
+              //weInfo.search.tv.credits(vm.selectedMovieTv.id, function(results){
+              weInfo.search.tv[type](vm.selectedMovieTv.id, function(results){
+                vm.selectedMovieTv[type] = results;
+                vm.selectedMovieTv.infoview = type
+              });
+            }
           }
         }
         else {
-          vm.selectedMovie.infoview = type
+          vm.selectedMovieTv.infoview = type
         }
 
       }
 
-      function displayDetails(id){
-        weInfo.search.movies.byId(id, function(results){
-          vm.selectedMovie.id = id;
-          vm.selectedMovie.details = results;
-          vm.selectedMovie.credits = {};
-          vm.selectedMovie.suggestions = {};
-          vm.selectedMovie.infoview = 'details';
-          vm.selectedMovie.display = (results != null);
-        });
+      function displayDetails(id, type){
+        if(type == "movie"){
+          weInfo.search.movies.byId(id, function(results){
+            vm.selectedMovieTv.id = id;
+            vm.selectedMovieTv.details = results;
+            vm.selectedMovieTv.details.type = type;
+            vm.selectedMovieTv.credits = {};
+            vm.selectedMovieTv.suggestions = {};
+            vm.selectedMovieTv.infoview = 'details';
+            vm.selectedMovieTv.display = (results != null);
+          });
+        }
+        else if(type == "tv"){
+          weInfo.search.tv.byId(id, function(results){
+            vm.selectedMovieTv.id = id;
+            vm.selectedMovieTv.details = results;
+            vm.selectedMovieTv.details.type = type;
+            vm.selectedMovieTv.credits = {};
+            vm.selectedMovieTv.suggestions = {};
+            vm.selectedMovieTv.infoview = 'details';
+            vm.selectedMovieTv.display = (results != null);
+          });
+        }
       }
-      function clearDetails(){
-        vm.selectedMovie.id = -1;
-        vm.selectedMovie.details = {};
-        vm.selectedMovie.credits = {};
-        vm.selectedMovie.suggestions = {};
-        vm.selectedMovie.infoview = 'details';
-        vm.selectedMovie.display = false;
 
+      function clearDetails(){
+        vm.selectedMovieTv.display = false;
+        vm.selectedMovieTv.id = -1;
+        vm.selectedMovieTv.details = {};
+        vm.selectedMovieTv.credits = {};
+        vm.selectedMovieTv.suggestions = {};
+        vm.selectedMovieTv.infoview = 'details';
       }
 
       /*Header*/
@@ -354,7 +552,7 @@
       vm.itemAction = itemAction;
 
       function itemAction(item, type) {
-        displayDetails(item.id);
+        displayDetails(item.id, item.media_type);
         clearSearch();
         toggleSearch("close");
       }
@@ -401,6 +599,65 @@
         }
       }
 
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          //console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.10;
+            var borderY = parentContainer.clientHeight *.10;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
+        }
+      }
     }]);
 
 })();
@@ -476,9 +733,9 @@
           $http({
             method: 'GET',
             url: api.tv.searchname($str)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         },
@@ -486,19 +743,29 @@
           $http({
             method: 'GET',
             url: api.tv.getTvCredits($mid)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         },
-        info: function($mid) {
+        similar: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.tv.getSimilarTv($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
+        info: function($mid, callback) {
           $http({
             method: 'GET',
             url: api.tv.getTvInfo($mid)
-          }).then(function successCallback(response) {
+          }).success(function (response) {
             callback(response);
-          }, function errorCallback(response) {
+          }).error(function(response){
             callback(response);
           });
         }

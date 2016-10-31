@@ -16,12 +16,12 @@
           }
         }
       })
-      .state('app.movie', {
-        url: "movie?id1&id2&id3",
+      .state('app.movie_tv', {
+        url: "movie_tv?id1&id2&id3",
         views: {
           'content@': {
-            templateUrl: 'views/movie.html',
-            controller: 'MovieController as sc'
+            templateUrl: 'views/movie_tv.html',
+            controller: 'MovieTvController as sc'
           }
         }
       })

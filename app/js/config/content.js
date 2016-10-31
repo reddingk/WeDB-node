@@ -6,6 +6,34 @@
     .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices', function MCEInfo(WEData, $filter, movieServices, tvServices){
       var blogs = WEData.siteData.blogs;
 
+      function getAllMovieTvCredits(item, list, callback){
+        var objectMT = list[item];
+        if(Object.keys(objectMT.credits).length == 0){
+          if(objectMT.details.type == 'movie'){
+            movieServices.credits(objectMT.id, function(res) {
+              list[item].credits = res;
+              if((item-1) < 0) {
+                callback(list);
+              }
+              else {
+                getAllMovieTvCredits(item-1, list, callback);
+              }
+            });
+          }
+          else if(objectMT.details.type == 'tv'){
+            tvServices.credits(objectMT.id, function(res) {
+              list[item].credits = res;
+              if((item-1) < 0) { callback(list); }
+              else { getAllMovieTvCredits(item-1, list, callback);}
+            });
+          }
+        }
+        else {
+          if((item-1) < 0) { callback(list); }
+          else { getAllMovieTvCredits(item-1, list, callback);}
+        }
+      }
+
       return {
         blogs: {
           all: function(){
@@ -33,6 +61,20 @@
               movieServices.similar(id, function(res) { callback(res); } );
             }
           },
+          tv: {
+            byName: function(query, callback){
+              tvServices.names(query, function(res) { callback(res); } );
+            },
+            byId: function(id, callback){
+              tvServices.info(id, function(res) { callback(res); } );
+            },
+            credits: function(id, callback){
+              tvServices.credits(id, function(res) { callback(res); } );
+            },
+            suggestions: function(id, callback){
+              tvServices.similar(id, function(res) { callback(res); } );
+            }
+          },
           movies_Tv: {
             byName: function(query, callback){
               movieServices.anyItem(query, function(res) {
@@ -55,6 +97,49 @@
               });
 
             }
+          }
+        },
+        compare: {
+          movieTv: function(compareList, callback){
+            getAllMovieTvCredits(compareList.length-1, compareList, function(res){
+              var tmpResults = {"moviestv":[], "cast":[], "crew":[]};
+              for(var i=0; i < res.length; i++){
+                tmpResults.moviestv.push({"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type});
+                //Add Cast
+                for(var j=0; j < res[i].credits.cast.length; j++){
+                  var added = false;
+                  for(var k=0; k < tmpResults.cast.length; k++){
+                    if(res[i].credits.cast[j].id == tmpResults.cast[k].id) {
+                      tmpResults.cast[k].MTIDS.push(res[i].id);
+                      added = true;
+                      break;
+                    }
+                  }
+                  if(!added) {
+                    var tmpCast = {"id":res[i].credits.cast[j].id, "name":res[i].credits.cast[j].name, "image_path":res[i].credits.cast[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.cast.push(tmpCast);
+                  }
+                }
+
+                //Add Crew
+                for(var j=0; j < res[i].credits.crew.length; j++){
+                  var added = false;
+                  for(var k=0; k < tmpResults.crew.length; k++){
+                    if(res[i].credits.crew[j].id == tmpResults.crew[k].id) {
+                      tmpResults.crew[k].MTIDS.push(res[i].id);
+                      added = true;
+                      break;
+                    }
+                  }
+                  if(!added) {
+                    var tmpCast = {"id":res[i].credits.crew[j].id, "name":res[i].credits.crew[j].name, "image_path":res[i].credits.crew[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.crew.push(tmpCast);
+                  }
+                }
+              }
+
+              callback(tmpResults);
+            });
           }
         }
       }

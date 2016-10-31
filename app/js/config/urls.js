@@ -56,6 +56,9 @@
              },
              getTvInfo: function(id) {
                  return baseurl + "tv/"+id+"?api_key="+apikey;
+             },
+             getSimilarTv: function(id) {
+               return baseurl + "tv/"+id+"/similar?api_key="+apikey;
              }
          }
       }

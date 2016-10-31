@@ -14,7 +14,7 @@
 
       vm.homeImg = "imgs/siteart/Home6.jpg";
       vm.pageCards = [
-        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie_tv","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
         {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
         {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
       ];
@@ -33,8 +33,8 @@
           // Add
         }
         else {
-          if(type == 'movie')
-          {$state.go('app.movie',{id1: item.id});}
+          if(type == 'movie' || type == 'tv')
+          {$state.go('app.movie_tv',{id1: item.id});}
           /*else if(type == 'tv')
           {$state.go(app.movie({id1: item.id}));}
           else if(type == 'cast')
