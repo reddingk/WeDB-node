@@ -16,7 +16,7 @@
 
   angular
     .module('dataconfig')
-    .service('weInfo', [ 'WEData', '$filter','movieServices', function MCEInfo(WEData, $filter, movieServices){
+    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices', function MCEInfo(WEData, $filter, movieServices, tvServices){
       var blogs = WEData.siteData.blogs;
 
       return {
@@ -44,6 +44,29 @@
             },
             suggestions: function(id, callback){
               movieServices.similar(id, function(res) { callback(res); } );
+            }
+          },
+          movies_Tv: {
+            byName: function(query, callback){
+              movieServices.anyItem(query, function(res) {
+                var combo = [];
+                var results = res.results;
+                for(var i =0; i < results.length; i++)
+                {
+                  if((results[i].media_type == "movie") || (results[i].media_type == "tv"))
+                  {
+                    combo.push(results[i]);
+                  }
+                }
+                if(combo.length < 15)
+                {
+                  // Get 2nd page and add results to combo
+                  callback(combo);
+                }
+                else { callback(combo);}
+
+              });
+
             }
           }
         }
@@ -189,9 +212,9 @@
 
       vm.homeImg = "imgs/siteart/Home6.jpg";
       vm.pageCards = [
-        {"title": "movie", "icon":"fa-film", "img":"", "loc":"app.movie","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-        {"title": "tv", "icon":"fa-television", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-        {"title": "cast", "icon":"fa-users", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie","text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+        {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+        {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"", "loc":"app.construction", "text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
       ];
 
       vm.latestBlog = weInfo.blogs.latest();
@@ -251,7 +274,7 @@
 
     angular.module('movieCtrl').controller('MovieController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
       var vm = this;
-      vm.title = "movie";
+      vm.title = "movietv";
       /*Movie Ctrl*/
       var id1 = $stateParams.id1;
       var id2 = $stateParams.id2;
@@ -270,6 +293,7 @@
       vm.addItem = addItem;
 
       function addItem(item) {
+        // DO ID check to see if it is already added
         vm.comparisonMovies.push(item);
         clearDetails();
       }
@@ -320,7 +344,7 @@
       vm.searchOpen = false;
       vm.searchQuery = "";
       vm.searchIcon = "fa-search-plus";
-      vm.displayResults = { "max":10, "display":[]};
+      vm.displayResults = { "max":15, "display":[]};
       vm.allResults = [];
 
       /*Functions*/
@@ -344,9 +368,13 @@
       function search() {
         var query = vm.searchQuery;
         if(query.length > 1){
-          weInfo.search.movies.byName(query, function(results){
+          /*weInfo.search.movies.byName(query, function(results){
             vm.allResults = results;
             vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
+          });*/
+          weInfo.search.movies_Tv.byName(query, function(results){
+            vm.allResults = results;
+            vm.displayResults.display = vm.allResults.slice(0, vm.displayResults.max);
           });
         }
       }
@@ -355,6 +383,22 @@
         if(control == "open") { vm.searchOpen = true; }
         else if(control == "close") { vm.searchOpen = false; }
         else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('backImg', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          var url = attrs.backImg;
+          element.css({'background-image': 'url(' + url +')'});
+        }
       }
 
     }]);
@@ -425,15 +469,40 @@
 (function(){
    "use strict";
 
-    angular.module('directives').directive('backImg', ['$window', function($window) {
+   angular.module('services')
+    .service('tvServices', ['$http','api', function TvService($http, api) {
       return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          var url = attrs.backImg;
-          element.css({'background-image': 'url(' + url +')'});
+        names: function($str, callback){
+          $http({
+            method: 'GET',
+            url: api.tv.searchname($str)
+          }).then(function successCallback(response) {
+            callback(response);
+          }, function errorCallback(response) {
+            callback(response);
+          });
+        },
+        credits: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.tv.getTvCredits($mid)
+          }).then(function successCallback(response) {
+            callback(response);
+          }, function errorCallback(response) {
+            callback(response);
+          });
+        },
+        info: function($mid) {
+          $http({
+            method: 'GET',
+            url: api.tv.getTvInfo($mid)
+          }).then(function successCallback(response) {
+            callback(response);
+          }, function errorCallback(response) {
+            callback(response);
+          });
         }
       }
-
     }]);
 
 })();

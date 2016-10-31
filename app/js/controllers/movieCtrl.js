@@ -3,7 +3,7 @@
 
     angular.module('movieCtrl').controller('MovieController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
       var vm = this;
-      vm.title = "movie";
+      vm.title = "movietv";
       /*Movie Ctrl*/
       var id1 = $stateParams.id1;
       var id2 = $stateParams.id2;
@@ -73,7 +73,7 @@
       vm.searchOpen = false;
       vm.searchQuery = "";
       vm.searchIcon = "fa-search-plus";
-      vm.displayResults = { "max":10, "display":[]};
+      vm.displayResults = { "max":15, "display":[]};
       vm.allResults = [];
 
       /*Functions*/
@@ -97,9 +97,13 @@
       function search() {
         var query = vm.searchQuery;
         if(query.length > 1){
-          weInfo.search.movies.byName(query, function(results){
+          /*weInfo.search.movies.byName(query, function(results){
             vm.allResults = results;
             vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
+          });*/
+          weInfo.search.movies_Tv.byName(query, function(results){
+            vm.allResults = results;
+            vm.displayResults.display = vm.allResults.slice(0, vm.displayResults.max);
           });
         }
       }

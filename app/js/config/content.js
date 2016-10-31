@@ -3,7 +3,7 @@
 
   angular
     .module('dataconfig')
-    .service('weInfo', [ 'WEData', '$filter','movieServices', function MCEInfo(WEData, $filter, movieServices){
+    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices', function MCEInfo(WEData, $filter, movieServices, tvServices){
       var blogs = WEData.siteData.blogs;
 
       return {
@@ -31,6 +31,29 @@
             },
             suggestions: function(id, callback){
               movieServices.similar(id, function(res) { callback(res); } );
+            }
+          },
+          movies_Tv: {
+            byName: function(query, callback){
+              movieServices.anyItem(query, function(res) {
+                var combo = [];
+                var results = res.results;
+                for(var i =0; i < results.length; i++)
+                {
+                  if((results[i].media_type == "movie") || (results[i].media_type == "tv"))
+                  {
+                    combo.push(results[i]);
+                  }
+                }
+                if(combo.length < 15)
+                {
+                  // Get 2nd page and add results to combo
+                  callback(combo);
+                }
+                else { callback(combo);}
+
+              });
+
             }
           }
         }

@@ -2,12 +2,12 @@
 
 <div class="page-container">
   <!--Details Page-->
-  <div class="details movie card crd-1" ng-show="sc.selectedMovie.display">
+  <div class="details movietv card crd-1" ng-show="sc.selectedMovie.display">
     <div class="details-container">
       <div class="details-section blk-section blk-left">
         <div class="details-img">
           <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovie.details.poster_path}}">
-          <div class="add-item" ng-click="sc.addItem(sc.selectedMovie)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
+          <div class="add-item {{sc.selectedMovie.details.type}}" ng-click="sc.addItem(sc.selectedMovie)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
         </div>
       </div>
 
