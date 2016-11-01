@@ -91,7 +91,6 @@ html, body {
       -webkit-animation:0.5s slideInDown  ease;
       animation:0.5s slideInDown  ease;
 
-
       /* when showing the thing */
       &.ng-hide  {
         -webkit-animation:0.7s slideOutUp ease;
@@ -261,24 +260,46 @@ html, body {
     }
 
     .comparison {
+      min-height: 400px;
       .comparison-container {
         width: 100%;
         padding: 30px 50px;
-        background-color: rgba(200,200,200,0.7);
+        //background-color: rgba(200,200,200,0.7);
         .comparison-header {
-          .comparison-title { display: block; text-align: center; font-size: 3rem; }
+          overflow: hidden;
+          .comparison-title { position: relative; z-index: 1; display: block; text-align: center; font-size: 3rem; padding: 30px 0px;}
           .comparison-ctrls {
+             position: relative; z-index: 1;
+             text-align: center;
+             padding-bottom: 20px;
             .ctrl-btn {
               color:rgba(255,255,255,1);
               display: inline-block;
               background-color: rgba(200,200,200,0.8);
               margin: 10px 0px;
               min-width: 300px;
-              .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px;}
-              span { padding-left: 5px;}
+              .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px; float: left;}
+              span { padding:5px 0px 0px 5px; float: left;}
 
               &+.ctrl-btn { margin-left: 5%;}
             }
+          }
+          .backcover-img {
+            position: absolute;
+            z-index:0;
+            top:0;
+            left: 0;
+            height: 100%;
+            min-height: 400px;
+            /* Create the parallax scrolling effect */
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            opacity: 0.5;
           }
         }
         .compare-objects {
@@ -296,6 +317,7 @@ html, body {
             width: 250px;
             height: 100%;
             z-index: 0;
+            background-color: rgba(0,0,0,0.5);
             .compare-mask {
               position: absolute;
               top: 0;
@@ -315,19 +337,29 @@ html, body {
             }
             .compare-img { height: 85%; img { height: 100%;}}
             .compare-text { }
-            &+.comparison-item { margin-left: 20%; }
+            &+.comparison-item { margin-left: 10%; }
           }
         }
+      }
+    }
+
+    .comparison-res {
+      .comparison-container {
+        width: 100%;
+        padding: 30px 50px;
+        background-color: rgba(30,30,30,0.7);
         .compare-results {
           min-height: 500px;
+          position: relative;
+          z-index:2;
           .full-results {
             width: 55%;
             display: inline-block;
             .detail-results {
               padding: 10px;
-              .details-title {font-size: 3rem; width: 100%; display: block; border-bottom: 1px solid @color-movie;}
+              .details-title {font-size: 2rem; width: 100%; display: block; border-bottom: 1px solid @color-movie;}
               .details-container {
-                height: 250px;
+                height: 170px;
                 width: 100%;
                 overflow-x: auto;
                 white-space:nowrap;
@@ -339,7 +371,7 @@ html, body {
                   padding: 10px;
                   display: inline-block;
                   width: 200px;
-                  height: 250px;
+                  height: 150px;
                   .item-img{ height: 85%; img { height: 100%;}}
                   .item-title { }
                 }
@@ -349,7 +381,7 @@ html, body {
           .visual-results {
             width:44%;
             display: inline-block;
-            height: 600px;
+            height: 410px;
             background-color: @color-movie-back;
             .visual-container {
               height: 100%;

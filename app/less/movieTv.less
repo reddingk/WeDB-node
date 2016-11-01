@@ -34,7 +34,14 @@
   .comparison {
     &.movietv {
       .comparison-container {
-        .comparison-header { }
+        .comparison-header {
+          .comparison-ctrls {
+            .ctrl-btn {
+              background-color: @color-movie-back;
+              &:hover { background-color: rgba(20,20,20,0.8);}
+            }
+          }
+        }
         .compare-objects {
           .comparison-item {
             .compare-mask { &.active { background-color:@color-movie-back; }}

@@ -363,6 +363,7 @@
     angular.module('movieTvCtrl').controller('MovieTvController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
       var vm = this;
       vm.title = "movietv";
+      vm.homeImg = "imgs/siteart/Home7.jpg";
       /*Movie Ctrl*/
       var id1 = $stateParams.id1;
       var id2 = $stateParams.id2;
@@ -387,20 +388,26 @@
       vm.displayResultsCheck = displayResultsCheck;
       vm.isResultsViewed = isResultsViewed;
       vm.toggleResultViews = toggleResultViews;
+      vm.clearCompare = clearCompare;
 
+      function clearCompare(){
+        vm.comparisonMoviesTv = [];
+        vm.resultsMovieTv = {};
+        vm.resultsMovieTv.visuals = {};
+        vm.resultsMovieTv.visuals.view = false;
+      }
       function toggleResultViews(id){
         var pos = -1;
-        if(vm.resultsMovieTv.viewIds.length > 1){
-          for(var i =0; i < vm.resultsMovieTv.viewIds.length; i++){
-            if(vm.resultsMovieTv.viewIds[i] == id){
-              pos = i;
-            }
+        for(var i =0; i < vm.resultsMovieTv.viewIds.length; i++){
+          if(vm.resultsMovieTv.viewIds[i] == id){
+            pos = i;
           }
-          if(pos < 0) { vm.resultsMovieTv.viewIds.push(id); }
-          else { vm.resultsMovieTv.viewIds.splice(pos, 1); }
-          // Set Visuals
-          setVisuals();
         }
+        if((pos < 0) && (vm.resultsMovieTv.viewIds.length < 3)) { vm.resultsMovieTv.viewIds.push(id); }
+        else if((pos >= 0) && (vm.resultsMovieTv.viewIds.length > 1)){ vm.resultsMovieTv.viewIds.splice(pos, 1); }
+        else { alert("You must keep atleast one Movie or Tv show selected");}
+        // Set Visuals
+        setVisuals();
       }
 
       function isResultsViewed(id) {
@@ -590,81 +597,6 @@
 (function(){
    "use strict";
 
-    angular.module('directives').directive('backImg', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          var url = attrs.backImg;
-          element.css({'background-image': 'url(' + url +')'});
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          //console.log("Start Motion");
-          // Randomly Set Postion & Velocity
-          var maxVelocity = 100;
-          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
-          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
-          var velX = (Math.random() * maxVelocity);
-          var velY = (Math.random() * maxVelocity);
-          var timestamp = null;
-
-          var parentContainer = element[0].offsetParent;
-
-          // Move Object
-          (function tick() {
-            var now = new Date().getTime();
-            var borderX = parentContainer.clientWidth *.10;
-            var borderY = parentContainer.clientHeight *.10;
-
-            var maxX = parentContainer.clientWidth - borderX;
-            var maxY = parentContainer.clientHeight - borderY;
-
-            var elapsed = (timestamp || now) - now;
-            timestamp = now;
-            posX += elapsed * velX / 1000;
-            posY += elapsed * velY / 1000;
-
-            if (posX > maxX) {
-                posX = 2 * maxX - posX;
-                velX *= -1;
-            }
-            if (posX < 10) {
-                posX = 10;
-                velX *= -1;
-            }
-            if (posY > maxY) {
-                posY = 2 * maxY - posY;
-                velY *= -1;
-            }
-            if (posY < 10) {
-                posY = 10;
-                velY *= -1;
-            }
-            element.css({ "top": posY, "left": posX });
-            // Set Position to $element top and left
-            // Loop to Move object
-            $timeout(tick, 30);
-          })();
-        }
-      }
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
    angular.module('services')
     .service('movieServices', ['$http','api', function MovieService($http, api) {
       return {
@@ -768,6 +700,81 @@
           }).error(function(response){
             callback(response);
           });
+        }
+      }
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('backImg', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          var url = attrs.backImg;
+          element.css({'background-image': 'url(' + url +')'});
+        }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          //console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.10;
+            var borderY = parentContainer.clientHeight *.10;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
         }
       }
     }]);
