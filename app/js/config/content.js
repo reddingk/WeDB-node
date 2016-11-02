@@ -102,40 +102,28 @@
         compare: {
           movieTv: function(compareList, callback){
             getAllMovieTvCredits(compareList.length-1, compareList, function(res){
-              var tmpResults = {"moviestv":[], "cast":[], "crew":[]};
+              var tmpResults = {"moviestv":[], "cast":[], "crew":[], "castACrew":[]};
+
               for(var i=0; i < res.length; i++){
                 tmpResults.moviestv.push({"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type});
-                //Add Cast
-                for(var j=0; j < res[i].credits.cast.length; j++){
+
+                var castCrewList = res[i].credits.cast.concat(res[i].credits.crew);
+                // Add Cast & Crew
+                for(var j=0; j < castCrewList.length; j++){
                   var added = false;
-                  for(var k=0; k < tmpResults.cast.length; k++){
-                    if(res[i].credits.cast[j].id == tmpResults.cast[k].id) {
-                      tmpResults.cast[k].MTIDS.push(res[i].id);
+                  for(var k=0; k < tmpResults.castACrew.length; k++){
+                    if(castCrewList[j].id == tmpResults.castACrew[k].id) {
+                      tmpResults.castACrew[k].MTIDS.push(res[i].id);
                       added = true;
                       break;
                     }
                   }
                   if(!added) {
-                    var tmpCast = {"id":res[i].credits.cast[j].id, "name":res[i].credits.cast[j].name, "image_path":res[i].credits.cast[j].profile_path, "MTIDS":[res[i].id]};
-                    tmpResults.cast.push(tmpCast);
+                    var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.castACrew.push(tmpCast);
                   }
                 }
 
-                //Add Crew
-                for(var j=0; j < res[i].credits.crew.length; j++){
-                  var added = false;
-                  for(var k=0; k < tmpResults.crew.length; k++){
-                    if(res[i].credits.crew[j].id == tmpResults.crew[k].id) {
-                      tmpResults.crew[k].MTIDS.push(res[i].id);
-                      added = true;
-                      break;
-                    }
-                  }
-                  if(!added) {
-                    var tmpCast = {"id":res[i].credits.crew[j].id, "name":res[i].credits.crew[j].name, "image_path":res[i].credits.crew[j].profile_path, "MTIDS":[res[i].id]};
-                    tmpResults.crew.push(tmpCast);
-                  }
-                }
               }
 
               callback(tmpResults);

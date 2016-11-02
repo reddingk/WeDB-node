@@ -31,6 +31,7 @@ html, body {
 }
 @-webkit-keyframes moviepulse {0% { color: @color-movie; } 50% { color: rgba(157,157,157,1);} 100% { color: @color-movie; } }
 @-webkit-keyframes appear {0% { opacity: 0;} 50% { opacity: 0.5;} 100% { opacity: 1; } }
+@-webkit-keyframes disappear {0% { opacity: 1;} 50% { opacity: 0.5;} 100% { opacity: 0; } }
 
 /*Navigation*/
 .header-container {
@@ -44,8 +45,6 @@ html, body {
   	left: 0;
   	z-index: 100;
   	width: 100%;
-
-
     .navbar {
       border-radius: 0px;
       margin-bottom: 0px;
@@ -172,8 +171,14 @@ html, body {
 
     .details {
       background-color: rgba(100,100,100,0.7);
-      -webkit-animation: appear 2s 1;
-      animation: appear 2s 1;
+      -webkit-animation: appear 1.5s 1;
+      animation: appear 1.5s 1;
+
+      &.ng-hide {
+        -webkit-animation: disappear 0.5s 1;
+        animation: disappear 0.5s 1;
+        opacity: 0;
+      }
       .details-container {
         padding: 30px 50px;
         position: relative;
@@ -318,6 +323,17 @@ html, body {
             height: 100%;
             z-index: 0;
             background-color: rgba(0,0,0,0.5);
+            .removeItem {
+              position: absolute;
+              top:0;
+              right: 0;
+              border-radius: 50%;
+              i {
+                font-size: 3rem;
+                color: rgba(100,0,0,0.7);
+              }
+              &:hover { i { color: rgba(200,0,0,0.9);}}
+            }
             .compare-mask {
               position: absolute;
               top: 0;
@@ -355,6 +371,7 @@ html, body {
           .full-results {
             width: 55%;
             display: inline-block;
+            vertical-align: top;
             .detail-results {
               padding: 10px;
               .details-title {font-size: 2rem; width: 100%; display: block; border-bottom: 1px solid @color-movie;}
@@ -435,10 +452,36 @@ html, body {
 /*Footer*/
 .footer {
   //height: 115px;
-  background-color: rgba(0,0,0,1);
   color: rgba(255,255,255,1);
   width: 100%;
   min-height: 50px;
+  padding: 10px;
+  background-color: rgba(34,34,34,1);
+
+  .footer-section {
+    width: 20%;
+    padding: 10px;
+    display: inline-block;
+    vertical-align: top;
+
+    &.right { float: right; }
+    .poweredby {
+      font-size: 1rem;
+      img { width: 30px; height: 30px; margin-left: 10px; }
+    }
+    .section-header {
+      color: rgba(230,230,230,1);
+      font-size: 1rem;
+    }
+    .footer-link {
+      padding-left: 3px;
+      font-size: .9rem;
+      color: rgba(190,190,190,0.8);
+      display: block;
+      &:hover { color: rgba(210,210,210,0.9);}
+      &.icon { display: inline-block;}
+    }
+  }
 }
 
 *:focus { outline: none;}

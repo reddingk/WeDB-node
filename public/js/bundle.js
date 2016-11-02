@@ -115,40 +115,28 @@
         compare: {
           movieTv: function(compareList, callback){
             getAllMovieTvCredits(compareList.length-1, compareList, function(res){
-              var tmpResults = {"moviestv":[], "cast":[], "crew":[]};
+              var tmpResults = {"moviestv":[], "cast":[], "crew":[], "castACrew":[]};
+
               for(var i=0; i < res.length; i++){
                 tmpResults.moviestv.push({"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type});
-                //Add Cast
-                for(var j=0; j < res[i].credits.cast.length; j++){
+
+                var castCrewList = res[i].credits.cast.concat(res[i].credits.crew);
+                // Add Cast & Crew
+                for(var j=0; j < castCrewList.length; j++){
                   var added = false;
-                  for(var k=0; k < tmpResults.cast.length; k++){
-                    if(res[i].credits.cast[j].id == tmpResults.cast[k].id) {
-                      tmpResults.cast[k].MTIDS.push(res[i].id);
+                  for(var k=0; k < tmpResults.castACrew.length; k++){
+                    if(castCrewList[j].id == tmpResults.castACrew[k].id) {
+                      tmpResults.castACrew[k].MTIDS.push(res[i].id);
                       added = true;
                       break;
                     }
                   }
                   if(!added) {
-                    var tmpCast = {"id":res[i].credits.cast[j].id, "name":res[i].credits.cast[j].name, "image_path":res[i].credits.cast[j].profile_path, "MTIDS":[res[i].id]};
-                    tmpResults.cast.push(tmpCast);
+                    var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "MTIDS":[res[i].id]};
+                    tmpResults.castACrew.push(tmpCast);
                   }
                 }
 
-                //Add Crew
-                for(var j=0; j < res[i].credits.crew.length; j++){
-                  var added = false;
-                  for(var k=0; k < tmpResults.crew.length; k++){
-                    if(res[i].credits.crew[j].id == tmpResults.crew[k].id) {
-                      tmpResults.crew[k].MTIDS.push(res[i].id);
-                      added = true;
-                      break;
-                    }
-                  }
-                  if(!added) {
-                    var tmpCast = {"id":res[i].credits.crew[j].id, "name":res[i].credits.crew[j].name, "image_path":res[i].credits.crew[j].profile_path, "MTIDS":[res[i].id]};
-                    tmpResults.crew.push(tmpCast);
-                  }
-                }
               }
 
               callback(tmpResults);
@@ -294,7 +282,6 @@
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
       vm.searchQuery = "";
-      vm.searchIcon = "fa-search";
       vm.displayResults = { "max":10, "display":[]};
       vm.allResults = [];
 
@@ -320,7 +307,7 @@
         }
         else {
           if(type == 'movie' || type == 'tv')
-          {$state.go('app.movie_tv',{id1: item.id});}
+          {$state.go('app.movie_tv',{id1: item.id +"-"+item.media_type});}
           /*else if(type == 'tv')
           {$state.go(app.movie({id1: item.id}));}
           else if(type == 'cast')
@@ -376,7 +363,8 @@
       vm.resultsMovieTv.visuals.view = false;
 
       if(id1 != undefined && (id2 == undefined && id3 == undefined)){
-        displayDetails(id1,"");
+        var id1List = id1.split('-');
+        displayDetails(id1List[0],id1List[1]);
       }
       /*Functions*/
       vm.clearDetails = clearDetails;
@@ -389,6 +377,19 @@
       vm.isResultsViewed = isResultsViewed;
       vm.toggleResultViews = toggleResultViews;
       vm.clearCompare = clearCompare;
+      vm.removeMovieTv = removeMovieTv;
+
+      function removeMovieTv(id){
+        //vm.comparisonMoviesTv
+        var removePos = -1;
+        for(var i=0; i < vm.comparisonMoviesTv.length; i++){
+          if(id == vm.comparisonMoviesTv[i].id){
+            removePos = i;
+            break;
+          }
+        }
+        if(removePos > -1) {vm.comparisonMoviesTv.splice(removePos,1);}
+      }
 
       function clearCompare(){
         vm.comparisonMoviesTv = [];
@@ -420,21 +421,14 @@
       }
 
       function setVisuals() {
-        // Cast
-        vm.resultsMovieTv.visuals.cast = [];
-        for(var i=0; i < vm.resultsMovieTv.results.cast.length; i++) {
-          if(displayResultsCheck(vm.resultsMovieTv.results.cast[i].MTIDS)){  vm.resultsMovieTv.visuals.cast.push(vm.resultsMovieTv.results.cast[i]);    }
+        // Cast & Crew
+        vm.resultsMovieTv.visuals.castACrew = [];
+        for(var i=0; i < vm.resultsMovieTv.results.castACrew.length; i++) {
+          if(displayResultsCheck(vm.resultsMovieTv.results.castACrew[i].MTIDS)){  vm.resultsMovieTv.visuals.castACrew.push(vm.resultsMovieTv.results.castACrew[i]);    }
         }
-        var colorArrayCast = randomColor({ count: vm.resultsMovieTv.visuals.cast.length + 1, luminosity: 'bright', format: 'rgb'});
-        for(var i=0; i < vm.resultsMovieTv.visuals.cast.length; i++) { vm.resultsMovieTv.visuals.cast[i].color = colorArrayCast[i]; }
+        var colorArrayCast = randomColor({ count: vm.resultsMovieTv.visuals.castACrew.length + 1, luminosity: 'bright', format: 'rgb'});
+        for(var i=0; i < vm.resultsMovieTv.visuals.castACrew.length; i++) { vm.resultsMovieTv.visuals.castACrew[i].color = colorArrayCast[i]; }
 
-        // Crew
-        vm.resultsMovieTv.visuals.crew = [];
-        for(var i=0; i < vm.resultsMovieTv.results.crew.length; i++) {
-          if(displayResultsCheck(vm.resultsMovieTv.results.crew[i].MTIDS)) {  vm.resultsMovieTv.visuals.crew.push(vm.resultsMovieTv.results.crew[i]); }
-        }
-        var colorArrayCrew = randomColor({ count: vm.resultsMovieTv.visuals.crew.length + 1, luminosity: 'bright', format: 'rgb'});
-        for(var i=0; i < vm.resultsMovieTv.visuals.crew.length; i++) { vm.resultsMovieTv.visuals.crew[i].color = colorArrayCrew[i]; }
         vm.resultsMovieTv.visuals.view = true;
       }
 
@@ -548,7 +542,6 @@
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
       vm.searchQuery = "";
-      vm.searchIcon = "fa-search-plus";
       vm.displayResults = { "max":15, "display":[]};
       vm.allResults = [];
 
@@ -590,6 +583,81 @@
         else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
       }
 
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('backImg', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          var url = attrs.backImg;
+          element.css({'background-image': 'url(' + url +')'});
+        }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          //console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.10;
+            var borderY = parentContainer.clientHeight *.10;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
+        }
+      }
     }]);
 
 })();
@@ -700,81 +768,6 @@
           }).error(function(response){
             callback(response);
           });
-        }
-      }
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('backImg', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          var url = attrs.backImg;
-          element.css({'background-image': 'url(' + url +')'});
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          //console.log("Start Motion");
-          // Randomly Set Postion & Velocity
-          var maxVelocity = 100;
-          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
-          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
-          var velX = (Math.random() * maxVelocity);
-          var velY = (Math.random() * maxVelocity);
-          var timestamp = null;
-
-          var parentContainer = element[0].offsetParent;
-
-          // Move Object
-          (function tick() {
-            var now = new Date().getTime();
-            var borderX = parentContainer.clientWidth *.10;
-            var borderY = parentContainer.clientHeight *.10;
-
-            var maxX = parentContainer.clientWidth - borderX;
-            var maxY = parentContainer.clientHeight - borderY;
-
-            var elapsed = (timestamp || now) - now;
-            timestamp = now;
-            posX += elapsed * velX / 1000;
-            posY += elapsed * velY / 1000;
-
-            if (posX > maxX) {
-                posX = 2 * maxX - posX;
-                velX *= -1;
-            }
-            if (posX < 10) {
-                posX = 10;
-                velX *= -1;
-            }
-            if (posY > maxY) {
-                posY = 2 * maxY - posY;
-                velY *= -1;
-            }
-            if (posY < 10) {
-                posY = 10;
-                velY *= -1;
-            }
-            element.css({ "top": posY, "left": posX });
-            // Set Position to $element top and left
-            // Loop to Move object
-            $timeout(tick, 30);
-          })();
         }
       }
     }]);

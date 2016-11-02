@@ -8,7 +8,6 @@
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
       vm.searchQuery = "";
-      vm.searchIcon = "fa-search";
       vm.displayResults = { "max":10, "display":[]};
       vm.allResults = [];
 
@@ -34,7 +33,7 @@
         }
         else {
           if(type == 'movie' || type == 'tv')
-          {$state.go('app.movie_tv',{id1: item.id});}
+          {$state.go('app.movie_tv',{id1: item.id +"-"+item.media_type});}
           /*else if(type == 'tv')
           {$state.go(app.movie({id1: item.id}));}
           else if(type == 'cast')
