@@ -240,6 +240,14 @@
         if(control == "open") { vm.searchOpen = true; }
         else if(control == "close") { vm.searchOpen = false; }
         else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
+
+        if(vm.searchOpen == true) {
+          var mainsearch = angular.element('#mainsearch');
+          mainsearch[0].focus();
+          var element = document.getElementById("mainsearch");
+          element.focus();
+          $('#mainsearch').focus();
+        }
       }
 
     }]);

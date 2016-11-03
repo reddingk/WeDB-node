@@ -183,9 +183,10 @@ html, body {
         .clearDetails {
           font-size: 4rem;
           position: absolute;
-          right: 15px;
+          right: 30px;
+          top: 0px;
           color:rgba(50,50,50,0.7);
-          transition: all 0.7 ease;
+          transition: all 0.5s ease;
           &:hover { color: rgba(200,0,0,0.9);}
         }
         .details-section {
@@ -258,6 +259,7 @@ html, body {
                     text-align: center;
                     overflow: hidden;
                     padding: 10px 0px;
+                    transition: all 0.5s ease-in-out;
                     img { height: 90%;}
                     .suggestion-title { font-weight: bold;}
                   }
@@ -277,7 +279,7 @@ html, body {
         //background-color: rgba(200,200,200,0.7);
         .comparison-header {
           overflow: hidden;
-          .comparison-title { position: relative; z-index: 1; display: block; text-align: center; font-size: 3rem; padding: 30px 0px;}
+          .comparison-title { position: relative; z-index: 1; display: block; text-align: center; font-size: 4.1rem; padding: 30px 0px;}
           .comparison-ctrls {
              position: relative; z-index: 1;
              text-align: center;
@@ -335,8 +337,8 @@ html, body {
               border-radius: 50%;
               i {
                 font-size: 3rem;
-                color:rgba(50,50,50,0.7);
-                transition: all 0.7 ease;
+                color:rgba(130,50,50,0.7);
+                transition: all 0.5s ease-in-out;
               }
               &:hover { i { color: rgba(200,0,0,0.9);}}
             }
@@ -368,12 +370,15 @@ html, body {
     .comparison-res {
       .comparison-container {
         width: 100%;
-        padding: 30px 50px;
+        padding: 30px 20px;
         background-color: rgba(30,30,30,0.7);
         .compare-results {
-          min-height: 500px;
+          //min-height: 500px;
           position: relative;
           z-index:2;
+          padding: 30px 0px;
+          border-top: 1px solid @color-movie;
+          border-bottom: 1px solid @color-movie;
           .full-results {
             width: 55%;
             display: inline-block;
@@ -404,7 +409,7 @@ html, body {
           .visual-results {
             width:44%;
             display: inline-block;
-            height: 410px;
+            height: 310px;
             background-color: @color-movie-back;
             .visual-container {
               height: 100%;
@@ -430,13 +435,13 @@ html, body {
       background-color: rgba(30,30,30,0.7);
       padding-top: 50px;
       .extra-content-containers {
-        .extra-header { font-size: 4rem; font-weight: bold;}
+        .extra-header { font-size: 3rem; font-weight: bold; padding: 10px 0px;}
         .item-container {
           width: 100%;
           overflow-x: auto;
           white-space:nowrap;
           min-height: 320px;
-          border: 1px solid rgba(0,0,0,1);
+          border-top: 1px solid rgba(0,0,0,1);
           .item {
             width: 300px;
             height: 290px;
@@ -444,6 +449,7 @@ html, body {
             text-align: center;
             overflow: hidden;
             padding: 10px 0px;
+            transition: all 0.5s ease;
             &:hover { &.movie { background-color: @color-movie-back; } &.tv { background-color: @color-tv-back; } }
             img { height: 90%;}
             .extra-title { font-weight: bold;  }

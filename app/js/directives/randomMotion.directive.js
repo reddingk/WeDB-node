@@ -19,8 +19,8 @@
           // Move Object
           (function tick() {
             var now = new Date().getTime();
-            var borderX = parentContainer.clientWidth *.10;
-            var borderY = parentContainer.clientHeight *.10;
+            var borderX = parentContainer.clientWidth *.20;
+            var borderY = parentContainer.clientHeight *.20;
 
             var maxX = parentContainer.clientWidth - borderX;
             var maxY = parentContainer.clientHeight - borderY;
