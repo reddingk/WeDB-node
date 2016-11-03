@@ -70,18 +70,21 @@
   .blog-post {
     height: 300px;
     padding: 30px;
-    background-color: rgba(150,150,150,1);
+    background-color: rgba(100,100,100,1);
     .img-section {
       display: inline-block;
       width: 25%;
       position: relative;
       height: 100%;
-      overflow: hidden;
+      overflow-x: auto;
+      white-space:nowrap;
+      margin-right: 5px;
+      border: solid 5px rgba(255,255,255,1);
       .images {
         display: inline-block;
-        width: 50%;
-        height: 50%;
-        padding: 1px;
+        width: 60%;
+        height: 100%;
+        padding: 5px;
         text-align: center;
         img { height: 100%; max-width: 100%;}
       }
@@ -92,13 +95,14 @@
       width: 65%;
       height: 100%;
       overflow: auto;
-      color: rgba(0,0,0,1);
-      border: dashed 5px rgba(230,230,230,1);
+      color: rgba(255,255,255,1);
+      border: dashed 5px rgba(255,255,255,1);
 
       .content-title {
         font-size: 2rem;
         font-weight: bold;
         display: block;
+        color: orange;
       }
       .content-text {
         font-size: 1.1rem;
@@ -120,8 +124,8 @@
       	width: 7rem;
       	height: 7rem;
       	background: transparent;
-      	border-top: .4rem solid black;
-      	border-right: .4rem solid black;
+      	border-top: .4rem solid #fff;
+      	border-right: .4rem solid #fff;
       	box-shadow: 0 0 0 lightgray;
       	transition: all .5s ease;
 
@@ -138,7 +142,7 @@
       	&:hover {
       		border-top: .4rem solid orange;
       		border-right: .4rem solid orange;
-      		box-shadow: .2rem -.2rem 0 black;
+      		box-shadow: .2rem -.2rem 0 #fff;
 
       		&.left {
       			left: -.2rem;
