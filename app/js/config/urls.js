@@ -28,6 +28,12 @@
              },
              getSimilarMovies: function(id) {
                return baseurl + "movie/"+id+"/similar?api_key="+apikey;
+             },
+             getNowPlaying: function(page) {
+               return baseurl + "movie/now_playing?page="+page+"&api_key="+apikey;
+             },
+             getPopular: function(page) {
+               return baseurl + "movie/popular?page="+page+"&api_key="+apikey;
              }
          },
          cast: {
@@ -59,6 +65,9 @@
              },
              getSimilarTv: function(id) {
                return baseurl + "tv/"+id+"/similar?api_key="+apikey;
+             },
+             getOnAir: function(page) {
+               return baseurl + "tv/on_the_air?page="+page+"&api_key="+apikey;
              }
          }
       }

@@ -59,6 +59,9 @@
             },
             suggestions: function(id, callback){
               movieServices.similar(id, function(res) { callback(res); } );
+            },
+            nowPlaying: function(page, callback){
+                movieServices.now_playing(page, function(res) { callback(res); } );
             }
           },
           tv: {
@@ -73,6 +76,9 @@
             },
             suggestions: function(id, callback){
               tvServices.similar(id, function(res) { callback(res); } );
+            },
+            onAir: function(page, callback){
+              tvServices.onAir(page, function(res) { callback(res); } );
             }
           },
           movies_Tv: {
@@ -80,22 +86,18 @@
               movieServices.anyItem(query, function(res) {
                 var combo = [];
                 var results = res.results;
-                for(var i =0; i < results.length; i++)
-                {
+                for(var i =0; i < results.length; i++) {
                   if((results[i].media_type == "movie") || (results[i].media_type == "tv"))
                   {
                     combo.push(results[i]);
                   }
                 }
-                if(combo.length < 15)
-                {
+                if(combo.length < 15) {
                   // Get 2nd page and add results to combo
                   callback(combo);
                 }
                 else { callback(combo);}
-
               });
-
             }
           }
         },

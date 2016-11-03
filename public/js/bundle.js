@@ -72,6 +72,9 @@
             },
             suggestions: function(id, callback){
               movieServices.similar(id, function(res) { callback(res); } );
+            },
+            nowPlaying: function(page, callback){
+                movieServices.now_playing(page, function(res) { callback(res); } );
             }
           },
           tv: {
@@ -86,6 +89,9 @@
             },
             suggestions: function(id, callback){
               tvServices.similar(id, function(res) { callback(res); } );
+            },
+            onAir: function(page, callback){
+              tvServices.onAir(page, function(res) { callback(res); } );
             }
           },
           movies_Tv: {
@@ -93,22 +99,18 @@
               movieServices.anyItem(query, function(res) {
                 var combo = [];
                 var results = res.results;
-                for(var i =0; i < results.length; i++)
-                {
+                for(var i =0; i < results.length; i++) {
                   if((results[i].media_type == "movie") || (results[i].media_type == "tv"))
                   {
                     combo.push(results[i]);
                   }
                 }
-                if(combo.length < 15)
-                {
+                if(combo.length < 15) {
                   // Get 2nd page and add results to combo
                   callback(combo);
                 }
                 else { callback(combo);}
-
               });
-
             }
           }
         },
@@ -234,6 +236,12 @@
              },
              getSimilarMovies: function(id) {
                return baseurl + "movie/"+id+"/similar?api_key="+apikey;
+             },
+             getNowPlaying: function(page) {
+               return baseurl + "movie/now_playing?page="+page+"&api_key="+apikey;
+             },
+             getPopular: function(page) {
+               return baseurl + "movie/popular?page="+page+"&api_key="+apikey;
              }
          },
          cast: {
@@ -265,6 +273,9 @@
              },
              getSimilarTv: function(id) {
                return baseurl + "tv/"+id+"/similar?api_key="+apikey;
+             },
+             getOnAir: function(page) {
+               return baseurl + "tv/on_the_air?page="+page+"&api_key="+apikey;
              }
          }
       }
@@ -366,6 +377,16 @@
         var id1List = id1.split('-');
         displayDetails(id1List[0],id1List[1]);
       }
+      /*Set Now Playing*/
+      vm.extraContent = {"movies":{}, "tv":{}};
+
+      weInfo.search.movies.nowPlaying(1, function(results){
+        vm.extraContent.movies = results;
+      });
+      weInfo.search.tv.onAir(1, function(results){
+        vm.extraContent.tv = results;
+      });
+
       /*Functions*/
       vm.clearDetails = clearDetails;
       vm.displayDetails = displayDetails;
@@ -380,7 +401,6 @@
       vm.removeMovieTv = removeMovieTv;
 
       function removeMovieTv(id){
-        //vm.comparisonMoviesTv
         var removePos = -1;
         for(var i=0; i < vm.comparisonMoviesTv.length; i++){
           if(id == vm.comparisonMoviesTv[i].id){
@@ -566,10 +586,6 @@
       function search() {
         var query = vm.searchQuery;
         if(query.length > 1){
-          /*weInfo.search.movies.byName(query, function(results){
-            vm.allResults = results;
-            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
-          });*/
           weInfo.search.movies_Tv.byName(query, function(results){
             vm.allResults = results;
             vm.displayResults.display = vm.allResults.slice(0, vm.displayResults.max);
@@ -708,6 +724,16 @@
             callback(response);
           });
         },
+        now_playing: function($pg,callback) {
+          $http({
+            method: 'GET',
+            url: api.movie.getNowPlaying($pg)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
         anyItem: function($str, callback) {
           $http({
             method: 'GET',
@@ -763,6 +789,16 @@
           $http({
             method: 'GET',
             url: api.tv.getTvInfo($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
+        onAir: function($pg, callback) {
+          $http({
+            method: 'GET',
+            url: api.tv.getOnAir($pg)
           }).success(function (response) {
             callback(response);
           }).error(function(response){

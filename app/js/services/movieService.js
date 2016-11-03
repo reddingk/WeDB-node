@@ -44,6 +44,16 @@
             callback(response);
           });
         },
+        now_playing: function($pg,callback) {
+          $http({
+            method: 'GET',
+            url: api.movie.getNowPlaying($pg)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
         anyItem: function($str, callback) {
           $http({
             method: 'GET',

@@ -43,6 +43,16 @@
           }).error(function(response){
             callback(response);
           });
+        },
+        onAir: function($pg, callback) {
+          $http({
+            method: 'GET',
+            url: api.tv.getOnAir($pg)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
         }
       }
     }]);

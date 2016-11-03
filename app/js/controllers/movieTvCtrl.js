@@ -20,6 +20,16 @@
         var id1List = id1.split('-');
         displayDetails(id1List[0],id1List[1]);
       }
+      /*Set Now Playing*/
+      vm.extraContent = {"movies":{}, "tv":{}};
+
+      weInfo.search.movies.nowPlaying(1, function(results){
+        vm.extraContent.movies = results;
+      });
+      weInfo.search.tv.onAir(1, function(results){
+        vm.extraContent.tv = results;
+      });
+
       /*Functions*/
       vm.clearDetails = clearDetails;
       vm.displayDetails = displayDetails;
@@ -34,7 +44,6 @@
       vm.removeMovieTv = removeMovieTv;
 
       function removeMovieTv(id){
-        //vm.comparisonMoviesTv
         var removePos = -1;
         for(var i=0; i < vm.comparisonMoviesTv.length; i++){
           if(id == vm.comparisonMoviesTv[i].id){
@@ -220,10 +229,6 @@
       function search() {
         var query = vm.searchQuery;
         if(query.length > 1){
-          /*weInfo.search.movies.byName(query, function(results){
-            vm.allResults = results;
-            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
-          });*/
           weInfo.search.movies_Tv.byName(query, function(results){
             vm.allResults = results;
             vm.displayResults.display = vm.allResults.slice(0, vm.displayResults.max);
