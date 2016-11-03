@@ -11,10 +11,10 @@
       </div>
       <div class="collapse navbar-collapse" id="weNavbar">
         <ul class="nav navbar-nav pull-right">
-          <li><a ui-sref="app.movie_tv" class="movie" ui-sref-active="active">Movies & Tv Shows</a></li>
-          <li><a ui-sref="app.construction" class="cast" ui-sref-active="active">Cast & Crew</a></li>
-          <li><a ui-sref="app.construction" class="spotlight" ui-sref-active="active">Spotlight</a></li>
-          <li><a ng-click="sc.toggleSearch('toggle')" ng-hide="sc.searchOpen"><i class="fa fa-search" aria-hidden="true"></i></a></li>
+          <li><a ui-sref="app.movie_tv" class="link movie" ui-sref-active="active">Movies & Tv Shows</a></li>
+          <li><a ui-sref="app.cast" class="link cast" ui-sref-active="active">Cast & Crew</a></li>
+          <li><a ui-sref="app.construction" class="link spotlight" ui-sref-active="active">Spotlight</a></li>
+          <li><a ng-click="sc.toggleSearch('toggle')" ng-hide="sc.searchOpen" class="link"><i class="fa fa-search" aria-hidden="true"></i></a></li>
         </ul>
       </div>
     </div>
@@ -32,6 +32,7 @@
 
     <div class="search-results">
       <div class="list-container">
+        <!--<div class="error-message" ng-if="sc.displayResults.display.length == 0 && sc.searchQuery.length > 0">Sorry we did not find anything for "{{sc.searchQuery}}"</div>-->
         <div class="list-item" ng-repeat="item in sc.displayResults.display">
           <!--Movie Result-->
           <div class="result-item movie-item" ng-click="sc.itemAction(item, 'movie')" ng-if="item.media_type == 'movie'">
@@ -44,7 +45,7 @@
             <div class="item-info"><div class="item-title">{{item.name}} <span class="item-year">({{item.first_air_date | date:"MM/dd/yyyy"}})</span></div> <div class="type-icon"><i class="fa fa-television "></i></div></div>
           </div>
           <!--Person Result-->
-          <div class="result-item cast-item" ng-if="item.media_type == 'person' || sc.title == 'cast'">
+          <div class="result-item cast-item" ng-click="sc.itemAction(item, 'cast')" ng-if="item.media_type == 'person' || sc.title == 'cast'">
             <div class="item-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.profile_path}}" ng-if="item.profile_path != null"/> <div class="no-img" ng-if="item.profile_path == null"></div></div>
             <div class="item-info"><div class="item-title">{{item.name}}</div> <div class="type-icon"><i class="fa fa-users"></i></div></div>
           </div>

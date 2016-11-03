@@ -11,6 +11,9 @@
         any: {
           all: function(query){
             return baseurl + "search/multi?api_key="+apikey+"&query="+query;
+          },
+          page: function(query, page){
+            return baseurl + "search/multi?page="+page+"&api_key="+apikey+"&query="+query;
           }
         },
          movie: {
@@ -43,11 +46,14 @@
              searchName_Page: function(query, page){
                  return baseurl + "search/person?api_key="+apikey+"&page="+ page +"&query="+query;
              },
-             getCastCredits: function(id) {
-                 return baseurl + "person/"+id+"/movie_credits?api_key="+apikey;
+             getCombinedCredits: function(id) {
+                 return baseurl + "person/"+id+"/combined_credits?api_key="+apikey;
              },
-             getCastInfo: function(id) {
+             getCastDetails: function(id) {
                  return baseurl + "person/"+id+"?api_key="+apikey;
+             },
+             getPopular: function(page) {
+                 return baseurl + "person/popular?page="+page+"&api_key="+apikey;
              }
          },
          tv: {

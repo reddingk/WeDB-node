@@ -63,6 +63,16 @@
           }).error(function(response){
             callback(response);
           });
+        },
+        anyItemPage: function($str, $page, callback) {
+          $http({
+            method: 'GET',
+            url: api.any.page($str, $page)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
         }
       }
     }]);

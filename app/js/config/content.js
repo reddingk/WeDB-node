@@ -3,9 +3,9 @@
 
   angular
     .module('dataconfig')
-    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices', function MCEInfo(WEData, $filter, movieServices, tvServices){
+    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices','castServices', function MCEInfo(WEData, $filter, movieServices, tvServices,castServices){
       var blogs = WEData.siteData.blogs;
-
+      /*Needed Function */
       function getAllMovieTvCredits(item, list, callback){
         var objectMT = list[item];
         if(Object.keys(objectMT.credits).length == 0){
@@ -31,6 +31,25 @@
         else {
           if((item-1) < 0) { callback(list); }
           else { getAllMovieTvCredits(item-1, list, callback);}
+        }
+      }
+
+      function getAllCastCrewCredits(item, list, callback){
+        var objectCC = list[item];
+        if(Object.keys(objectCC.credits).length == 0){
+          castServices.credits(objectCC.id, function(res) {
+            list[item].credits = res;
+            if((item-1) < 0) {
+              callback(list);
+            }
+            else {
+              getAllCastCrewCredits(item-1, list, callback);
+            }
+          });
+        }
+        else {
+          if((item-1) < 0) { callback(list); }
+          else { getAllCastCrewCredits(item-1, list, callback);}
         }
       }
 
@@ -81,20 +100,42 @@
               tvServices.onAir(page, function(res) { callback(res); } );
             }
           },
+          cast: {
+            byName: function(query, callback){
+              castServices.names(query, function(res) { callback(res); } );
+            },
+            byId: function(id, callback){
+              castServices.details(id, function(res) { callback(res); } );
+            },
+            credits: function(id, callback){
+              castServices.credits(id, function(res) { callback(res); } );
+            },
+            popular: function(page, callback){
+              castServices.popular(page, function(res) { callback(res); } );
+            }
+          },
           movies_Tv: {
             byName: function(query, callback){
               movieServices.anyItem(query, function(res) {
                 var combo = [];
                 var results = res.results;
                 for(var i =0; i < results.length; i++) {
-                  if((results[i].media_type == "movie") || (results[i].media_type == "tv"))
-                  {
+                  if((results[i].media_type == "movie") || (results[i].media_type == "tv")){
                     combo.push(results[i]);
                   }
                 }
                 if(combo.length < 15) {
                   // Get 2nd page and add results to combo
-                  callback(combo);
+                  movieServices.anyItemPage(query, 2, function(res2) {
+                    var results2 = res2.results;
+                    for(var i =0; i < results2.length; i++) {
+                      if(((results2[i].media_type == "movie") || (results2[i].media_type == "tv")) && combo.length < 15){
+                        combo.push(results2[i]);
+                      }
+                      if(combo.length == 15) { break;}
+                    }
+                    callback(combo);
+                  });
                 }
                 else { callback(combo);}
               });
@@ -123,6 +164,35 @@
                   if(!added) {
                     var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "MTIDS":[res[i].id]};
                     tmpResults.castACrew.push(tmpCast);
+                  }
+                }
+
+              }
+
+              callback(tmpResults);
+            });
+          },
+          cast: function(compareList, callback){
+            getAllCastCrewCredits(compareList.length-1, compareList, function(res){
+              var tmpResults = {"castcrew":[], "movieATv":[]};
+
+              for(var i=0; i < res.length; i++){
+                tmpResults.castcrew.push({"id":res[i].id, "name": res[i].details.name, "image_path":res[i].details.profile_path});
+
+                var movieTvList = res[i].credits.cast.concat(res[i].credits.crew);
+                // Add Cast & Crew
+                for(var j=0; j < movieTvList.length; j++){
+                  var added = false;
+                  for(var k=0; k < tmpResults.movieATv.length; k++){
+                    if(movieTvList[j].id == tmpResults.movieATv[k].id) {
+                      tmpResults.movieATv[k].CCIDS.push(res[i].id);
+                      added = true;
+                      break;
+                    }
+                  }
+                  if(!added) {
+                    var tmpCast = {"id":movieTvList[j].id, "title":(movieTvList[j].media_type == 'movie' ? movieTvList[j].title : movieTvList[j].name), "image_path":movieTvList[j].poster_path, "CCIDS":[res[i].id]};
+                    tmpResults.movieATv.push(tmpCast);
                   }
                 }
 

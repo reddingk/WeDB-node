@@ -20,6 +20,14 @@
         var id1List = id1.split('-');
         displayDetails(id1List[0],id1List[1]);
       }
+      /*else if(id1 != undefined && (id2 != undefined || id3 != undefined)){
+        var id1List = id1.split('-');
+        var id2List = (id2 != undefined ? id2.split('-') : []);
+        var id3List = (id3 != undefined ? id3.split('-') : []);
+
+        if(id2List.length  == 2){ }
+        if(id3List.length  == 2){ }
+      }*/
       /*Set Now Playing*/
       vm.extraContent = {"movies":{}, "tv":{}};
 
@@ -42,6 +50,7 @@
       vm.toggleResultViews = toggleResultViews;
       vm.clearCompare = clearCompare;
       vm.removeMovieTv = removeMovieTv;
+      
 
       function removeMovieTv(id){
         var removePos = -1;
@@ -146,14 +155,12 @@
         if(Object.keys(vm.selectedMovieTv[type]).length == 0) {
           if(type == 'credits' || type == 'suggestions') {
             if(media_type == 'movie'){
-              //weInfo.search.movies.credits(vm.selectedMovieTv.id, function(results){
               weInfo.search.movies[type](vm.selectedMovieTv.id, function(results){
                 vm.selectedMovieTv[type] = results;
                 vm.selectedMovieTv.infoview = type
               });
             }
             else if(media_type == 'tv'){
-              //weInfo.search.tv.credits(vm.selectedMovieTv.id, function(results){
               weInfo.search.tv[type](vm.selectedMovieTv.id, function(results){
                 vm.selectedMovieTv[type] = results;
                 vm.selectedMovieTv.infoview = type
@@ -164,7 +171,6 @@
         else {
           vm.selectedMovieTv.infoview = type
         }
-
       }
 
       function displayDetails(id, type){
@@ -241,12 +247,9 @@
         else if(control == "close") { vm.searchOpen = false; }
         else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
 
-        if(vm.searchOpen == true) {
-          var mainsearch = angular.element('#mainsearch');
-          mainsearch[0].focus();
-          var element = document.getElementById("mainsearch");
-          element.focus();
-          $('#mainsearch').focus();
+        if(vm.searchOpen) {
+          var navMain = $("#weNavbar");
+          navMain.collapse('hide');
         }
       }
 

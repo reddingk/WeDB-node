@@ -86,6 +86,8 @@
       </div>
     </div>
   </div>
+  
+  <!-- Comparison Results -->
   <div class="comparison-res movietv card crd-1" ng-if="sc.resultsMovieTv.visuals.view == true">
     <div class="comparison-container">
       <div class="compare-results">
@@ -105,6 +107,7 @@
             <div class="item-visual" ng-repeat="item in sc.resultsMovieTv.visuals.castACrew" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
               <img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null">
             </div>
+            <div class="error-message" ng-if="sc.resultsMovieTv.visuals.castACrew.length == 0" random-motion>Sorry We Did Not Find Any Matches</div>
           </div>
         </div>
       </div>

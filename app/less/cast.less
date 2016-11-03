@@ -1,0 +1,51 @@
+.page-container {
+  .details {
+    &.cast {
+      .details-container {
+        .details-section {
+          .details-img {
+            .add-item {
+              &.cast {  background-color: @color-cast-back !important; &:hover { background-color: @color-cast !important;} }
+            }
+          }
+          .item-row {
+            .item-details-container {
+              .info-section {
+                .info-credits {
+                  .credits-item {
+                    &.cast { .item-character, .item-job {color: @color-cast;} }
+                  }
+                }
+                .info-sugggestions-container {
+                  .suggestions-item {
+                    &.cast {  &:hover { background-color: @color-cast-back; } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .comparison {
+    &.cast {
+      .comparison-container {
+        .comparison-header {
+          .comparison-title { color: @color-cast; }
+          .comparison-ctrls {
+            .ctrl-btn {
+              background-color: @color-cast-back;
+              &:hover { background-color: rgba(20,20,20,0.8);}
+            }
+          }
+        }
+        .compare-objects {
+          .comparison-item {
+            .compare-mask { &.active { background-color:@color-cast-back; }}
+          }
+        }
+      }
+    }
+  }
+}

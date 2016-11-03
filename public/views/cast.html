@@ -1,0 +1,124 @@
+<div class="header-container cast" ng-include="sc.headerTemplate"></div>
+
+<div class="page-container">
+  <!--Details Page-->
+  <div class="details cast card crd-1" ng-show="sc.selectedCast.display">
+    <div class="details-container">
+      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>
+      <div class="details-section blk-section blk-left">
+        <div class="details-img">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedCast.details.profile_path}}">
+          <div class="add-item cast" ng-click="sc.addItem(sc.selectedCast)" ng-show="sc.addCheck(sc.selectedCast.id)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Person To Comparison</span></div>
+        </div>
+      </div>
+
+      <div class="details-section blk-section blk-right">
+        <div class="item-title">{{sc.selectedCast.details.name}}</div>
+        <div class="item-row">
+          <div class="item-details-container">
+            <div class="item-section-seperation" ng-if="sc.selectedCast.details.homepage != null"><a ng-href="{{sc.selectedCast.details.homepage}}" target="_blank">Website</a></div>
+            <div class="item-section-seperation"><div class="age">Age: {{sc.selectedCast.details.age}}</div></div>
+            <div class="item-section-seperation"><div class="birthplace">Birthplace: {{sc.selectedCast.details.place_of_birth}}</div></div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-details-container options">
+            <div class="option-link" ng-class="sc.selectedCast.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details')">Biography</div>
+            <div class="option-link" ng-class="sc.selectedCast.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits')">Credits</div>
+          </div>
+        </div>
+        <div class="item-row">
+          <div class="item-details-container info">
+            <div class="info-section" ng-if="sc.selectedCast.infoview == 'details' ? 'selected' : ''">{{sc.selectedCast.details.biography}}</div>
+            <div class="info-section" ng-if="sc.selectedCast.infoview == 'credits' ? 'selected' : ''">
+              <div class="info-credits">
+                <div class="credits-title">Cast</div>
+                <div class="credits-item cast" ng-repeat="item in sc.selectedCast.credits.cast">
+                  <div class="item-name" ng-if="item.media_type == 'movie'"><i class="fa fa-film"></i> {{item.title}}</div> <div class="item-name" ng-if="item.media_type == 'tv'"><i class="fa fa-television "></i> {{item.name}}</div>
+                  <div class="item-character">{{item.character}}</div>
+                </div>
+                <div ng-if="sc.selectedCast.credits.cast.length == 0">Sorry we don't have the cast for this</div>
+              </div>
+              <div class="info-credits">
+                <div class="credits-title">Crew</div>
+                <div class="credits-item cast" ng-repeat="item in sc.selectedCast.credits.crew">
+                  <div class="item-name" ng-if="item.media_type == 'movie'"><i class="fa fa-film"></i> {{item.title}}</div> <div class="item-name" ng-if="item.media_type == 'tv'"><i class="fa fa-television "></i> {{item.name}}</div>
+                  <div class="item-job">{{item.job}}</div>
+                </div>
+                <div ng-if="sc.selectedCast.credits.crew.length == 0">Sorry we don't have the crew for this</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Section -->
+  <div class="comparison cast card crd-1">
+    <div class="comparison-container">
+      <div class="comparison-header">
+        <img class="backcover-img" back-img="{{sc.homeImg}}">
+        <div class="comparison-title">Cast & Crew</div>
+        <div class="comparison-text" ng-if="sc.comparisonCast.length <= 1">Search for Cast or Crew members, then add to our comparison machine to find out which movies or tv shows they have worked in together.</div>
+        <div class="comparison-ctrls" ng-if="sc.comparisonCast.length > 1">
+          <div class="ctrl-btn compare-btn" ng-click="sc.compareObjects()" ng-show="sc.resultsCast.visuals.view == false" scroll-to="compareSection"><div class="icon"><i class="fa fa-balance-scale"></i></div> <span>Compare</span></div>
+          <div class="ctrl-btn clear-btn" ng-click="sc.clearCompare()"><div class="icon"><i class="fa fa-minus"></i></div> <span>Clear</span></div>
+        </div>
+      </div>
+      <div class="compare-objects" ng-if="sc.comparisonCast.length > 0">
+        <div id="compareSection"></div>
+        <div class="comparison-item" ng-repeat="item in sc.comparisonCast">
+          <div class="removeItem" ng-click="sc.removeCast(item.id)" ng-if="sc.resultsCast.visuals.view == false"><i class="fa fa-times"></i></div>
+          <div class="compare-mask" ng-class="{'active':sc.isResultsViewed(item.id)}" ng-if="sc.resultsCast.visuals.view == true" ng-click="sc.toggleResultViews(item.id)">
+            <i class="fa fa-eye" ng-if="sc.isResultsViewed(item.id)"></i>
+            <i class="fa fa-eye-slash" ng-if="!sc.isResultsViewed(item.id)"></i>
+          </div>
+          <div class="compare-img"><img ng-src="http://image.tmdb.org/t/p/w500{{item.details.profile_path}}"></div>
+          <div class="compare-text">{{item.details.name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Results -->
+  <div class="comparison-res cast card crd-1" ng-if="sc.resultsCast.visuals.view == true">
+    <div class="comparison-container">
+      <div class="compare-results">
+        <div class="full-results">
+          <div class="detail-results">
+            <div class="details-title">Cast & Crew</div>
+            <div class="details-container">
+              <div class="details-item" ng-repeat="item in sc.resultsCast.visuals.movieATv">
+                <div class="item-img" ng-style="{'background-color':item.color}"><img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null"></div>
+                <div class="item-title">{{item.title}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="visual-results">
+          <div class="visual-container">
+            <div class="item-visual" ng-repeat="item in sc.resultsCast.visuals.movieATv" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
+              <img ng-src="http://image.tmdb.org/t/p/w500{{item.image_path}}" ng-if="item.image_path != null">
+            </div>
+            <div class="error-message" ng-if="sc.resultsCast.visuals.movieATv.length == 0" random-motion>Sorry We Did Not Find Any Matches</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popular -->
+  <div class="extra-content card crd-1">
+    <div class="extra-content-containers">
+      <div class="extra-header">Popular Stars</div>
+      <div class="item-container">
+        <div class="item cast" ng-repeat="item in sc.extraContent.cast.results" ng-click="sc.displayDetails(item.id, 'cast')" scroll-to="">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{item.profile_path}}"/>
+          <div class="extra-title">{{item.name}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
