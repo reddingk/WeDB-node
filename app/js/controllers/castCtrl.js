@@ -167,7 +167,7 @@
         weInfo.search.cast.byId(id, function(results){
           vm.selectedCast.id = id;
           vm.selectedCast.details = results;
-          vm.selectedCast.details.age = getAge(results.birthday);
+          vm.selectedCast.details.age = getAge(results.birthday, results.deathday);
           vm.selectedCast.credits = {};
           vm.selectedCast.infoview = 'details';
           vm.selectedCast.display = (results != null);
