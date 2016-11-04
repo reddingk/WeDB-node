@@ -1,6 +1,7 @@
 @mobile-device: ~"(max-width: 770px)";
 
 @font-size: 16px;
+
 /*main colors*/
 @color-cast: rgba(63,132,206,1);
 @color-movie: rgba(255, 59, 63,1);
@@ -12,6 +13,8 @@
 @color-movie-back: rgba(255, 59, 63,0.7);
 @color-tv-back: rgba(34, 153, 84, 0.7);
 @color-spotlight-back: rgba(241,159,77,0.7);
+/**/
+@dark-shadow: 2px 2px 10px rgba(10,10,10,1);
 
 @import url('https://fonts.googleapis.com/css?family=Boogaloo|Cinzel|Fjalla+One|Oswald|Paytone+One|Sintony');
 
@@ -268,6 +271,8 @@ html, body {
                     overflow: hidden;
                     padding: 10px 0px;
                     transition: all 0.5s ease-in-out;
+
+                    @media @mobile-device {  width: 200px; }
                     img { height: 90%;}
                     .suggestion-title { font-weight: bold;}
                   }
@@ -288,7 +293,18 @@ html, body {
         .comparison-header {
           overflow: hidden;
 
-          .comparison-title { position: relative; z-index: 1; display: block; text-align: center; font-size: 4.1rem; padding: 30px 0px; text-transform: uppercase; font-weight: bold; @media @mobile-device { font-size: 2.5rem; }}
+          .comparison-title {
+            position: relative;
+            z-index: 1;
+            display: block;
+            text-align: center;
+            font-size: 4.1rem;
+            padding: 30px 0px;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-shadow: @dark-shadow;
+            @media @mobile-device { font-size: 2.5rem; }
+          }
           .comparison-text { position: relative; z-index: 1; display: block; text-align: center; font-size: 2.1rem; padding: 10px 0px; max-width: 920px; margin: 0 auto; @media @mobile-device { font-size: 1.2rem; }}
           .comparison-ctrls {
              position: relative; z-index: 1;
@@ -521,6 +537,7 @@ html, body {
     display: inline-block;
     vertical-align: top;
 
+    @media @mobile-device { width: 30%;}
     &.right { float: right; }
     .poweredby {
       font-size: 1rem;
@@ -529,6 +546,7 @@ html, body {
     .section-header {
       color: rgba(230,230,230,1);
       font-size: 1rem;
+      padding-bottom: 5px;
     }
     .footer-link {
       padding-left: 3px;

@@ -412,7 +412,7 @@
       vm.removeCast = removeCast;
 
       function getAge(dateString, deathString){
-        var today = (deathString == undefined ? new Date() : new Date(deathString));
+        var today = (deathString == undefined || deathString == "" ? new Date() : new Date(deathString));
         var birthDate = new Date(dateString);
         var age = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();
@@ -939,6 +939,154 @@
 (function(){
    "use strict";
 
+    angular.module('directives').directive('backImg', ['$window', function($window) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          var url = attrs.backImg;
+          element.css({'background-image': 'url(' + url +')'});
+        }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
+      return {
+        restrict: 'EA',
+        link: function ($scope, element, attrs) {
+          //console.log("Start Motion");
+          // Randomly Set Postion & Velocity
+          var maxVelocity = 100;
+          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
+          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
+          var velX = (Math.random() * maxVelocity);
+          var velY = (Math.random() * maxVelocity);
+          var timestamp = null;
+
+          var parentContainer = element[0].offsetParent;
+
+          // Move Object
+          (function tick() {
+            var now = new Date().getTime();
+            var borderX = parentContainer.clientWidth *.20;
+            var borderY = parentContainer.clientHeight *.20;
+
+            var maxX = parentContainer.clientWidth - borderX;
+            var maxY = parentContainer.clientHeight - borderY;
+
+            var elapsed = (timestamp || now) - now;
+            timestamp = now;
+            posX += elapsed * velX / 1000;
+            posY += elapsed * velY / 1000;
+
+            if (posX > maxX) {
+                posX = 2 * maxX - posX;
+                velX *= -1;
+            }
+            if (posX < 10) {
+                posX = 10;
+                velX *= -1;
+            }
+            if (posY > maxY) {
+                posY = 2 * maxY - posY;
+                velY *= -1;
+            }
+            if (posY < 10) {
+                posY = 10;
+                velY *= -1;
+            }
+            element.css({ "top": posY, "left": posX });
+            // Set Position to $element top and left
+            // Loop to Move object
+            $timeout(tick, 30);
+          })();
+        }
+      }
+    }]);
+
+})();
+
+
+angular.module('directives')
+  .directive('scrollTo', ['ScrollTo', function(ScrollTo){
+    return {
+      restrict : "AC",
+      compile : function(){
+
+        return function(scope, element, attr) {
+          element.bind("click", function(event){
+            ScrollTo.idOrName(attr.scrollTo, attr.offset);
+          });
+        };
+      }
+    };
+  }])
+  .service('ScrollTo', ['$window', 'ngScrollToOptions', function($window, ngScrollToOptions) {
+    this.idOrName = function (idOrName, offset, focus) {//find element with the given id or name and scroll to the first element it finds
+        var document = $window.document;
+
+        if(!idOrName) {//move to top if idOrName is not provided
+          $window.scrollTo(0, 0);
+        }
+
+        if(focus === undefined) { //set default action to focus element
+            focus = true;
+        }
+
+        //check if an element can be found with id attribute
+        var el = document.getElementById(idOrName);
+        if(!el) {//check if an element can be found with name attribute if there is no such id
+          el = document.getElementsByName(idOrName);
+
+          if(el && el.length)
+            el = el[0];
+          else
+            el = null;
+        }
+
+        if(el) { //if an element is found, scroll to the element
+          if (focus) {
+              el.focus();
+          }
+
+          ngScrollToOptions.handler(el, offset);
+        }
+        //otherwise, ignore
+      }
+
+  }])
+  .provider("ngScrollToOptions", function() {
+    this.options = {
+      handler : function(el, offset) {
+        if (offset) {
+          var top = $(el).offset().top - offset;
+          window.scrollTo(0, top);
+        }
+        else {
+          el.scrollIntoView();
+        }
+      }
+    };
+    this.$get = function() {
+      return this.options;
+    };
+    this.extend = function(options) {
+      this.options = angular.extend(this.options, options);
+    };
+  });
+
+
+
+//angular.module("myApp", ["ngScrollTo"]);
+
+(function(){
+   "use strict";
+
    angular.module('services')
     .service('castServices', ['$http','api', function CastService($http, api) {
       return {
@@ -1128,151 +1276,3 @@
     }]);
 
 })();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('backImg', ['$window', function($window) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          var url = attrs.backImg;
-          element.css({'background-image': 'url(' + url +')'});
-        }
-      }
-
-    }]);
-
-})();
-
-(function(){
-   "use strict";
-
-    angular.module('directives').directive('randomMotion', ['$timeout', function($timeout) {
-      return {
-        restrict: 'EA',
-        link: function ($scope, element, attrs) {
-          //console.log("Start Motion");
-          // Randomly Set Postion & Velocity
-          var maxVelocity = 100;
-          var posX = Math.min(0, Math.max(20, (Math.random() * 0)));
-          var posY = Math.min(0, Math.max(20, (Math.random() * 10)));
-          var velX = (Math.random() * maxVelocity);
-          var velY = (Math.random() * maxVelocity);
-          var timestamp = null;
-
-          var parentContainer = element[0].offsetParent;
-
-          // Move Object
-          (function tick() {
-            var now = new Date().getTime();
-            var borderX = parentContainer.clientWidth *.20;
-            var borderY = parentContainer.clientHeight *.20;
-
-            var maxX = parentContainer.clientWidth - borderX;
-            var maxY = parentContainer.clientHeight - borderY;
-
-            var elapsed = (timestamp || now) - now;
-            timestamp = now;
-            posX += elapsed * velX / 1000;
-            posY += elapsed * velY / 1000;
-
-            if (posX > maxX) {
-                posX = 2 * maxX - posX;
-                velX *= -1;
-            }
-            if (posX < 10) {
-                posX = 10;
-                velX *= -1;
-            }
-            if (posY > maxY) {
-                posY = 2 * maxY - posY;
-                velY *= -1;
-            }
-            if (posY < 10) {
-                posY = 10;
-                velY *= -1;
-            }
-            element.css({ "top": posY, "left": posX });
-            // Set Position to $element top and left
-            // Loop to Move object
-            $timeout(tick, 30);
-          })();
-        }
-      }
-    }]);
-
-})();
-
-
-angular.module('directives')
-  .directive('scrollTo', ['ScrollTo', function(ScrollTo){
-    return {
-      restrict : "AC",
-      compile : function(){
-
-        return function(scope, element, attr) {
-          element.bind("click", function(event){
-            ScrollTo.idOrName(attr.scrollTo, attr.offset);
-          });
-        };
-      }
-    };
-  }])
-  .service('ScrollTo', ['$window', 'ngScrollToOptions', function($window, ngScrollToOptions) {
-    this.idOrName = function (idOrName, offset, focus) {//find element with the given id or name and scroll to the first element it finds
-        var document = $window.document;
-
-        if(!idOrName) {//move to top if idOrName is not provided
-          $window.scrollTo(0, 0);
-        }
-
-        if(focus === undefined) { //set default action to focus element
-            focus = true;
-        }
-
-        //check if an element can be found with id attribute
-        var el = document.getElementById(idOrName);
-        if(!el) {//check if an element can be found with name attribute if there is no such id
-          el = document.getElementsByName(idOrName);
-
-          if(el && el.length)
-            el = el[0];
-          else
-            el = null;
-        }
-
-        if(el) { //if an element is found, scroll to the element
-          if (focus) {
-              el.focus();
-          }
-
-          ngScrollToOptions.handler(el, offset);
-        }
-        //otherwise, ignore
-      }
-
-  }])
-  .provider("ngScrollToOptions", function() {
-    this.options = {
-      handler : function(el, offset) {
-        if (offset) {
-          var top = $(el).offset().top - offset;
-          window.scrollTo(0, top);
-        }
-        else {
-          el.scrollIntoView();
-        }
-      }
-    };
-    this.$get = function() {
-      return this.options;
-    };
-    this.extend = function(options) {
-      this.options = angular.extend(this.options, options);
-    };
-  });
-
-
-
-//angular.module("myApp", ["ngScrollTo"]);

@@ -41,7 +41,7 @@
       vm.removeCast = removeCast;
 
       function getAge(dateString, deathString){
-        var today = (deathString == undefined ? new Date() : new Date(deathString));
+        var today = (deathString == undefined || deathString == "" ? new Date() : new Date(deathString));
         var birthDate = new Date(dateString);
         var age = today.getFullYear() - birthDate.getFullYear();
         var m = today.getMonth() - birthDate.getMonth();

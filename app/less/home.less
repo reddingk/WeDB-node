@@ -100,16 +100,19 @@
       overflow: auto;
       color: rgba(255,255,255,1);
       border: dashed 5px rgba(0,0,0,1);
-      @media @mobile-device { width: 100%; max-height: 250px;}
+      @media @mobile-device { width: 100%; max-height: 250px; margin-top: 10px; }
       .content-title {
         font-size: 2rem;
         font-weight: bold;
         display: block;
         color: orange;
+        @media @mobile-device { font-size: 1.5rem; }
       }
       .content-text {
         font-size: 1.1rem;
         line-height: 1.7rem;
+
+        @media @mobile-device { font-size: .9rem; }
       }
 
       .read-more { color: orange; }
