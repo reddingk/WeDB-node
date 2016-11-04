@@ -50,7 +50,7 @@
       transition: all 0.7s ease;
     }
     .item-content {
-      border: 4px dashed rgba(230,230,230,1);
+      border: 4px dashed rgba(255,255,255,1);
       height: 100%;
       position: relative;
       overflow: hidden;
@@ -80,7 +80,8 @@
       overflow-x: auto;
       white-space:nowrap;
       margin-right: 5px;
-      border: solid 5px rgba(255,255,255,1);
+      border-top: solid 5px rgba(0,0,0,1);
+      border-bottom: solid 5px rgba(0,0,0,1);
       @media @mobile-device { height:300px; width: 100%; display: block;}
       .images {
         display: inline-block;
@@ -98,7 +99,7 @@
       height: 100%;
       overflow: auto;
       color: rgba(255,255,255,1);
-      border: dashed 5px rgba(255,255,255,1);
+      border: dashed 5px rgba(0,0,0,1);
       @media @mobile-device { width: 100%; max-height: 250px;}
       .content-title {
         font-size: 2rem;
@@ -127,8 +128,8 @@
       	width: 7rem;
       	height: 7rem;
       	background: transparent;
-      	border-top: .4rem solid #fff;
-      	border-right: .4rem solid #fff;
+      	border-top: .4rem solid #000;
+      	border-right: .4rem solid #000;
       	box-shadow: 0 0 0 lightgray;
       	transition: all .5s ease;
 
@@ -145,7 +146,7 @@
       	&:hover {
       		border-top: .4rem solid orange;
       		border-right: .4rem solid orange;
-      		box-shadow: .2rem -.2rem 0 #fff;
+      		box-shadow: .2rem -.2rem 0 #000;
 
       		&.left {
       			left: -.2rem;
