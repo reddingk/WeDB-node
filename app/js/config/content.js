@@ -3,7 +3,7 @@
 
   angular
     .module('dataconfig')
-    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices','castServices', function MCEInfo(WEData, $filter, movieServices, tvServices,castServices){
+    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices','castServices', function WEInfo(WEData, $filter, movieServices, tvServices,castServices){
       var blogs = WEData.siteData.blogs;
       /*Needed Function */
       function getAllMovieTvCredits(item, list, callback){
@@ -200,6 +200,78 @@
 
               callback(tmpResults);
             });
+          }
+        },
+        spotlight: {
+          getMovieTv: function(spotlightMovies, spotlightLength, callback){
+            getAllMovieTvCredits(spotlightMovies.length-1, spotlightMovies, function(res){
+              var tmpResults = {"info":{}, "castACrew":[], "connections":[]};
+
+              var i = 0;
+              tmpResults.info = {"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type};
+
+              var castCrewList = res[i].credits.cast.concat(res[i].credits.crew);
+              // Add Cast & Crew
+              for(var j=0; j < castCrewList.length; j++){
+                if(tmpResults.castACrew.length < spotlightLength) {
+                  var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "credits":[]};
+                  tmpResults.castACrew.push(tmpCast);
+                }
+              }
+
+              // Get Cast Credits
+              getAllCastCrewCredits(tmpResults.castACrew.length-1, tmpResults.castACrew, function(res){
+
+                // Build connections List
+                for(var k=0; k < tmpResults.castACrew.length; k++){
+                  tmpResults.castACrew[k].fullcredits = tmpResults.castACrew[k].credits.cast.concat(tmpResults.castACrew[k].credits.crew);
+                  for(var l=k+1; l < tmpResults.castACrew.length; l++){
+                    tmpResults.castACrew[l].fullcredits = tmpResults.castACrew[l].credits.cast.concat(tmpResults.castACrew[l].credits.crew);
+                    for(var m=0; m < tmpResults.castACrew[k].fullcredits.length; m++) {
+                      var credit1 = tmpResults.castACrew[k].fullcredits[m];
+                      var credit2List = tmpResults.castACrew[l].fullcredits;
+
+                      var credit2Results = $.grep(credit2List, function(e){ return e.id == credit1.id});
+                      if(credit2Results.length > 0 && credit2Results[0].id != spotlightMovies[0].id){
+                        tmpResults.connections.push({"title":(credit1.media_type == 'movie' ? credit1.title : credit1.name), "id":credit1.id, "cast1":{"name":tmpResults.castACrew[k].name, "id":tmpResults.castACrew[k].id}, "cast2":{"name":tmpResults.castACrew[l].name, "id":tmpResults.castACrew[l].id}})
+                      }
+                    }
+                  }
+                }
+                callback(tmpResults);
+              });
+            });
+          },
+          transformMovieTv: function(data, callback){
+            var results = {"chordResults":{"sortOrder":[], "colors":{}, "data":[]}, "networkResults":{"nodes":[], "edges":[]}};
+            var colorArrayCast = randomColor({ count: data.castACrew.length + 1, luminosity: 'bright', format: 'hex'});
+
+            // transform Chord Results
+            for(var i =0; i < data.castACrew.length; i++){
+              results.chordResults.sortOrder.push(data.castACrew[i].name);
+              results.chordResults.colors[data.castACrew[i].name] = colorArrayCast[i];
+            }
+            for(var i =0; i < data.connections.length; i++){
+              var tmpConn = data.connections[i];
+              var tmpData = [tmpConn.cast1.name, tmpConn.cast2.name, 1];
+              var tmpData2 = [tmpConn.cast2.name, tmpConn.cast1.name, 1];
+
+              results.chordResults.data.push(tmpData);
+              results.chordResults.data.push(tmpData2);
+            }
+
+            // transform network Results
+            for(var j =0; j < data.castACrew.length; j++){
+              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].profile_path, "label": data.castACrew[j].name}
+              results.networkResults.nodes.push(tmpNode);
+            }
+            for(var j =0; j < data.connections.length; j++){
+              var tmpConn = data.connections[j];
+              var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id};
+
+              results.networkResults.edges.push(tmpData);
+            }
+            callback(results);
           }
         }
       }

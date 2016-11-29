@@ -7,8 +7,9 @@
 		angular.module('homeCtrl', ['ui.bootstrap', 'ngAnimate']);
 		angular.module('movieTvCtrl', ['ui.bootstrap', 'ngAnimate']);
 		angular.module('castCtrl', ['ui.bootstrap', 'ngAnimate']);
+		angular.module('spotlightCtrl', ['ui.bootstrap', 'ngAnimate']);
 		/**/
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieTvCtrl', 'castCtrl']);
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieTvCtrl', 'castCtrl','spotlightCtrl']);
 
 })();
 
@@ -17,7 +18,7 @@
 
   angular
     .module('dataconfig')
-    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices','castServices', function MCEInfo(WEData, $filter, movieServices, tvServices,castServices){
+    .service('weInfo', [ 'WEData', '$filter','movieServices', 'tvServices','castServices', function WEInfo(WEData, $filter, movieServices, tvServices,castServices){
       var blogs = WEData.siteData.blogs;
       /*Needed Function */
       function getAllMovieTvCredits(item, list, callback){
@@ -215,6 +216,79 @@
               callback(tmpResults);
             });
           }
+        },
+        spotlight: {
+          getMovieTv: function(spotlightMovies, spotlightLength, callback){
+            getAllMovieTvCredits(spotlightMovies.length-1, spotlightMovies, function(res){
+              var tmpResults = {"info":{}, "castACrew":[], "connections":[]};
+
+              var i = 0;
+              tmpResults.info = {"id":res[i].id, "title":(res[i].details.type == 'movie'? res[i].details.title : res[i].details.name), "image_path":res[i].details.poster_path, "media_type":res[i].details.type};
+
+              var castCrewList = res[i].credits.cast.concat(res[i].credits.crew);
+              // Add Cast & Crew
+              for(var j=0; j < castCrewList.length; j++){
+                if(tmpResults.castACrew.length < spotlightLength) {
+                  var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "credits":[]};
+                  tmpResults.castACrew.push(tmpCast);
+                }
+              }
+
+              // Get Cast Credits
+              getAllCastCrewCredits(tmpResults.castACrew.length-1, tmpResults.castACrew, function(res){
+
+                // Build connections List
+                for(var k=0; k < tmpResults.castACrew.length; k++){
+                  tmpResults.castACrew[k].fullcredits = tmpResults.castACrew[k].credits.cast.concat(tmpResults.castACrew[k].credits.crew);
+                  for(var l=k+1; l < tmpResults.castACrew.length; l++){
+                    tmpResults.castACrew[l].fullcredits = tmpResults.castACrew[l].credits.cast.concat(tmpResults.castACrew[l].credits.crew);
+                    for(var m=0; m < tmpResults.castACrew[k].fullcredits.length; m++) {
+                      var credit1 = tmpResults.castACrew[k].fullcredits[m];
+                      var credit2List = tmpResults.castACrew[l].fullcredits;
+
+                      var credit2Results = $.grep(credit2List, function(e){ return e.id == credit1.id});
+                      if(credit2Results.length > 0 && credit2Results[0].id != spotlightMovies[0].id){
+                        tmpResults.connections.push({"title":(credit1.media_type == 'movie' ? credit1.title : credit1.name), "id":credit1.id, "cast1":{"name":tmpResults.castACrew[k].name, "id":tmpResults.castACrew[k].id}, "cast2":{"name":tmpResults.castACrew[l].name, "id":tmpResults.castACrew[l].id}})
+                      }
+                    }
+                  }
+                }
+                callback(tmpResults);
+              });
+            });
+          },
+          transformMovieTv: function(data, callback){
+            var results = {"chordResults":{"sortOrder":[], "colors":{}, "data":[]}, "networkResults":{"nodes":[], "edges":[]}};
+            var colorArrayCast = randomColor({ count: data.castACrew.length + 1, luminosity: 'bright', format: 'hex'});
+
+            // transform Chord Results
+            for(var i =0; i < data.castACrew.length; i++){
+              results.chordResults.sortOrder.push(data.castACrew[i].name);
+              results.chordResults.colors[data.castACrew[i].name] = colorArrayCast[i];
+            }
+            for(var i =0; i < data.connections.length; i++){
+              var tmpConn = data.connections[i];
+              var tmpData = [tmpConn.cast1.name, tmpConn.cast2.name, 1];
+              var tmpData2 = [tmpConn.cast2.name, tmpConn.cast1.name, 1];
+
+              results.chordResults.data.push(tmpData);
+              results.chordResults.data.push(tmpData2);
+            }
+
+            // transform network Results
+            for(var j =0; j < data.castACrew.length; j++){
+
+              var tmpNode = {"id":data.castACrew.id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].profile_path, "label": data.castACrew[j].name}
+              results.networkResults.nodes.push(tmpNode);
+            }
+            for(var j =0; j < data.connections.length; j++){
+              var tmpConn = data.connections[j];
+              var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id};
+
+              results.networkResults.edges.push(tmpData);
+            }
+            callback(results);
+          }
         }
       }
     }])
@@ -264,6 +338,15 @@
           'content@': {
             templateUrl: 'views/cast.html',
             controller: 'CastController as sc'
+          }
+        }
+      })
+      .state('app.spotlight', {
+        url: "spotlight?id",
+        views: {
+          'content@': {
+            templateUrl: 'views/spotlight.html',
+            controller: 'SpotlightController as sc'
           }
         }
       })
@@ -901,6 +984,138 @@
 
       function itemAction(item, type) {
         displayDetails(item.id, item.media_type);
+        clearSearch();
+        toggleSearch("close");
+      }
+
+      function clearSearch() {
+        vm.searchQuery = "";
+        vm.allResults = [];
+        vm.displayResults.display = [];
+      }
+
+      function search() {
+        var query = vm.searchQuery;
+        if(query.length > 1){
+          weInfo.search.movies_Tv.byName(query, function(results){
+            vm.allResults = results;
+            vm.displayResults.display = vm.allResults.slice(0, vm.displayResults.max);
+          });
+        }
+      }
+
+      function toggleSearch(control){
+        if(control == "open") { vm.searchOpen = true; }
+        else if(control == "close") { vm.searchOpen = false; }
+        else if(control == "toggle") { vm.searchOpen = !vm.searchOpen; }
+
+        if(vm.searchOpen) {
+          var navMain = $("#weNavbar");
+          navMain.collapse('hide');
+        }
+      }
+
+    }]);
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('spotlightCtrl').controller('SpotlightController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
+      var vm = this;
+      vm.title = "spotlight";
+      vm.homeImg = "imgs/siteart/Home7.jpg";
+      /*Movie Ctrl*/
+      var id = $stateParams.id;
+      vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
+
+      if(id != undefined){
+        var idList = id.split('-');
+        displayDetails(idList[0],idList[1]);
+      }
+      /*Variables*/
+      vm.spotlightObject = {};
+      vm.spotlightObjects = [];
+      /*Spotlight Functions*/
+      vm.spotlightSelected = spotlightSelected;
+      vm.addItem = addItem;
+      vm.displayDetails = displayDetails;
+
+      function displayDetails(id, type){
+        if(type == "movie"){
+          weInfo.search.movies.byId(id, function(results){
+            vm.spotlightObject.id = id;
+            vm.spotlightObject.details = results;
+            vm.spotlightObject.details.type = type;
+            vm.spotlightObject.credits = {};
+            vm.spotlightObject.suggestions = {};
+            vm.spotlightObject.infoview = 'details';
+            vm.spotlightObject.display = (results != null);
+
+            addItem(vm.spotlightObject);
+            spotlightSelected();
+          });
+        }
+        else if(type == "tv"){
+          weInfo.search.tv.byId(id, function(results){
+            vm.spotlightObject.id = id;
+            vm.spotlightObject.details = results;
+            vm.spotlightObject.details.type = type;
+            vm.spotlightObject.credits = {};
+            vm.spotlightObject.suggestions = {};
+            vm.spotlightObject.infoview = 'details';
+            vm.spotlightObject.display = (results != null);
+
+            addItem(vm.spotlightObject);
+            spotlightSelected();
+          });
+        }
+      }
+
+      function addItem(item) {
+        var tmpObject = {};
+        tmpObject.id = item.id;
+        tmpObject.details = item.details;
+        tmpObject.credits = item.credits;
+        tmpObject.suggestions = item.suggestions;
+
+        vm.spotlightObjects.push(tmpObject);
+
+      }
+
+      function spotlightSelected(){
+        var itemid = 0;
+        // get data
+        weInfo.spotlight.getMovieTv(vm.spotlightObjects, 7, function(res){
+          // perform spotlight & transform results
+          console.log("Get Results:");
+          console.log(res);
+          weInfo.spotlight.transformMovieTv(res, function(res2){
+            console.log("Transform Results:");
+            console.log(res2);
+          });
+          // display results using vis.js
+        });
+      }
+
+      /*Header*/
+      vm.headerTemplate = "views/templates/_header.html";
+      vm.searchOpen = false;
+      vm.searchQuery = "";
+      vm.displayResults = { "max":15, "display":[]};
+      vm.allResults = [];
+
+      /*Functions*/
+      vm.toggleSearch = toggleSearch;
+      vm.search = search;
+      vm.clearSearch = clearSearch;
+      vm.itemAction = itemAction;
+
+      function itemAction(item, type) {
+        //TEST
+        displayDetails(item.id, item.media_type);
+
         clearSearch();
         toggleSearch("close");
       }

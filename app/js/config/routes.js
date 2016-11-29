@@ -34,6 +34,15 @@
           }
         }
       })
+      .state('app.spotlight', {
+        url: "spotlight?id",
+        views: {
+          'content@': {
+            templateUrl: 'views/spotlight.html',
+            controller: 'SpotlightController as sc'
+          }
+        }
+      })
       .state('app.construction', {
         url: "underconstruction",
         views: {
