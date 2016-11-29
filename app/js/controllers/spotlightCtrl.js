@@ -16,6 +16,7 @@
       /*Variables*/
       vm.spotlightObject = {};
       vm.spotlightObjects = [];
+      vm.spotlightMax = 10;
       /*Spotlight Functions*/
       vm.spotlightSelected = spotlightSelected;
       vm.addItem = addItem;
@@ -66,7 +67,7 @@
       function spotlightSelected(){
         var itemid = 0;
         // get data
-        weInfo.spotlight.getMovieTv(vm.spotlightObjects, 7, function(res){
+        weInfo.spotlight.getMovieTv(vm.spotlightObjects, vm.spotlightMax, function(res){
           // perform spotlight & transform results
           console.log("Get Results:");
           console.log(res);
@@ -74,10 +75,68 @@
             console.log("Transform Results:");
             console.log(res2);
             // display results using vis.js
+            ChordVisuals(res2.chordResults);
+            NetworkVisuals(res2.networkResults);
           });
         });
       }
 
+      // Visuals
+
+      //Chord Visuals
+      function ChordVisuals(vizData){
+        function sort(a,b){ return d3.ascending(vizData.sortOrder.indexOf(a),vizData.sortOrder.indexOf(b)); }
+
+        var ch = viz.ch().data(vizData.data)
+          .padding(.01)
+          .sort(sort)
+	        .innerRadius(430)
+	        .outerRadius(450)
+	        .duration(1000)
+	        .chordOpacity(0.3)
+	        .labelPadding(.03)
+          .fill(function(d){ return vizData.colors[d];});
+
+        var width=1200, height=1100;
+        var svg = d3.select(".chord-container").append("svg").attr("height",height).attr("width",width);
+
+        svg.append("g").attr("transform", "translate(600,550)").call(ch);
+        d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");
+      }
+      // Network Visuals
+      function NetworkVisuals(vizData){
+        var network = null;
+        var container = document.getElementById('network-container');
+        var data = {
+          nodes: vizData.nodes,
+          edges: vizData.edges
+        };
+        var options = {
+          interaction: {
+            keyboard: {
+              enabled: false
+            }
+          },
+          nodes: {
+            borderWidth:4,
+            size:30,
+  	      color: {
+              border: '#222222',
+              background: '#666666'
+            },
+            font:{color:'#eeeeee'}
+          },
+          edges: {
+            color: 'lightgray',
+            length: 500,
+            selectionWidth: function (width) {return width*10;},
+            smooth: {
+              type: 'continuous'
+            }
+          }
+        };
+        network = new vis.Network(container, data, options);
+      }
       /*Header*/
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;

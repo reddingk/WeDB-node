@@ -31,7 +31,10 @@ var config = {
       'app/libs/moment/min/moment.min.js',
       'app/libs/angular-ui-calendar/src/calendar.js',
       'app/libs/fullcalendar/dist/fullcalendar.min.js',
-      'app/libs/fullcalendar/dist/gcal.js'
+      'app/libs/fullcalendar/dist/gcal.js',
+      'app/libs/d3/d3.min.js',
+      'app/js/directives/viz.v1.1.0.min.js',
+      'app/libs/vis/dist/vis.min.js'
     ],
     libsCSS: [
       'app/libs/angular-material/angular-material.min.css',
@@ -39,7 +42,8 @@ var config = {
       'app/libs/font-awesome/css/font-awesome.min.css',
       'app/libs/animate.css/animate.min.css',
       'app/libs/angular-bootstrap/ui-bootstrap-csp.css',
-      'app/libs/fullcalendar/dist/fullcalendar.min.css'
+      'app/libs/fullcalendar/dist/fullcalendar.min.css',
+      'app/libs/vis/dist/vis-network.min.css'
     ]
   },
   dest:{

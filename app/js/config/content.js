@@ -213,7 +213,8 @@
               var castCrewList = res[i].credits.cast.concat(res[i].credits.crew);
               // Add Cast & Crew
               for(var j=0; j < castCrewList.length; j++){
-                if(tmpResults.castACrew.length < spotlightLength) {
+                var castCheck = $.grep(tmpResults.castACrew, function(e){ return e.id == castCrewList[j].id});
+                if(tmpResults.castACrew.length < spotlightLength && castCheck.length == 0) {
                   var tmpCast = {"id":castCrewList[j].id, "name":castCrewList[j].name, "image_path":castCrewList[j].profile_path, "credits":[]};
                   tmpResults.castACrew.push(tmpCast);
                 }
@@ -262,14 +263,19 @@
 
             // transform network Results
             for(var j =0; j < data.castACrew.length; j++){
-              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].profile_path, "label": data.castACrew[j].name}
+              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}}
               results.networkResults.nodes.push(tmpNode);
             }
             for(var j =0; j < data.connections.length; j++){
               var tmpConn = data.connections[j];
-              var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id};
 
-              results.networkResults.edges.push(tmpData);
+              // Check if Connection exists
+              var connectionCheck = $.grep(results.networkResults.edges, function(e){ return (((e.from == tmpConn.cast1.id) && (e.to == tmpConn.cast2.id)) || ((e.to == tmpConn.cast1.id) && (e.from == tmpConn.cast2.id)))});
+
+              if(connectionCheck.length == 0){
+                var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id, "label":tmpConn.title, "color":{inherit:'from'}, "font": { align: 'middle', color: "#ffffff", strokeWidth:0}};
+                results.networkResults.edges.push(tmpData);
+              }
             }
             callback(results);
           }
