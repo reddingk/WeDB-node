@@ -34,6 +34,16 @@
             callback(response);
           });
         },
+        images: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.tv.getImages($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
+        },
         info: function($mid, callback) {
           $http({
             method: 'GET',

@@ -79,6 +79,9 @@
             suggestions: function(id, callback){
               movieServices.similar(id, function(res) { callback(res); } );
             },
+            images: function(id, callback){
+              movieServices.images(id, function(res) { callback(res); } );
+            },
             nowPlaying: function(page, callback){
                 movieServices.now_playing(page, function(res) { callback(res); } );
             }
@@ -95,6 +98,9 @@
             },
             suggestions: function(id, callback){
               tvServices.similar(id, function(res) { callback(res); } );
+            },
+            images: function(id, callback){
+              tvServices.images(id, function(res) { callback(res); } );
             },
             onAir: function(page, callback){
               tvServices.onAir(page, function(res) { callback(res); } );

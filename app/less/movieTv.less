@@ -11,11 +11,23 @@
           }
           .item-row {
             .item-details-container {
+              &.movie {
+              .option-link { &.selected, &:hover { border-bottom: 2px solid @color-movie !important;}  }
+              }
+              &.tv {
+              .option-link { &.selected, &:hover { border-bottom: 2px solid @color-tv !important;}  }
+              }
               .info-section {
                 .info-credits {
                   .credits-item {
-                    &.movie { .item-character, .item-job {color: @color-movie;} }
-                    &.tv { .item-character, .item-job {color: @color-tv;} }
+                    &.movie {
+                      .item-character, .item-job {color: @color-movie;}
+                      .credit-img { border-color: @color-movie; }
+                    }
+                    &.tv {
+                      .item-character, .item-job {color: @color-tv;}
+                      .credit-img { border-color:@color-tv; }
+                    }
                   }
                 }
                 .info-sugggestions-container {
@@ -31,9 +43,9 @@
       }
     }
   }
-  .comparison {
+  .comparison, .header-panel {
     &.movietv {
-      .comparison-container {
+      .comparison-container, .header-panel-container {
         .comparison-header {
           .comparison-title { color: @color-movie; }
           .comparison-ctrls {
@@ -41,6 +53,12 @@
               background-color: @color-movie-back;
               &:hover { background-color: rgba(20,20,20,0.8);}
             }
+          }
+        }
+        .comparison-links {
+          .option-link {
+            &.compare-btn { color: @color-movie; }
+            &.selected, &:hover { border-bottom: 2px solid @color-movie !important;}
           }
         }
         .compare-objects {

@@ -50,7 +50,7 @@
       vm.toggleResultViews = toggleResultViews;
       vm.clearCompare = clearCompare;
       vm.removeMovieTv = removeMovieTv;
-      
+
 
       function removeMovieTv(id){
         var removePos = -1;
@@ -183,6 +183,14 @@
             vm.selectedMovieTv.suggestions = {};
             vm.selectedMovieTv.infoview = 'details';
             vm.selectedMovieTv.display = (results != null);
+            weInfo.search.movies.images(id, function(results){
+              if(results != null && results.backdrops.length > 0){
+                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+results.backdrops[0].file_path;
+              }
+              else {
+                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              }
+            });
           });
         }
         else if(type == "tv"){
@@ -194,6 +202,14 @@
             vm.selectedMovieTv.suggestions = {};
             vm.selectedMovieTv.infoview = 'details';
             vm.selectedMovieTv.display = (results != null);
+            weInfo.search.tv.images(id, function(results){
+              if(results != null && results.backdrops.length > 0){
+                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+results.backdrops[0].file_path;
+              }
+              else {
+                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              }
+            });
           });
         }
       }
