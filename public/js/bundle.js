@@ -284,7 +284,7 @@
 
             // transform network Results
             for(var j =0; j < data.castACrew.length; j++){
-              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}}
+              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}, "font": { color:'#ffffff', strokeWidth: 2, strokeColor: colorArrayCast[j] }}
               results.networkResults.nodes.push(tmpNode);
             }
             for(var j =0; j < data.connections.length; j++){
@@ -294,7 +294,7 @@
               var connectionCheck = $.grep(results.networkResults.edges, function(e){ return (((e.from == tmpConn.cast1.id) && (e.to == tmpConn.cast2.id)) || ((e.to == tmpConn.cast1.id) && (e.from == tmpConn.cast2.id)))});
 
               if(connectionCheck.length == 0){
-                var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id, "label":tmpConn.title, "color":{inherit:'from'}, "font": { align: 'middle', color: "#ffffff", strokeWidth:0}};
+                var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id, "label":tmpConn.title};
                 results.networkResults.edges.push(tmpData);
               }
             }
@@ -962,14 +962,13 @@
             vm.selectedMovieTv.suggestions = {};
             vm.selectedMovieTv.infoview = 'details';
             vm.selectedMovieTv.display = (results != null);
-            weInfo.search.movies.images(id, function(results){
-              if(results != null && results.backdrops.length > 0){
-                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+results.backdrops[0].file_path;
-              }
-              else {
-                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
-              }
-            });
+
+            if(vm.selectedMovieTv.details != null && vm.selectedMovieTv.details.backdrop_path != null){
+              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.selectedMovieTv.details.backdrop_path;
+            }
+            else {
+              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+            }
           });
         }
         else if(type == "tv"){
@@ -1058,7 +1057,7 @@
     angular.module('spotlightCtrl').controller('SpotlightController', ['$state','$stateParams','weInfo','$sce', function($state, $stateParams, weInfo, $sce){
       var vm = this;
       vm.title = "spotlight";
-      vm.homeImg = "imgs/siteart/Home7.jpg";
+      vm.defaultImg = "imgs/siteart/Home7.jpg";
       /*Movie Ctrl*/
       var id = $stateParams.id;
       vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
@@ -1087,6 +1086,12 @@
             vm.spotlightObject.infoview = 'details';
             vm.spotlightObject.display = (results != null);
 
+            if(vm.spotlightObject.details != null && vm.spotlightObject.details.backdrop_path != null){
+              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
+            }
+            else {
+              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+            }
             addItem(vm.spotlightObject);
             spotlightSelected();
           });
@@ -1115,7 +1120,6 @@
         tmpObject.suggestions = item.suggestions;
 
         vm.spotlightObjects.push(tmpObject);
-
       }
 
       function spotlightSelected(){
@@ -1129,8 +1133,8 @@
             console.log("Transform Results:");
             console.log(res2);
             // display results using vis.js
-            ChordVisuals(res2.chordResults);
             NetworkVisuals(res2.networkResults);
+            //ChordVisuals(res2.chordResults);
           });
         });
       }
@@ -1151,11 +1155,13 @@
 	        .labelPadding(.03)
           .fill(function(d){ return vizData.colors[d];});
 
-        var width=1200, height=1100;
+        //var width=1200, height=1100;
+        var width = 100, height = 100;
         var svg = d3.select(".chord-container").append("svg").attr("height",height).attr("width",width);
 
         svg.append("g").attr("transform", "translate(600,550)").call(ch);
-        d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");
+        //d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");
+        d3.select(self.frameElement).style("height", height+"%").style("width", width+"%");
       }
       // Network Visuals
       function NetworkVisuals(vizData){
@@ -1169,23 +1175,36 @@
           interaction: {
             keyboard: {
               enabled: false
-            }
+            },
+            zoomView: false
           },
           nodes: {
             borderWidth:4,
             size:30,
-  	      color: {
-              border: '#222222',
-              background: '#666666'
-            },
-            font:{color:'#eeeeee'}
+    	      color: {
+                highlight: {
+                  border:'#F19F4D',
+                  background:'#F19F4D'
+                }
+              }
           },
           edges: {
-            color: 'lightgray',
+            color: {
+              inherit: 'both',
+              highlight: '#F19F4D',
+              opacity: 0.5
+            },
+            font: {
+              align: 'middle',
+              color: "#ffffff",
+              strokeWidth:0
+            },
             length: 500,
+            labelHighlightBold: true,
             selectionWidth: function (width) {return width*10;},
             smooth: {
-              type: 'continuous'
+              type: 'cubicBezier',
+              forceDirection : 'horizontal'
             }
           }
         };
@@ -1205,7 +1224,6 @@
       vm.itemAction = itemAction;
 
       function itemAction(item, type) {
-        //TEST
         displayDetails(item.id, item.media_type);
 
         clearSearch();

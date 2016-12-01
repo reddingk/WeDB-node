@@ -269,7 +269,7 @@
 
             // transform network Results
             for(var j =0; j < data.castACrew.length; j++){
-              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}}
+              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}, "font": { color:'#ffffff', strokeWidth: 2, strokeColor: colorArrayCast[j] }}
               results.networkResults.nodes.push(tmpNode);
             }
             for(var j =0; j < data.connections.length; j++){
@@ -279,7 +279,7 @@
               var connectionCheck = $.grep(results.networkResults.edges, function(e){ return (((e.from == tmpConn.cast1.id) && (e.to == tmpConn.cast2.id)) || ((e.to == tmpConn.cast1.id) && (e.from == tmpConn.cast2.id)))});
 
               if(connectionCheck.length == 0){
-                var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id, "label":tmpConn.title, "color":{inherit:'from'}, "font": { align: 'middle', color: "#ffffff", strokeWidth:0}};
+                var tmpData = {"from":tmpConn.cast1.id, "to":tmpConn.cast2.id, "label":tmpConn.title};
                 results.networkResults.edges.push(tmpData);
               }
             }

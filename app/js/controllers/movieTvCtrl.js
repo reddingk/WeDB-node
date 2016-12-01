@@ -183,14 +183,13 @@
             vm.selectedMovieTv.suggestions = {};
             vm.selectedMovieTv.infoview = 'details';
             vm.selectedMovieTv.display = (results != null);
-            weInfo.search.movies.images(id, function(results){
-              if(results != null && results.backdrops.length > 0){
-                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+results.backdrops[0].file_path;
-              }
-              else {
-                vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
-              }
-            });
+
+            if(vm.selectedMovieTv.details != null && vm.selectedMovieTv.details.backdrop_path != null){
+              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.selectedMovieTv.details.backdrop_path;
+            }
+            else {
+              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+            }
           });
         }
         else if(type == "tv"){

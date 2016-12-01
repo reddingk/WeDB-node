@@ -81,7 +81,7 @@
     </div>
   </div>
   <!-- Header Panel -->
-  <div class="header-panel movietv card crd-1" ng-if="sc.comparisonMoviesTv.length < 1">
+  <div class="header-panel movietv card crd-1" ng-if="sc.comparisonMoviesTv.length < 1" ng-hide="sc.selectedMovieTv.display">
     <div class="header-panel-container">
       <div class="comparison-header">
         <img class="backcover-img" back-img="{{sc.homeImg}}">
@@ -93,7 +93,7 @@
   <!-- Comparison Section -->
   <div class="comparison movietv card crd-1" ng-if="sc.comparisonMoviesTv.length >= 1">
     <div class="comparison-container">
-      <div class="comparison-title item-row">Comparison Results</div>
+      <div class="comparison-title item-row">Comparison List</div>
 
       <div class="comparison-links" ng-if="sc.comparisonMoviesTv.length > 1">
         <div class="option-link compare-btn" ng-click="sc.compareObjects()" ng-class="{selected: sc.resultsMovieTv.visuals.view == true}" ng-disabled="sc.resultsMovieTv.visuals.view == true" scroll-to="compareSection"><span>Compare</span></div>
@@ -117,7 +117,17 @@
   <!-- Comparison Results -->
   <div class="comparison-res movietv card crd-1" ng-if="sc.resultsMovieTv.visuals.view == true">
     <div class="comparison-container">
+      <div class="comparison-title item-row">Comparison Results</div>
       <div class="compare-results">
+        <div class="visual-results">
+          <div class="visual-container">
+            <div class="item-visual" ng-repeat="item in sc.resultsMovieTv.visuals.castACrew" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
+              <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.image_path}}" ng-if="item.image_path != null">
+            </div>
+            <div class="error-message" ng-if="sc.resultsMovieTv.visuals.castACrew.length == 0" random-motion>Sorry We Did Not Find Any Matches</div>
+          </div>
+        </div>
+        
         <div class="full-results">
           <div class="detail-results">
             <div class="details-title">Cast & Crew</div>
@@ -129,14 +139,7 @@
             </div>
           </div>
         </div>
-        <div class="visual-results">
-          <div class="visual-container">
-            <div class="item-visual" ng-repeat="item in sc.resultsMovieTv.visuals.castACrew" ng-style="{'border-color':item.color,'background-color':item.color }" random-motion>
-              <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.image_path}}" ng-if="item.image_path != null">
-            </div>
-            <div class="error-message" ng-if="sc.resultsMovieTv.visuals.castACrew.length == 0" random-motion>Sorry We Did Not Find Any Matches</div>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>

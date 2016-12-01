@@ -1,6 +1,29 @@
 <div class="header-container spotlight" ng-include="sc.headerTemplate"></div>
 
 <div class="page-container">
-  <div class="chord-container"></div>
-  <div id="network-container"></div>
+  <div class="header-section-container">
+    <div class="header-panel spotlight card crd-1">
+      <div class="header-content">
+        <div class="background-cover" ng-style="{'background-image':'url('+sc.spotlightObject.images +')'}"></div>
+        <div class="spotlight-details detail-img">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.spotlightObject.details.poster_path}}">
+        </div>
+        <div class="spotlight-details detail-info">
+          <div class="info-title">{{sc.spotlightObject.details.title}}</div>
+          <div class="info"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visual-section cast-connections-section">
+    <div class="visual-title">Cast Connections</div>
+    <div id="network-container"></div>
+  </div>
+
+  <div class="visual-section cast-frequency-section">
+    <div class="visual-title">Cast Work Frequency</div>
+    <!-- <div class="chord-container"></div>-->
+  </div>
+
 </div>

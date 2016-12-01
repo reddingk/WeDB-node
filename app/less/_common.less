@@ -258,7 +258,7 @@ html, body {
                 font-size: 0.889rem;
                 display: inline-block;
                 &+.item-section-seperation { border-left: 1px solid rgba(255,255,255,1);}
-                .genres { color: rgba(0,0,0,1); display: inline-block; background: rgba(230,230,230,1); border-radius: 5px; padding: 3px; &+.genres { margin-left: 10px; }}
+                .genres { color: rgba(0,0,0,1); display: inline-block; background: rgba(230,230,230,0.5); border: 2px solid rgba(230,230,230,1); border-radius: 5px; padding: 2px 7px; &+.genres { margin-left: 10px; }}
               }
 
               .option-link {
@@ -310,6 +310,7 @@ html, body {
                     display: inline-block;
                     text-align: center;
                     overflow: hidden;
+                    border:2px solid rgba(0,0,0,0);
                     padding: 10px 0px;
                     transition: all 0.5s ease-in-out;
 
@@ -329,8 +330,9 @@ html, body {
       min-height: 400px;
       .comparison-container, .header-panel-container {
         width: 100%;
-        padding: 30px 50px;
+        padding: 10px 50px 30px;
         //background-color: rgba(200,200,200,0.7);
+        @media @mobile-device { padding: 20px; }
         .comparison-header {
           overflow: hidden;
 
@@ -407,7 +409,7 @@ html, body {
           white-space:nowrap;
           text-align: center;
           padding-top: 10px;
-          @media @mobile-device { height: 150px;}
+          @media @mobile-device { height: inherit;}
           .comparison-item {
             position: relative;
             text-align: center;
@@ -415,9 +417,10 @@ html, body {
             width: 250px;
             height: 100%;
             z-index: 0;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(200,200,200,0.5);
             vertical-align: top;
             overflow: hidden;
+            border: 2px solid rgba(50,50,50,1);
             @media @mobile-device { width: 100px;}
             .removeItem {
               position: absolute;
@@ -465,8 +468,14 @@ html, body {
     .comparison-res {
       .comparison-container {
         width: 100%;
-        padding: 30px 20px;
+        padding: 10px 50px 30px;
         background-color: rgba(220,220,220,1);
+        @media @mobile-device { padding: 20px 10px; }
+        .comparison-title {
+          padding:20px 0px 15px 0px;
+          font-size: 2rem;
+          color: rgba(0,0,0,1);
+        }
         .compare-results {
           //min-height: 500px;
           position: relative;
@@ -474,6 +483,7 @@ html, body {
           padding: 30px 0px;
           border-top: 1px solid rgba(0,0,0,1);
           border-bottom: 1px solid rgba(0,0,0,1);
+
           .full-results {
             width: 55%;
             display: inline-block;
@@ -514,7 +524,7 @@ html, body {
             height: 310px;
             background-color: @color-movie-back;
 
-            @media @mobile-device { width: 100%;}
+            @media @mobile-device { width: 100%; margin-bottom: 10px; }
             .visual-container {
               height: 100%;
               position: relative;
@@ -536,11 +546,12 @@ html, body {
       }
     }
     .extra-content {
-      padding: 20px;
-      background-color: rgba(30,30,30,0.7);
-      padding-top: 50px;
+      padding: 30px 10px;
       .extra-content-containers {
-        .extra-header { font-size: 3rem; font-weight: bold; padding: 10px 0px; @media @mobile-device { font-size: 2rem;}}
+        padding: 20px;
+        background-color: rgba(30,30,30,0.7);
+        border: 2px solid rgba(50,50,50,1);
+        .extra-header { font-size: 2rem; font-weight: bold; padding: 10px 0px; @media @mobile-device { font-size: 2rem;}}
         .item-container {
           width: 100%;
           overflow-x: auto;
@@ -552,11 +563,12 @@ html, body {
             height: 290px;
             display: inline-block;
             text-align: center;
+            border:2px solid rgba(0,0,0,0);
             overflow: hidden;
             padding: 10px 0px;
             transition: all 0.5s ease;
             @media @mobile-device { width: 200px; }
-            &:hover { border:2px solid; &.movie { border-color: @color-movie-back; } &.tv { border-color: @color-tv-back; } &.cast { border-color: @color-cast-back; } }
+            &:hover { &.movie { border-color: @color-movie-back; } &.tv { border-color: @color-tv-back; } &.cast { border-color: @color-cast-back; } }
             img { height: 90%;}
             .extra-title { font-weight: bold;  }
           }
