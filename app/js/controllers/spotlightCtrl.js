@@ -81,7 +81,7 @@
             console.log(res2);
             // display results using vis.js
             NetworkVisuals(res2.networkResults);
-            //ChordVisuals(res2.chordResults);
+            ChordVisuals(res2.chordResults);
           });
         });
       }
@@ -103,10 +103,11 @@
           .fill(function(d){ return vizData.colors[d];});
 
         //var width=1200, height=1100;
-        var width = 100, height = 100;
-        var svg = d3.select(".chord-container").append("svg").attr("height",height).attr("width",width);
+        var width = 80, height = 80;
+        var svg = d3.select(".chord-container").append("svg");//.attr("height",height).attr("width",width);
 
-        svg.append("g").attr("transform", "translate(600,550)").call(ch);
+        //svg.append("g").attr("transform", "translate(600,550)").call(ch);
+        svg.append("g").attr("transform", "translate(50%,50%)").call(ch);
         //d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");
         d3.select(self.frameElement).style("height", height+"%").style("width", width+"%");
       }
@@ -156,7 +157,16 @@
           }
         };
         network = new vis.Network(container, data, options);
+        network.on("click", function (params) {
+          console.log(params);
+          //getEdgesInfo();
+        });
       }
+
+      function getEdgesInfo(nodeid, edges, nodes){
+
+      }
+
       /*Header*/
       vm.headerTemplate = "views/templates/_header.html";
       vm.searchOpen = false;
