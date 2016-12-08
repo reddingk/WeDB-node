@@ -5,24 +5,25 @@
       var vm = this;
       vm.title = "spotlight";
       vm.defaultImg = "imgs/siteart/Home7.jpg";
-      /*Movie Ctrl*/
-      var id = $stateParams.id;
-      vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
-
-      if(id != undefined){
-        var idList = id.split('-');
-        displayDetails(idList[0],idList[1]);
-      }
       /*Variables*/
       vm.spotlightObject = {};
       vm.spotlightObjects = [];
       vm.spotlightMax = 10;
+
+      vm.defaultItem = {id: 14736, type: "movie"};
+
+      if(vm.spotlightObject.id == undefined){
+        displayDetails(vm.defaultItem.id,vm.defaultItem.type);
+      }
+
       /*Spotlight Functions*/
       vm.spotlightSelected = spotlightSelected;
       vm.addItem = addItem;
       vm.displayDetails = displayDetails;
 
       function displayDetails(id, type){
+        vm.spotlightObject = {};
+        vm.spotlightObjects = [];
         if(type == "movie"){
           weInfo.search.movies.byId(id, function(results){
             vm.spotlightObject.id = id;
@@ -53,6 +54,13 @@
             vm.spotlightObject.infoview = 'details';
             vm.spotlightObject.display = (results != null);
 
+            if(vm.spotlightObject.details != null && vm.spotlightObject.details.backdrop_path != null){
+              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
+            }
+            else {
+              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+            }
+
             addItem(vm.spotlightObject);
             spotlightSelected();
           });
@@ -74,13 +82,13 @@
         // get data
         weInfo.spotlight.getMovieTv(vm.spotlightObjects, vm.spotlightMax, function(res){
           // perform spotlight & transform results
-          console.log("Get Results:");
-          console.log(res);
           weInfo.spotlight.transformMovieTv(res, function(res2){
-            console.log("Transform Results:");
-            console.log(res2);
             // display results using vis.js
+            // Display Cast Visuals
+            vm.spotlightObject.creditsVisuals = res2.networkResults.nodes
+            // Display Network Visuals
             NetworkVisuals(res2.networkResults);
+            // Display Chord Visuals
             ChordVisuals(res2.chordResults);
           });
         });
@@ -91,25 +99,29 @@
       //Chord Visuals
       function ChordVisuals(vizData){
         function sort(a,b){ return d3.ascending(vizData.sortOrder.indexOf(a),vizData.sortOrder.indexOf(b)); }
+        var calcWidth = document.getElementsByClassName("chord-container")[0].offsetWidth;
+        var calcHeight = document.getElementsByClassName("chord-container")[0].offsetHeight;
+
+        var chordRadius = (calcWidth < 500 ? 80 : 250);
 
         var ch = viz.ch().data(vizData.data)
           .padding(.01)
           .sort(sort)
-	        .innerRadius(430)
-	        .outerRadius(450)
+          .innerRadius(chordRadius - 20)
+	        .outerRadius(chordRadius)
 	        .duration(1000)
 	        .chordOpacity(0.3)
 	        .labelPadding(.03)
           .fill(function(d){ return vizData.colors[d];});
 
-        //var width=1200, height=1100;
-        var width = 80, height = 80;
-        var svg = d3.select(".chord-container").append("svg");//.attr("height",height).attr("width",width);
+        // remove old svg
+        d3.select(".chord-container > svg").remove();
+        // append new svg
+        var svg = d3.select(".chord-container").append("svg");
 
-        //svg.append("g").attr("transform", "translate(600,550)").call(ch);
-        svg.append("g").attr("transform", "translate(50%,50%)").call(ch);
-        //d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");
-        d3.select(self.frameElement).style("height", height+"%").style("width", width+"%");
+        svg.append("g").attr("transform", "translate("+(calcWidth/2)+","+(calcHeight/2)+")").call(ch);
+
+        d3.select(self.frameElement).style("height", (calcHeight/2)+"px").style("width", (calcWidth/2)+"px");
       }
       // Network Visuals
       function NetworkVisuals(vizData){

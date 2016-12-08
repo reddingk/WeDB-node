@@ -57,6 +57,9 @@
              },
              getPopular: function(page) {
                  return baseurl + "person/popular?page="+page+"&api_key="+apikey;
+             },
+             getImages: function(id){
+               return baseurl + "person/"+id+"/images?api_key="+apikey;
              }
          },
          tv: {

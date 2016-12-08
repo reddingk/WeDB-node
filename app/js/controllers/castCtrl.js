@@ -171,6 +171,15 @@
           vm.selectedCast.credits = {};
           vm.selectedCast.infoview = 'details';
           vm.selectedCast.display = (results != null);
+
+          weInfo.search.cast.images(id, function(results2){
+            if(results2 != null && results2.profiles.length > 0){
+              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+ results2.profiles[results2.profiles.length-1].file_path;
+            }
+            else {
+              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+            }
+          });
         });
       }
 

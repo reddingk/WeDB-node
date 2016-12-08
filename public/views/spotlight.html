@@ -1,7 +1,10 @@
 <div class="header-container spotlight" ng-include="sc.headerTemplate"></div>
 
 <div class="page-container">
+  <!-- Header Section-->
   <div class="header-section-container">
+    <div class="header-message spotlight" ng-if="sc.spotlightObject.id == sc.defaultItem.id">Our spotlight section allows you to focus on a Movie or TV Show and find the cast connections within that title. With our WEDB favorite we bring to you one of our favorite titles.</div>
+
     <div class="header-panel spotlight card crd-1">
       <div class="header-content">
         <div class="background-cover" ng-style="{'background-image':'url('+sc.spotlightObject.images +')'}"></div>
@@ -9,9 +12,27 @@
           <img ng-src="http://image.tmdb.org/t/p/w500{{sc.spotlightObject.details.poster_path}}">
         </div>
         <div class="spotlight-details detail-info">
-          <div class="info-title">{{sc.spotlightObject.details.title}}</div>
-          <div class="info"></div>
+          <div class="info-title"><span ng-if="sc.spotlightObject.details.type == 'movie'">{{sc.spotlightObject.details.title}}</span> <span ng-if="sc.spotlightObject.details.type == 'tv'">{{sc.spotlightObject.details.name}}</span></div>
+          <div class="spotlight-item" ng-if="sc.spotlightObject.id == sc.defaultItem.id"><i class="fa fa-lightbulb-o"></i> WEDB Favorite</div>
+          <div class="info-content">
+            <div class="content info-tagline" ng-if="sc.spotlightObject.details.tagline != null">"{{sc.spotlightObject.details.tagline}}"</div>
+
+            <div class="content info-date" ng-if="sc.spotlightObject.details.type == 'movie'">{{sc.spotlightObject.details.release_date | date:'MMM dd, yyyy'}}</div>
+            <div class="content info-date" ng-if="sc.spotlightObject.details.type == 'tv'">{{sc.spotlightObject.details.first_air_date | date:'MMM, yyyy'}}</div>
+          </div>
+
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="visual-section cast-spotlight-section">
+    <div class="visual-title">Spotlight Cast</div>
+    <div class="cast-container">
+      <div class="cast-item" ng-repeat="item in sc.spotlightObject.creditsVisuals">
+        <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
+        <div class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image == null"></div>
+        <div class="item-title">{{item.label}}</div>
       </div>
     </div>
   </div>

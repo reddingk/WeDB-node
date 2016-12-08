@@ -118,6 +118,9 @@
             },
             popular: function(page, callback){
               castServices.popular(page, function(res) { callback(res); } );
+            },
+            images: function(id, callback){
+              castServices.images(id, function(res) { callback(res); } );
             }
           },
           movies_Tv: {
@@ -269,7 +272,7 @@
 
             // transform network Results
             for(var j =0; j < data.castACrew.length; j++){
-              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":'http://image.tmdb.org/t/p/w500'+data.castACrew[j].image_path, "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}, "font": { color:'#ffffff', strokeWidth: 2, strokeColor: colorArrayCast[j] }}
+              var tmpNode = {"id":data.castACrew[j].id, "shape":'circularImage',"image":(data.castACrew[j].image_path != null ? 'https://image.tmdb.org/t/p/w132_and_h132_bestv2'+data.castACrew[j].image_path : null), "label": data.castACrew[j].name, "color":{border:colorArrayCast[j]}, "font": { color:'#ffffff', strokeWidth: 2, strokeColor: colorArrayCast[j] }}
               results.networkResults.nodes.push(tmpNode);
             }
             for(var j =0; j < data.connections.length; j++){

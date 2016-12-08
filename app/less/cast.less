@@ -10,6 +10,7 @@
           }
           .item-row {
             .item-details-container {
+              .option-link { &.selected, &:hover { border-bottom: 2px solid @color-cast !important;}  }
               .info-section {
                 .info-credits {
                   .credits-item {
@@ -28,9 +29,9 @@
       }
     }
   }
-  .comparison {
+  .comparison, .header-panel {
     &.cast {
-      .comparison-container {
+      .comparison-container, .header-panel-container {
         .comparison-header {
           .comparison-title { color: @color-cast; }
           .comparison-ctrls {
@@ -38,6 +39,12 @@
               background-color: @color-cast-back;
               &:hover { background-color: rgba(20,20,20,0.8);}
             }
+          }
+        }
+        .comparison-links {
+          .option-link {
+            &.compare-btn { color: @color-cast; }
+            &.selected, &:hover { border-bottom: 2px solid @color-cast !important;}
           }
         }
         .compare-objects {

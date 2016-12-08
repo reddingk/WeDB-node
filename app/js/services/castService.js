@@ -43,6 +43,16 @@
           }).error(function(response){
             callback(response);
           });
+        },
+        images: function($mid, callback) {
+          $http({
+            method: 'GET',
+            url: api.cast.getImages($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
         }
       }
     }]);

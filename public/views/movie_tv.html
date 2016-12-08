@@ -1,6 +1,9 @@
 <div class="header-container movie" ng-include="sc.headerTemplate"></div>
 
 <div class="page-container">
+  <!-- Message -->
+  <div class="header-message movie" ng-if="sc.comparisonMoviesTv.length > 0 || sc.comparisonMoviesTv.display">Search for Movie or TV shows, then add to our comparison machine to find out what cast and crew have worked in your selections.</div>
+
   <!--Details Page-->
   <div class="details movietv card crd-1" ng-show="sc.selectedMovieTv.display">
     <div class="background-cover" ng-style="{'background-image':'url('+sc.selectedMovieTv.images +')'}"></div>
@@ -127,7 +130,7 @@
             <div class="error-message" ng-if="sc.resultsMovieTv.visuals.castACrew.length == 0" random-motion>Sorry We Did Not Find Any Matches</div>
           </div>
         </div>
-        
+
         <div class="full-results">
           <div class="detail-results">
             <div class="details-title">Cast & Crew</div>
