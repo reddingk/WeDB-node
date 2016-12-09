@@ -28,6 +28,8 @@
 
   <div class="visual-section cast-spotlight-section">
     <div class="visual-title">Spotlight Cast</div>
+    <div class="header-message spotlight">Our spotlight section chooses {{sc.spotlightMax}} of the top billed cast & crew to build our connections.</div>
+
     <div class="cast-container">
       <div class="cast-item" ng-repeat="item in sc.spotlightObject.creditsVisuals">
         <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
@@ -39,11 +41,13 @@
 
   <div class="visual-section cast-connections-section">
     <div class="visual-title">Cast Connections</div>
+    <div class="header-message spotlight">View the projects each cast or crew member has been involved in that connects them to each other.</div>
     <div id="network-container"></div>
   </div>
 
   <div class="visual-section cast-frequency-section">
     <div class="visual-title">Cast Work Frequency</div>
+    <div class="header-message spotlight">Look at the number of projects a member of the spotlight group has colaborated with the other members with.  Broken down to individual frequency as well as overall.</div>
     <div class="chord-container"></div>
   </div>
 

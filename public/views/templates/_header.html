@@ -7,6 +7,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
+        <div class="navbar-out-search"><a ng-click="sc.toggleSearch('toggle')" ng-hide="sc.searchOpen" class="link"><i class="fa fa-search" aria-hidden="true"></i></a></div>
         <a class="navbar-brand" ui-sref="app">WEDB</a>
       </div>
       <div class="collapse navbar-collapse" id="weNavbar">
@@ -14,6 +15,7 @@
           <li><a ui-sref="app.movie_tv" class="link movie" ui-sref-active="active">Movies & Tv Shows</a></li>
           <li><a ui-sref="app.cast" class="link cast" ui-sref-active="active">Cast & Crew</a></li>
           <li><a ui-sref="app.spotlight" class="link spotlight" ui-sref-active="active">Spotlight</a></li>
+          <li><a ui-sref="app.construction" class="link blog" ui-sref-active="active">Blogs</a></li>
           <li class="navbar-search"><a ng-click="sc.toggleSearch('toggle')" ng-hide="sc.searchOpen" class="link"><i class="fa fa-search" aria-hidden="true"></i></a></li>
         </ul>
       </div>
