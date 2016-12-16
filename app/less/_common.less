@@ -349,10 +349,32 @@ html, body {
                     border:2px solid rgba(0,0,0,0);
                     padding: 10px 0px;
                     transition: all 0.5s ease-in-out;
+                    position: relative;
 
+                    &:hover {
+                      -webkit-animation:1s bounce ease;
+                      animation: 1s bounce ease;
+                      opacity: 0.5;
+                    }
                     @media @mobile-device {  width: 200px; }
+
                     img { height: 90%;}
                     .suggestion-title { font-weight: bold;}
+
+                    &.movie { .image-notify { border-top: 50px solid @color-movie; }}
+                    &.tv { .image-notify { border-top: 50px solid @color-tv; }}
+                    &.cast { .image-notify { border-top: 50px solid @color-cast; }}
+
+                    .image-notify {
+                      width: 0;
+                    	height: 0;
+                    	//border-top: 50px solid red;
+                    	border-left: 50px solid transparent;
+                      position: absolute;
+                      top:0;
+                      right: 0;
+                      opacity: 0.9;
+                    }
                   }
                 }
               }
@@ -603,10 +625,34 @@ html, body {
             overflow: hidden;
             padding: 10px 0px;
             transition: all 0.5s ease;
+            position: relative;
             @media @mobile-device { width: 200px; }
-            &:hover { &.movie { border-color: @color-movie-back; } &.tv { border-color: @color-tv-back; } &.cast { border-color: @color-cast-back; } }
+            &:hover {
+              -webkit-animation:1s bounce ease;
+              animation: 1s bounce ease;
+              opacity: 0.5;
+
+              &.movie { border-color: @color-movie-back; }
+              &.tv { border-color: @color-tv-back; }
+              &.cast { border-color: @color-cast-back; }
+            }
             img { height: 90%;}
             .extra-title { font-weight: bold;  }
+
+            &.movie { .image-notify { border-top: 50px solid @color-movie; }}
+            &.tv { .image-notify { border-top: 50px solid @color-tv; }}
+            &.cast { .image-notify { border-top: 50px solid @color-cast; }}
+
+            .image-notify {
+              width: 0;
+            	height: 0;
+            	//border-top: 50px solid red;
+            	border-left: 50px solid transparent;
+              position: absolute;
+              top:0;
+              right: 0;
+              opacity: 0.9;
+            }
           }
         }
       }

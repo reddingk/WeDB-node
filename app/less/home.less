@@ -85,118 +85,130 @@
       @media @mobile-device { height: 250px; }
       .content {
         &.front { position: relative; top: 10px; width: 100%; height: 90%; z-index: 2;}
-        &.back { z-index: 0; position: absolute; top: 50%; transform: translateY(-50%);  width: 100%; text-align: center; }
-
-        .item-title { text-transform: capitalize; text-align: center; font-size: 2rem; font-weight: bold; }
-        .item-text { font-size: 1.5rem; text-align: center; @media @mobile-device, @tablet-device { font-size: 1.2rem;}}
-        .fa { font-size: 7rem; transition: all 0.7s ease-in-out; opacity: 0.4; }
-      }
-    }
-    &:hover, &:focus { .mask { opacity: 0.8; } .item-content { .content { .fa { transform: scale(1.5); }} } }
-  }
-
-  .blog-post {
-    padding: 10px;
-    @media @mobile-device { padding: 10px; }
-    .blog-container {
-      height: 300px;
-      //padding: 30px;
-      position: relative;
-      background-color: rgba(30,30,30,1);
-      border: @theme-border;
-      &:hover {
-        .img-section{
-          background: -webkit-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 30%, rgba(0,0,0,0) 90%); /* For Safari 5.1 to 6.0 */
-          background: -o-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 30%, rgba(0,0,0,0) 90%); /* For Opera 11.1 to 12.0 */
-          background: -moz-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 30%, rgba(0,0,0,0) 90%); /* For Firefox 3.6 to 15 */
-          background: linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 30%, rgba(0,0,0,0) 90%); /* Standard syntax (must be last) */
-          .blog-cover {
-            background-color: rgba(0,0,0,0.3);
-          }
-        }
-      }
-      @media @mobile-device { height: inherit; }
-
-      .img-section {
-        display: block;
-        width: 100%;
-        position: relative;
-        z-index: 3;
-        height: 50%;
-        overflow: hidden;
-        text-align: center;
-        transition: all 0.7s ease-in-out;
-        background: -webkit-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 60%, rgba(0,0,0,0) 80%); /* For Safari 5.1 to 6.0 */
-        background: -o-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 60%, rgba(0,0,0,0) 80%); /* For Opera 11.1 to 12.0 */
-        background: -moz-linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 60%, rgba(0,0,0,0) 80%); /* For Firefox 3.6 to 15 */
-        background: linear-gradient(left, rgba(0,0,0,0) 10%, @color-blog-back 60%, rgba(0,0,0,0) 80%); /* Standard syntax (must be last) */
-
-        @media @mobile-device { height:300px; width: 100%; display: block;}
-        .blog-cover {
+        &.back { z-index: 0;
           position: absolute;
-          z-index: 3;
+          //top: 50%;
+          //transform: translateY(-50%);
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
-          background-color: rgba(0,0,0,0.4);
-          transition: all 0.7s ease-in-out;
+          text-align: center;
         }
 
-        .img-container {
+        .item-title { text-transform: capitalize; text-align: center; font-size: 2rem; font-weight: bold; }
+        .item-text { font-size: 1.5rem; text-align: center; @media @mobile-device, @tablet-device { font-size: 1.2rem;}}
+        .fa { font-size: 7rem; transition: all 0.7s ease-in-out; opacity: 0.4; }
+        .back-img { width: 100%; height: 100%; position: absolute; left: 0; top: 0; opacity: 0.4; transition: all 0.7s ease-in-out; -webkit-filter: grayscale(90%); filter: grayscale(90%); img { wigth: 100%; min-height: 100%;}}
+      }
+    }
+    &:hover, &:focus { -webkit-animation:1s bounce ease; animation: 1s bounce ease; .mask { opacity: 0.8; } .item-content { .content { .back-img { /*transform: scale(1.1);*/ }} } }
+  }
+
+  .blog-post {
+    padding: 30px 10px;
+    .blog-container {
+      padding: 20px;
+      .blog-title {
+        display:block;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 10px 0px;
+        border-bottom-style: double;
+        margin-bottom: 10px;
+      }
+      .img-section {
+        position: relative;
+        width: 300px;
+        display: inline-block;
+        float: left;
+        overflow: hidden;
+        padding: 5px 10px;
+        .img-selected {
           position: relative;
-          z-index: 4;
-          overflow-x: auto;
-          overflow-y: hidden;
-          white-space:nowrap;
-          height: 100%;
-          padding: 5px;
-          .images {
-            display: inline-block;
-            position: relative;
-            z-index: 2;
-            width: 200px;
-            height: 200%;
-            padding: 5px;
-            text-align: center;
-            img { height: 100%; max-width: 100%;}
-            @media @mobile-device { height: 100%; }
-            &+.images { margin-left: 20px;}
-          }
-        }
-        .content-title {
-          position: absolute;
-          z-index: 4;
-          bottom: 5px;
-          left: 0;
           width: 100%;
-          padding: 2px 10px;
-          font-size: 2rem;
-          font-weight: bold;
           display: block;
-          color: rgba(186,85,211,1);
-          text-align: left;
-          @media @mobile-device { background-color: rgba(0,0,0,0.5); font-size: 1.5rem; }
+          overflow: hidden;
+          text-align: center;
+          transition: 1s all ease;
+          &:hover {
+            &.movie { border:3px solid @color-movie; }
+            &.tv { border:3px solid @color-tv; }
+            &.person { border:3px solid @color-cast; }
+
+            -webkit-animation:1s jello ease;
+            animation: 1s jello ease;
+            opacity: 0.5;
+          }
+          &.movie { .image-notify { border-top: 50px solid @color-movie; }}
+          &.tv { .image-notify { border-top: 50px solid @color-tv; }}
+          &.person { .image-notify { border-top: 50px solid @color-cast; }}
+
+          .image-notify {
+            width: 0;
+          	height: 0;
+          	//border-top: 50px solid red;
+          	border-left: 50px solid transparent;
+            position: absolute;
+            top:0;
+            right: 0;
+            opacity: 0.9;
+          }
+          img { width: 100%;}
         }
+        /* img All*/
       }
       .content-section {
         position: relative;
-        z-index: 3;
-        display: block;
-        padding: 30px;
-        width: 100%;
-        height: 50%;
-        overflow: hidden;
-        color: rgba(255,255,255,1);
-        background-color: rgba(50,50,50,1);
-        @media @mobile-device { padding: 15px; width: 100%; max-height: 250px; margin-top: 10px; }
-        .content-text {
-          font-size: 1.1rem;
-          line-height: 1.7rem;
-          @media @mobile-device { font-size: 0.9rem; }
-        }
+        width: 60%;
+        display: inline-block;
+        float: left;
+        padding: 5px;
 
-        .read-more { color: orange; }
+        @media @mobile-device { width: 100%; display: block; }
+        .content-title { display: block; font-size: 1.5rem; font-weight: bold; width: 100%; padding-bottom: 20px; }
+        .content-text {
+          display: block;
+          width: 100%;
+          padding: 20px;
+          background-color: rgba(100,100,100,0.3);
+          margin: 5px 0px;
+          @media @mobile-device { max-height: 300px; overflow-y: scroll; }
+        }
+        .img-all {
+          display: block;
+          padding: 5px;
+          height: 120px;
+          background-color: rgba(100,100,100,0.3);
+          margin: 5px 0px;
+          .img-all-container {
+            overflow-y: hidden;
+            overflow-x: auto;
+            white-space:nowrap;
+            width: 100%;
+            height: 100%;
+            .mini-img-item {
+              height: 100%;
+              padding: 5px;
+              display: inline-block;
+              transition: 1s all ease;
+              overflow: hidden;
+              &:hover {
+                -webkit-animation:1s tada ease;
+                animation: 1s tada ease;
+                opacity: 0.5;
+                //border: 2px solid rgba(255,255,255,0.7);
+              }
+
+              &.selected {
+                cursor: default;
+                opacity: 0.2;
+                &:hover { -webkit-animation:none; animation: none; border: none; }
+              }
+              img {  height: 100%;}
+            }
+          }
+        }
       }
     }
   }

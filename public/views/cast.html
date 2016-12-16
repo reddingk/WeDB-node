@@ -138,6 +138,7 @@
       <div class="extra-header">Popular Stars</div>
       <div class="item-container">
         <div class="item cast" ng-repeat="item in sc.extraContent.cast.results" ng-click="sc.displayDetails(item.id, 'cast')" scroll-to="">
+          <div class="image-notify"></div>
           <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}"/>
           <div class="extra-title">{{item.name}}</div>
         </div>

@@ -53,6 +53,20 @@
         }
       }
 
+      function getBlogDisplayData(item, list, callback){
+        var object = list[item];
+        movieServices.anyItem(object.title, function(res) {
+          var objectInfo = $.grep(res.results, function(e){ return e.id == object.id});
+          list[item].info = (objectInfo.length > 0 ? objectInfo[0] : null);
+          if((item-1) < 0) {
+            callback(list);
+          }
+          else {
+            getBlogDisplayData(item-1, list, callback)
+          }
+        });
+      }
+
       return {
         blogs: {
           all: function(){
@@ -60,6 +74,11 @@
           },
           latest: function() {
             return blogs[blogs.length -1];
+          },
+          displayData: function(data, callback){
+            getBlogDisplayData(data.length-1, data, function(res) {
+              callback(res);
+            });
           }
         },
         search: {
@@ -295,7 +314,7 @@
      function WeInfoData() {
        var vm = this;
        vm.siteData = {
-         blogs: [{"title":"From The Wild To The West", "images":["http://www.impawards.com/2016/posters/tarzan_ver3_xlg.jpg", "http://questionablefilmreview.files.wordpress.com/2013/07/7736093674_2e8414a35c_o.jpg","https://i.jeded.com/i/django-unchained.6897.jpg"], "text":"Whose headed to purchase @legendoftarzan available on blu-Ray and DVD TODAY!!! We wanted to find a #wedbconnection and we found one with one of our all time favorite actors @samuelljackson and co-star #ChristophWaltz This will be third time the pair have joined eachother for a big screen production! First in 2009 when Sam narrated for the film #IngloriousBasterds starring #BradPitt then again when the both graced the screen in the unique #QuentinTarantino film #DjangoUnchained starring the multitalented @iamjamiefoxx to their most recent action film to hit theaters @legendoftarzan a definite must see starring another one of our favorite actresses @margotrobbie as Jane and #AlexanderSkarsgard as Tarzan! With his incredible range and amazingly diverse talents we can't wait to see what @samuelljackson will do next! #SamuelLJackson #ChristophWaltz #MargotRobbie #AlexanderSkarsgard #JamieFoxx #BradPitt #IngloriousBasterds #DjangoUnchained #LegendOfTarzan #wedbconnection"}]
+         blogs: [{"title":"From The Wild To The West", "displayIds":[{"type":"movie", "id":258489, "title":"The Legend of Tarzan"},{"type":"person", "id":2231, "title":"Samuel L. Jackson"}, {"type":"person", "id":27319, "title":"Christoph Waltz"},{"type":"movie", "id":16869, "title":"Inglourious Basterds"}, {"type":"person", "id":287, "title":"Brad Pitt"}, {"type":"movie", "id":68718, "title":"Django Unchained"}, {"type":"person", "id":234352, "title":"Margot Robbie"}], "text":"Whose headed to purchase @legendoftarzan available on blu-Ray and DVD TODAY!!! We wanted to find a #wedbconnection and we found one with one of our all time favorite actors @samuelljackson and co-star #ChristophWaltz This will be third time the pair have joined eachother for a big screen production! First in 2009 when Sam narrated for the film #IngloriousBasterds starring #BradPitt then again when the both graced the screen in the unique #QuentinTarantino film #DjangoUnchained starring the multitalented @iamjamiefoxx to their most recent action film to hit theaters @legendoftarzan a definite must see starring another one of our favorite actresses @margotrobbie as Jane and #AlexanderSkarsgard as Tarzan! With his incredible range and amazingly diverse talents we can't wait to see what @samuelljackson will do next! #SamuelLJackson #ChristophWaltz #MargotRobbie #AlexanderSkarsgard #JamieFoxx #BradPitt #IngloriousBasterds #DjangoUnchained #LegendOfTarzan #wedbconnection"}]
        };
      }
 

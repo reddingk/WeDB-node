@@ -15,24 +15,34 @@
         <div class="item-text">{{item.text}}</div>
       </div>
       <div class="content back">
-        <i class="fa {{item.icon}}"></i>
+        <img class="back-img" ng-src="{{item.img}}">
       </div>
     </div>
   </div>
 
   <div class="blog-post card crd-1">
     <div class="blog-container">
+      <div class="blog-title">WeDB Notes</div>
       <div class="img-section">
-        <div class="blog-cover"></div>
-        <div class="img-container">
-          <div class="images" ng-repeat="img in sc.latestBlog.images"><img ng-src="{{img}}"></div>
+        <div class="img-selected {{sc.blogs.displayObj.type}}" ng-click="sc.selectBlogImg(sc.blogs.displayObj)">
+          <div class="image-notify"></div>
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.blogs.displayObj.img}}">
         </div>
-        <div class="content-title">{{sc.latestBlog.title}}</div>
       </div>
       <div class="content-section">
-        <div class="content-text">{{sc.latestBlog.text | limitTo: 350}} ......</div>
+        <div class="content-title">{{sc.blogs.all[sc.blogs.displayID].title}}</div>
+        <div class="img-all">
+          <div class="img-all-container">
+            <div class="mini-img-item" ng-repeat="item in sc.blogs.all[sc.blogs.displayID].displayData" ng-click="sc.changeBlogImg(item.info)" ng-class="{'selected': sc.isBlogImgSelected(item.info)}">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{item.info.poster_path}}" ng-if="item.info.media_type != 'person'">
+              <img ng-src="http://image.tmdb.org/t/p/w500{{item.info.profile_path}}" ng-if="item.info.media_type == 'person'">
+            </div>
+          </div>
+        </div>
+        <div class="content-text">{{sc.blogs.all[sc.blogs.displayID].text}} </div>
       </div>
-      <!--<div class="content-more"><div class="text">Read More</div><a ui-sref="app.construction" class="arrow right"></a></div>-->
+
+      <div class="more-notes"></div>
     </div>
   </div>
 

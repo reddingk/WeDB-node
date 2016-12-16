@@ -8,8 +8,9 @@
 		angular.module('movieTvCtrl', ['ui.bootstrap', 'ngAnimate']);
 		angular.module('castCtrl', ['ui.bootstrap', 'ngAnimate']);
 		angular.module('spotlightCtrl', ['ui.bootstrap', 'ngAnimate']);
+		angular.module('adminCtrl', ['ui.bootstrap', 'ngAnimate']);
 		/**/
-    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieTvCtrl', 'castCtrl','spotlightCtrl']);
+    angular.module('WeDBApp', ['ngMaterial','ngAnimate', 'ui.router', 'dataconfig', 'config', 'services', 'directives', 'homeCtrl', 'movieTvCtrl', 'castCtrl','spotlightCtrl', 'adminCtrl']);
 
 })();
 
@@ -68,6 +69,20 @@
         }
       }
 
+      function getBlogDisplayData(item, list, callback){
+        var object = list[item];
+        movieServices.anyItem(object.title, function(res) {
+          var objectInfo = $.grep(res.results, function(e){ return e.id == object.id});
+          list[item].info = (objectInfo.length > 0 ? objectInfo[0] : null);
+          if((item-1) < 0) {
+            callback(list);
+          }
+          else {
+            getBlogDisplayData(item-1, list, callback)
+          }
+        });
+      }
+
       return {
         blogs: {
           all: function(){
@@ -75,6 +90,11 @@
           },
           latest: function() {
             return blogs[blogs.length -1];
+          },
+          displayData: function(data, callback){
+            getBlogDisplayData(data.length-1, data, function(res) {
+              callback(res);
+            });
           }
         },
         search: {
@@ -310,7 +330,7 @@
      function WeInfoData() {
        var vm = this;
        vm.siteData = {
-         blogs: [{"title":"From The Wild To The West", "images":["http://www.impawards.com/2016/posters/tarzan_ver3_xlg.jpg", "http://questionablefilmreview.files.wordpress.com/2013/07/7736093674_2e8414a35c_o.jpg","https://i.jeded.com/i/django-unchained.6897.jpg"], "text":"Whose headed to purchase @legendoftarzan available on blu-Ray and DVD TODAY!!! We wanted to find a #wedbconnection and we found one with one of our all time favorite actors @samuelljackson and co-star #ChristophWaltz This will be third time the pair have joined eachother for a big screen production! First in 2009 when Sam narrated for the film #IngloriousBasterds starring #BradPitt then again when the both graced the screen in the unique #QuentinTarantino film #DjangoUnchained starring the multitalented @iamjamiefoxx to their most recent action film to hit theaters @legendoftarzan a definite must see starring another one of our favorite actresses @margotrobbie as Jane and #AlexanderSkarsgard as Tarzan! With his incredible range and amazingly diverse talents we can't wait to see what @samuelljackson will do next! #SamuelLJackson #ChristophWaltz #MargotRobbie #AlexanderSkarsgard #JamieFoxx #BradPitt #IngloriousBasterds #DjangoUnchained #LegendOfTarzan #wedbconnection"}]
+         blogs: [{"title":"From The Wild To The West", "displayIds":[{"type":"movie", "id":258489, "title":"The Legend of Tarzan"},{"type":"person", "id":2231, "title":"Samuel L. Jackson"}, {"type":"person", "id":27319, "title":"Christoph Waltz"},{"type":"movie", "id":16869, "title":"Inglourious Basterds"}, {"type":"person", "id":287, "title":"Brad Pitt"}, {"type":"movie", "id":68718, "title":"Django Unchained"}, {"type":"person", "id":234352, "title":"Margot Robbie"}], "text":"Whose headed to purchase @legendoftarzan available on blu-Ray and DVD TODAY!!! We wanted to find a #wedbconnection and we found one with one of our all time favorite actors @samuelljackson and co-star #ChristophWaltz This will be third time the pair have joined eachother for a big screen production! First in 2009 when Sam narrated for the film #IngloriousBasterds starring #BradPitt then again when the both graced the screen in the unique #QuentinTarantino film #DjangoUnchained starring the multitalented @iamjamiefoxx to their most recent action film to hit theaters @legendoftarzan a definite must see starring another one of our favorite actresses @margotrobbie as Jane and #AlexanderSkarsgard as Tarzan! With his incredible range and amazingly diverse talents we can't wait to see what @samuelljackson will do next! #SamuelLJackson #ChristophWaltz #MargotRobbie #AlexanderSkarsgard #JamieFoxx #BradPitt #IngloriousBasterds #DjangoUnchained #LegendOfTarzan #wedbconnection"}]
        };
      }
 
@@ -361,6 +381,15 @@
           'content@': {
             templateUrl: 'views/spotlight.html',
             controller: 'SpotlightController as sc'
+          }
+        }
+      })
+      .state('app.admin', {
+        url: "admin",
+        views: {
+          'content@': {
+            templateUrl: 'views/admin.html',
+            controller: 'AdminController as sc'
           }
         }
       })
@@ -472,6 +501,67 @@
          }
       }
     });
+
+})();
+
+(function(){
+   "use strict";
+
+    angular.module('adminCtrl').controller('AdminController', ['$state','weInfo','$sce', function($state, weInfo, $sce){
+      var vm = this;
+      vm.title = "Home";
+
+      vm.headerTemplate = "views/templates/_header.html";
+      vm.searchOpen = false;
+      vm.searchQuery = "";
+      vm.displayResults = { "max":10, "display":[]};
+      vm.allResults = [];
+
+      vm.dataDisplay= {};
+
+      /*Functions*/
+      vm.toggleSearch = toggleSearch;
+      vm.search = search;
+      vm.clearSearch = clearSearch;
+      vm.itemAction = itemAction;
+
+      function itemAction(item, type) {
+        vm.dataDisplay = item;
+        clearSearch();
+        toggleSearch("close");
+      }
+
+      function clearSearch() {
+        vm.searchQuery = "";
+        vm.allResults = [];
+        vm.displayResults.display = [];
+      }
+
+      function search() {
+        var query = vm.searchQuery;
+        if(query.length > 1){
+          weInfo.search.all(query, function(results){
+            vm.allResults = results;
+            vm.displayResults.display = vm.allResults.results.slice(0, vm.displayResults.max);
+          });
+        }
+      }
+
+      function toggleSearch(control){
+        if(control == "open")
+        { vm.searchOpen = true; }
+        else if(control == "close")
+        { vm.searchOpen = false; }
+        else if(control == "toggle")
+        { vm.searchOpen = !vm.searchOpen; }
+
+        if(vm.searchOpen) {
+          var navMain = $("#weNavbar");
+          navMain.collapse('hide');
+        }
+      }
+
+    }]);
 
 })();
 
@@ -732,12 +822,50 @@
 
       vm.homeImg = "imgs/siteart/Home6.jpg";
       vm.pageCards = [
-        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"", "loc":"app.movie_tv","text":"Get details on Movie's and Television shows both new and old.  Also use our comparison machine to find out which cast & crew members have appeared on programs together."},
-        {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"", "loc":"app.cast", "text":"Get information on cast & crew member's content credits.  As well as get the programs that cast & crew have worked on together using our comparision machine."},
-        {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"", "loc":"app.spotlight", "text":"Put a spotlight on a movie or tv show by finding out the connections between the cast of your spotlight."}
+        {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"imgs/siteart/Home7.jpg", "loc":"app.movie_tv","text":"Get details on Movie's and Television shows both new and old.  Also use our comparison machine to find out which cast & crew members have appeared on programs together."},
+        {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"imgs/siteart/Cast&Crew3.jpg", "loc":"app.cast", "text":"Get information on cast & crew member's content credits.  As well as get the programs that cast & crew have worked on together using our comparision machine."},
+        {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"imgs/siteart/Spotlight1.jpg", "loc":"app.spotlight", "text":"Put a spotlight on a movie or tv show by finding out the connections between the cast of your spotlight."}
       ];
 
       vm.latestBlog = weInfo.blogs.latest();
+      // Get Blog info
+      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}}
+      if(vm.blogs.all.length > 0){
+        weInfo.blogs.displayData(vm.blogs.all[vm.blogs.displayID].displayIds, function(res){
+            vm.blogs.all[vm.blogs.displayID].displayData = res;
+            var object = vm.blogs.all[vm.blogs.displayID].displayData[0];
+            vm.blogs.displayObj.type = object.info.media_type;
+            vm.blogs.displayObj.id = object.info.id;
+            vm.blogs.displayObj.img = (object.info.media_type == 'movie' || object.info.media_type == 'tv'? object.info.poster_path : object.info.profile_path);
+        });
+      }
+
+      /**/
+      vm.changeBlogImg = changeBlogImg;
+      vm.isBlogImgSelected = isBlogImgSelected;
+      vm.selectBlogImg = selectBlogImg;
+
+      function selectBlogImg(obj){
+        if(obj.type == 'movie' || obj.type == 'tv')
+        {$state.go('app.movie_tv',{id1: obj.id +"-"+obj.type});}
+        else if(obj.type == 'person')
+        {$state.go('app.cast',{id1: obj.id});}
+      }
+
+      function isBlogImgSelected(info){
+        return (vm.blogs.displayObj.id == info.id);        
+      }
+
+      function changeBlogImg(info){
+        vm.blogs.displayObj.type = info.media_type;
+        vm.blogs.displayObj.id = info.id;
+        if(info.media_type == 'person'){
+          vm.blogs.displayObj.img = info.profile_path;
+        }
+        else {
+          vm.blogs.displayObj.img = info.poster_path;
+        }
+      }
 
       /*Functions*/
       vm.toggleSearch = toggleSearch;
@@ -746,16 +874,10 @@
       vm.itemAction = itemAction;
 
       function itemAction(item, type) {
-        if(vm.title == 'movie' || vm.title == 'tv' || vm.title == 'person')
-        {
-          // Add
-        }
-        else {
-          if(type == 'movie' || type == 'tv')
-          {$state.go('app.movie_tv',{id1: item.id +"-"+item.media_type});}
-          else if(type == 'cast')
-          {$state.go('app.cast',{id1: item.id});}
-        }
+        if(type == 'movie' || type == 'tv')
+        {$state.go('app.movie_tv',{id1: item.id +"-"+item.media_type});}
+        else if(type == 'cast')
+        {$state.go('app.cast',{id1: item.id});}
       }
 
       function clearSearch() {

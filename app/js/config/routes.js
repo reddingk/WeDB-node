@@ -43,6 +43,15 @@
           }
         }
       })
+      .state('app.admin', {
+        url: "admin",
+        views: {
+          'content@': {
+            templateUrl: 'views/admin.html',
+            controller: 'AdminController as sc'
+          }
+        }
+      })
       .state('app.construction', {
         url: "underconstruction",
         views: {

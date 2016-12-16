@@ -72,6 +72,7 @@
               <div class="info-sugggestions-container">
                 <div ng-if="sc.selectedMovieTv.suggestions.results.length == 0">Sorry We Don't Have Any Suggestions</div>
                 <div class="suggestions-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.suggestions.results" ng-click="sc.displayDetails(item.id, sc.selectedMovieTv.details.type)">
+                  <div class="image-notify"></div>
                   <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
                   <div class="suggestion-title" ng-if="sc.selectedMovieTv.details.type == 'movie'">{{item.title}}</div>
                   <div class="suggestion-title" ng-if="sc.selectedMovieTv.details.type == 'tv'">{{item.name}}</div>
@@ -153,6 +154,7 @@
       <div class="extra-header">Movies Now Playing</div>
       <div class="item-container">
         <div class="item movie" ng-repeat="item in sc.extraContent.movies.results" ng-click="sc.displayDetails(item.id, 'movie')" scroll-to="">
+          <div class="image-notify"></div>
           <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
           <div class="extra-title">{{item.title}}</div>
         </div>
@@ -165,6 +167,7 @@
       <div class="extra-header">TV Shows On Air</div>
       <div class="item-container">
         <div class="item tv" ng-repeat="item in sc.extraContent.tv.results" ng-click="sc.displayDetails(item.id, 'tv')" scroll-to="">
+          <div class="image-notify"></div>
           <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
           <div class="extra-title">{{item.name}}</div>
         </div>
