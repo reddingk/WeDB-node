@@ -49,9 +49,24 @@ html, body {
 .header-container {
 
   &.construction { .nav-container { .navbar { .container-fluid { .navbar-header {  .navbar-brand { color:rgba(200,200,200,1); }} } } } }
-  &.movie { .nav-container { .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: moviepulse 3s 2; animation: moviepulse 3s 2; color: @color-movie; }} } } } }
-  &.cast { .nav-container { .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: castpulse 3s 2; animation: castpulse 3s 2; color: @color-cast; }} } } } }
-  &.spotlight { .nav-container { .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: spotlightpulse 3s 2; animation: spotlightpulse 3s 2; color: @color-spotlight; }} } } } }
+  &.movie {
+    .nav-container {
+      .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: moviepulse 3s 2; animation: moviepulse 3s 2; color: @color-movie; }} } }
+      .nav-bottom { .drop-search { background-color: @color-movie-back;} }
+    }
+  }
+  &.cast {
+    .nav-container {
+      .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: castpulse 3s 2; animation: castpulse 3s 2; color: @color-cast; }} } }
+      .nav-bottom { .drop-search{ background-color: @color-cast-back;} }
+    }
+  }
+  &.spotlight {
+    .nav-container {
+      .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: spotlightpulse 3s 2; animation: spotlightpulse 3s 2; color: @color-spotlight; }} } }
+      .nav-bottom { .drop-search { background-color: @color-spotlight-back;} }
+    }
+  }
   &.blog { .nav-container { .navbar { .container-fluid { .navbar-header {  .navbar-brand { -webkit-animation: spotlightpulse 3s 2; animation: spotlightpulse 3s 2; color: @color-blog; }} } } } }
 
 
@@ -118,6 +133,7 @@ html, body {
       overflow: hidden;
       -webkit-animation:0.5s slideInDown  ease;
       animation:0.5s slideInDown  ease;
+      //background-color: rgba(50,50,50,0.9);
 
       /* when showing the thing */
       &.ng-hide  {
@@ -157,6 +173,7 @@ html, body {
         width: 100%;
         padding: 10px 0px;
         max-height: 400px;
+        &.empty-list { padding: 3px 0; }
         .list-container {
           max-height: 380px;
           overflow: auto;
@@ -191,7 +208,7 @@ html, body {
 .mainBody {
   padding-top: 50px;
   min-height: 100%;
-  padding-bottom: 50px;
+  //padding-bottom: 50px;
 
   .header-container {  }
   .header-message {
@@ -209,7 +226,16 @@ html, body {
     }
   }
   .page-container {
-    padding-bottom: 30px;
+    padding-bottom: 80px;
+    background-color:black;
+    background-image:
+    radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+
     .construction-txt { text-align: center; padding-top: 30px; }
 
     .details {
@@ -245,13 +271,15 @@ html, body {
 
         @media @mobile-device { padding: 30px 10px; }
         .clearDetails {
-          font-size: 4rem;
+          //font-size: 4rem;
           position: absolute;
           right: 30px;
-          top: 0px;
+          top: 30px;
           color:rgba(50,50,50,0.7);
           transition: all 0.5s ease;
           @media @mobile-device { right: 10px; font-size: 2rem;}
+
+          i{ font-size: 4rem;}
           &:hover { color: rgba(200,0,0,0.9);}
         }
         .details-section {
@@ -274,6 +302,7 @@ html, body {
               display: block;
               background-color: rgba(200,200,200,0.8);
               margin: 10px 0px;
+              transition: 0.5s all ease-in-out;
               .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px;}
               span { padding-left: 5px;}
             }
@@ -294,13 +323,21 @@ html, body {
                 font-size: 0.889rem;
                 display: inline-block;
                 &+.item-section-seperation { border-left: 1px solid rgba(255,255,255,1);}
-                .genres { color: rgba(0,0,0,1); display: inline-block; background: rgba(230,230,230,0.5); border: 2px solid rgba(230,230,230,1); border-radius: 5px; padding: 2px 7px; &+.genres { margin-left: 10px; }}
+                .genres {
+                  color: rgba(0,0,0,1);
+                  display: inline-block;
+                  background: rgba(230,230,230,0.5);
+                  border: 2px solid rgba(230,230,230,1);
+                  border-radius: 5px;
+                  padding: 2px 7px; &+.genres { margin-left: 10px; }
+                  box-shadow: 0 1px 3px 0 rgba(0,0,0,.5), 0 1px 1px 0 rgba(0,0,0,.5), 0 2px 1px -1px rgba(0,0,0,.5);
+                }
               }
 
               .option-link {
                 display: inline-block;
                 font-size: 1.3rem;
-                padding-bottom: 5px;
+                padding-bottom: 5px;                
                 &.selected, &:hover { text-decoration: initial; color:rgba(150,150,150,1); border-bottom: 2px solid rgba(0,0,0,1);}
                 &+.option-link { margin-left: 25px; }
               }
@@ -346,24 +383,27 @@ html, body {
                     display: inline-block;
                     text-align: center;
                     overflow: hidden;
-                    border:2px solid rgba(0,0,0,0);
                     padding: 10px 0px;
                     transition: all 0.5s ease-in-out;
                     position: relative;
 
                     &:hover {
-                      -webkit-animation:1s bounce ease;
-                      animation: 1s bounce ease;
-                      opacity: 0.5;
+                      -webkit-animation:0.7s pulse ease;
+                      animation: 0.7s pulse ease;
+
+                      .image-notify { border-top: 50px solid rgba(50,50,50,1) !important; }
+                      &.movie { background-color: @color-movie-back; }
+                      &.tv { background-color: @color-tv-back; }
+                      &.cast { background-color: @color-cast-back; }
                     }
                     @media @mobile-device {  width: 200px; }
 
                     img { height: 90%;}
                     .suggestion-title { font-weight: bold;}
 
-                    &.movie { .image-notify { border-top: 50px solid @color-movie; }}
-                    &.tv { .image-notify { border-top: 50px solid @color-tv; }}
-                    &.cast { .image-notify { border-top: 50px solid @color-cast; }}
+                    &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
+                    &.tv { .image-notify { border-top: 50px solid @color-tv-back; }}
+                    &.cast { .image-notify { border-top: 50px solid @color-cast-back; }}
 
                     .image-notify {
                       width: 0;
@@ -389,7 +429,6 @@ html, body {
       .comparison-container, .header-panel-container {
         width: 100%;
         padding: 10px 50px 30px;
-        //background-color: rgba(200,200,200,0.7);
         @media @mobile-device { padding: 20px; }
         .comparison-header {
           overflow: hidden;
@@ -524,15 +563,17 @@ html, body {
     }
 
     .comparison-res {
+      padding: 30px 10px;
       .comparison-container {
         width: 100%;
         padding: 10px 50px 30px;
-        background-color: rgba(220,220,220,1);
+        background: linear-gradient(to bottom, rgba(35, 37, 38,0.7), rgba(65, 67, 69,0.7));
+
         @media @mobile-device { padding: 20px 10px; }
         .comparison-title {
           padding:20px 0px 15px 0px;
           font-size: 2rem;
-          color: rgba(0,0,0,1);
+          color: rgba(255,255,255,1);
         }
         .compare-results {
           //min-height: 500px;
@@ -548,8 +589,8 @@ html, body {
             vertical-align: top;
             @media @mobile-device { width: 100%;}
             .detail-results {
-              padding: 0px 10px;
-              .details-title {font-size: 2rem; width: 100%; display: block; border-bottom: 1px solid rgba(0,0,0,1); color: rgba(0,0,0,1);}
+              padding: 0px 10px 0px 30px;
+              .details-title {font-size: 2rem; width: 100%; display: block; border-bottom: 1px solid rgba(0,0,0,1); color: rgba(255,255,255,1);}
               .details-container {
                 width: 100%;
                 overflow-x: auto;
@@ -557,6 +598,7 @@ html, body {
                 text-align: center;
                 overflow-y: hidden;
                 height: 265px;
+                display: flex;
                 .details-item {
                   text-align: center;
                   padding: 10px;
@@ -571,7 +613,8 @@ html, body {
                     display: inline-block;
                     img { height: 100%;}
                   }
-                  .item-title { color: rgba(0,0,0,1);}
+                  .item-title { color: rgba(255,255,255,1); white-space: initial;}
+                  &+.details-item { margin-left: 10px; }
                 }
               }
             }
@@ -580,7 +623,10 @@ html, body {
             width:44%;
             display: inline-block;
             height: 310px;
-            background-color: @color-movie-back;
+            background-color: rgba(0,0,0,.2);
+            -moz-box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
 
             @media @mobile-device { width: 100%; margin-bottom: 10px; }
             .visual-container {
@@ -621,27 +667,27 @@ html, body {
             height: 290px;
             display: inline-block;
             text-align: center;
-            border:2px solid rgba(0,0,0,0);
             overflow: hidden;
             padding: 10px 0px;
-            transition: all 0.5s ease;
+            transition: all 0.7s ease-in-out;
             position: relative;
             @media @mobile-device { width: 200px; }
             &:hover {
-              -webkit-animation:1s bounce ease;
-              animation: 1s bounce ease;
-              opacity: 0.5;
+              -webkit-animation:0.7s pulse ease;
+              animation: 0.7s pulse ease;
+              //opacity: 0.5;
 
-              &.movie { border-color: @color-movie-back; }
-              &.tv { border-color: @color-tv-back; }
-              &.cast { border-color: @color-cast-back; }
+              .image-notify { border-top: 50px solid rgba(30,30,30,1) !important; }
+              &.movie { background-color: @color-movie-back; }
+              &.tv { background-color: @color-tv-back; }
+              &.cast { background-color: @color-cast-back; }
             }
             img { height: 90%;}
             .extra-title { font-weight: bold;  }
 
-            &.movie { .image-notify { border-top: 50px solid @color-movie; }}
-            &.tv { .image-notify { border-top: 50px solid @color-tv; }}
-            &.cast { .image-notify { border-top: 50px solid @color-cast; }}
+            &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
+            &.tv { .image-notify { border-top: 50px solid @color-tv-back; }}
+            &.cast { .image-notify { border-top: 50px solid @color-cast-back; }}
 
             .image-notify {
               width: 0;
@@ -651,7 +697,8 @@ html, body {
               position: absolute;
               top:0;
               right: 0;
-              opacity: 0.9;
+              opacity: 1;
+              transition: all 0.7s ease-in-out;
             }
           }
         }
@@ -672,7 +719,7 @@ html, body {
 
   /*Scroll Styles*/
   ::-webkit-scrollbar-track   {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
   	background-color: rgba(10,10,10,0.2);
   }
 

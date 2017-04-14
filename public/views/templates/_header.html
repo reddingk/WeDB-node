@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="search-results">
+    <div class="search-results" ng-class="{'empty-list':sc.displayResults.display.length == 0}">
       <div class="list-container">
         <!--<div class="error-message" ng-if="sc.displayResults.display.length == 0 && sc.searchQuery.length > 0">Sorry we did not find anything for "{{sc.searchQuery}}"</div>-->
         <div class="list-item" ng-repeat="item in sc.displayResults.display">

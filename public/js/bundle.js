@@ -406,7 +406,7 @@
 
 
       $urlRouterProvider.otherwise('/');
-      //$locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
     }]);
 
 
@@ -705,6 +705,11 @@
 
           vm.comparisonCast.push(tmpCast);
           clearDetails();
+
+          // If Compare has already been run re run with new item
+          if(vm.resultsCast.visuals.view){
+            compareObjects();
+          }
         }
       }
       function addCheck(id){
@@ -829,7 +834,8 @@
 
       vm.latestBlog = weInfo.blogs.latest();
       // Get Blog info
-      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}}
+      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
+      
       if(vm.blogs.all.length > 0){
         weInfo.blogs.displayData(vm.blogs.all[vm.blogs.displayID].displayIds, function(res){
             vm.blogs.all[vm.blogs.displayID].displayData = res;
@@ -853,7 +859,7 @@
       }
 
       function isBlogImgSelected(info){
-        return (vm.blogs.displayObj.id == info.id);        
+        return (vm.blogs.displayObj.id == info.id);
       }
 
       function changeBlogImg(info){
@@ -1055,6 +1061,11 @@
 
           vm.comparisonMoviesTv.push(tmpMovieTv);
           clearDetails();
+
+          // If Compare has already been run re run with new item
+          if(vm.resultsMovieTv.visuals.view){
+            compareObjects();
+          }
         }
       }
       function addCheck(id){
@@ -1200,7 +1211,7 @@
       vm.spotlightObjects = [];
       vm.spotlightMax = 10;
 
-      vm.defaultItem = {id: 14736, type: "movie"};
+      vm.defaultItem = {id: 337339, type: "movie"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);

@@ -20,7 +20,8 @@
 
       vm.latestBlog = weInfo.blogs.latest();
       // Get Blog info
-      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}}
+      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
+      
       if(vm.blogs.all.length > 0){
         weInfo.blogs.displayData(vm.blogs.all[vm.blogs.displayID].displayIds, function(res){
             vm.blogs.all[vm.blogs.displayID].displayData = res;
@@ -44,7 +45,7 @@
       }
 
       function isBlogImgSelected(info){
-        return (vm.blogs.displayObj.id == info.id);        
+        return (vm.blogs.displayObj.id == info.id);
       }
 
       function changeBlogImg(info){

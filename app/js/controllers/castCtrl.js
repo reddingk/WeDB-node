@@ -138,6 +138,11 @@
 
           vm.comparisonCast.push(tmpCast);
           clearDetails();
+
+          // If Compare has already been run re run with new item
+          if(vm.resultsCast.visuals.view){
+            compareObjects();
+          }
         }
       }
       function addCheck(id){

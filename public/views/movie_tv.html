@@ -8,7 +8,8 @@
   <div class="details movietv card crd-1" ng-show="sc.selectedMovieTv.display">
     <div class="background-cover" ng-style="{'background-image':'url('+sc.selectedMovieTv.images +')'}"></div>
     <div class="details-container">
-      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>
+      <!--<div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>-->
+      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="material-icons">close</i></div>
       <!--Nav Title-->
       <div class="details-section details-nav">
         <div class="item-title item-row"><span ng-if="sc.selectedMovieTv.details.type == 'movie'">{{sc.selectedMovieTv.details.title}}</span><span ng-if="sc.selectedMovieTv.details.type == 'tv'">{{sc.selectedMovieTv.details.name}}</span></div>

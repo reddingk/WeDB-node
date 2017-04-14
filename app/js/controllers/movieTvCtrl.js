@@ -139,6 +139,11 @@
 
           vm.comparisonMoviesTv.push(tmpMovieTv);
           clearDetails();
+
+          // If Compare has already been run re run with new item
+          if(vm.resultsMovieTv.visuals.view){
+            compareObjects();
+          }
         }
       }
       function addCheck(id){

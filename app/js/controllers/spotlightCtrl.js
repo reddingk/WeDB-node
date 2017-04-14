@@ -10,7 +10,7 @@
       vm.spotlightObjects = [];
       vm.spotlightMax = 10;
 
-      vm.defaultItem = {id: 14736, type: "movie"};
+      vm.defaultItem = {id: 337339, type: "movie"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);
