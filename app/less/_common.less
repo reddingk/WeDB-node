@@ -21,7 +21,7 @@
 /*Border*/
 @theme-border: 2px solid rgba(30,30,30,0.2);
 
-@import url('https://fonts.googleapis.com/css?family=Boogaloo|Cinzel|Fjalla+One|Oswald|Paytone+One|Sintony');
+@import url('https://fonts.googleapis.com/css?family=Poppins|Rancho');
 
 html, body {
   height: 100%;
@@ -30,13 +30,8 @@ html, body {
   font-size: @font-size;
   //overflow-x: hidden;
 
-  font-family: 'Oswald', sans-serif;
-  /*font-family: 'Fjalla One', sans-serif;
-  font-family: 'Paytone One', sans-serif;
-  font-family: 'Cinzel', serif;
-  font-family: 'Sintony', sans-serif;
-  font-family: 'Boogaloo', cursive;*/
-
+  font-family: 'Poppins', sans-serif;
+  //font-family: 'Rancho', cursive;
 }
 @-webkit-keyframes moviepulse {0% { color: @color-movie; } 50% { color: rgba(157,157,157,1);} 100% { color: @color-movie; } }
 @-webkit-keyframes castpulse {0% { color: @color-cast; } 50% { color: rgba(157,157,157,1);} 100% { color: @color-cast; } }
@@ -81,10 +76,14 @@ html, body {
       margin-bottom: 0px;
       position: relative;
       z-index: 90;
+      font-family: 'Rancho', cursive;
       .container-fluid {
         .navbar-header {
           .navbar-brand {
+            overflow: hidden;
             transition: all 0.5s ease-in-out;
+            img {  height: 140%; display: inline-block;}
+            span { }
           }
           .navbar-out-search {
             float: right;
@@ -109,6 +108,7 @@ html, body {
             }
           }
           .nav {
+            font-size: 1.3rem;
             li {
               a {
                 transition: all 0.5s ease-in-out;
@@ -337,7 +337,7 @@ html, body {
               .option-link {
                 display: inline-block;
                 font-size: 1.3rem;
-                padding-bottom: 5px;                
+                padding-bottom: 5px;
                 &.selected, &:hover { text-decoration: initial; color:rgba(150,150,150,1); border-bottom: 2px solid rgba(0,0,0,1);}
                 &+.option-link { margin-left: 25px; }
               }
@@ -443,6 +443,7 @@ html, body {
             text-transform: uppercase;
             font-weight: bold;
             text-shadow: @dark-shadow;
+            font-family: 'Rancho', cursive;
             @media @mobile-device { font-size: 2.5rem; }
           }
           .comparison-text { position: relative; z-index: 1; display: block; text-align: center; font-size: 2.1rem; padding: 10px 0px; max-width: 920px; margin: 0 auto; @media @mobile-device { font-size: 1.2rem; }}
@@ -662,6 +663,7 @@ html, body {
           white-space:nowrap;
           min-height: 320px;
           border-top: 1px solid rgba(0,0,0,1);
+          @media @mobile-device { min-height: 250px;}
           .item {
             width: 300px;
             height: 290px;
@@ -671,7 +673,7 @@ html, body {
             padding: 10px 0px;
             transition: all 0.7s ease-in-out;
             position: relative;
-            @media @mobile-device { width: 200px; }
+            @media @mobile-device { width: 200px; &+.item { margin-left: 10px; }}
             &:hover {
               -webkit-animation:0.7s pulse ease;
               animation: 0.7s pulse ease;
@@ -682,8 +684,8 @@ html, body {
               &.tv { background-color: @color-tv-back; }
               &.cast { background-color: @color-cast-back; }
             }
-            img { height: 90%;}
-            .extra-title { font-weight: bold;  }
+            img { height: 90%; }
+            .extra-title { font-weight: bold; padding: 10px 0px; }
 
             &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
             &.tv { .image-notify { border-top: 50px solid @color-tv-back; }}
