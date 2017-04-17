@@ -8,7 +8,6 @@
   <div class="details movietv card crd-1" ng-show="sc.selectedMovieTv.display">
     <div class="background-cover" ng-style="{'background-image':'url('+sc.selectedMovieTv.images +')'}"></div>
     <div class="details-container">
-      <!--<div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>-->
       <div class="clearDetails" ng-click="sc.clearDetails()"><i class="material-icons">close</i></div>
       <!--Nav Title-->
       <div class="details-section details-nav">
@@ -45,7 +44,7 @@
                 <div class="credits-title">Cast</div>
                 <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.cast">
                   <div class="credit-img">
-                    <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" />
+                    <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" ng-if="item.profile_path != null"/>
                   </div>
                   <div class="credit-content">
                     <div class="item-name">{{item.name}}</div>
@@ -59,7 +58,7 @@
                 <div class="credits-title">Crew</div>
                 <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.crew">
                   <div class="credit-img">
-                    <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" />
+                    <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" ng-if="item.profile_path != null"/>
                   </div>
                   <div class="credit-content">
                     <div class="item-name">{{item.name}}</div>
@@ -107,7 +106,7 @@
       <div class="compare-objects" ng-if="sc.comparisonMoviesTv.length > 0">
         <div id="compareSection"></div>
         <div class="comparison-item" ng-repeat="item in sc.comparisonMoviesTv">
-          <div class="removeItem" ng-click="sc.removeMovieTv(item.id)" ng-if="sc.resultsMovieTv.visuals.view == false"><i class="fa fa-times"></i></div>
+          <div class="removeItem" ng-click="sc.removeMovieTv(item.id)" ng-if="sc.resultsMovieTv.visuals.view == false"><i class="material-icons">close</i></div>
           <div class="compare-mask" ng-class="{'active':sc.isResultsViewed(item.id)}" ng-if="sc.resultsMovieTv.visuals.view == true" ng-click="sc.toggleResultViews(item.id)">
             <i class="fa fa-eye" ng-if="sc.isResultsViewed(item.id)"></i>
             <i class="fa fa-eye-slash" ng-if="!sc.isResultsViewed(item.id)"></i>

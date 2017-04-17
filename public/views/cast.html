@@ -8,7 +8,7 @@
   <div class="details cast card crd-1" ng-show="sc.selectedCast.display">
     <div class="background-cover" ng-style="{'background-image':'url('+sc.selectedCast.images +')'}"></div>
     <div class="details-container">
-      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="fa fa-times"></i></div>
+      <div class="clearDetails" ng-click="sc.clearDetails()"><i class="material-icons">close</i></div>
       <!-- Nav Title -->
       <div class="details-section details-nav">
         <div class="item-title item-row">{{sc.selectedCast.details.name}}</div>
@@ -88,7 +88,7 @@
       <div class="compare-objects" ng-if="sc.comparisonCast.length > 0">
         <div id="compareSection"></div>
         <div class="comparison-item" ng-repeat="item in sc.comparisonCast">
-          <div class="removeItem" ng-click="sc.removeCast(item.id)" ng-if="sc.resultsCast.visuals.view == false"><i class="fa fa-times"></i></div>
+          <div class="removeItem" ng-click="sc.removeCast(item.id)" ng-if="sc.resultsCast.visuals.view == false"><i class="material-icons">close</i></div>
           <div class="compare-mask" ng-class="{'active':sc.isResultsViewed(item.id)}" ng-if="sc.resultsCast.visuals.view == true" ng-click="sc.toggleResultViews(item.id)">
             <i class="fa fa-eye" ng-if="sc.isResultsViewed(item.id)"></i>
             <i class="fa fa-eye-slash" ng-if="!sc.isResultsViewed(item.id)"></i>
