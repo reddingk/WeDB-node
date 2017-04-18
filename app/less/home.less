@@ -51,62 +51,66 @@
       position: absolute;
       width: 100%;
       bottom: 0;
-      opacity: 0.7;
+      opacity: 0.4;
       background: linear-gradient(to right, #24c6dc, #514a9d);
       background: linear-gradient(to right, @color-movie, @color-cast, @color-spotlight);
     }
   }
+  .page-card-container {
+    display: flex;
+    padding: 0px 10px;
+    .page-cards {
+      height: 330px;
+      //padding: 10px;
+      cursor: pointer;
+      @media @mobile-device { height: inherit; padding: 10px; }
 
-  .page-cards {
-    height: 330px;
-    padding: 10px;
-    cursor: pointer;
-    @media @mobile-device { height: inherit; padding: 10px; }
+      &+.page-cards { margin-left: 10px;}
 
-    &.movie_tv { .mask { background-color: @color-movie; }}
-    &.tv { .mask { background-color: @color-tv;}}
-    &.cast { .mask { background-color: @color-cast;}}
-    &.spotlight { .mask { background-color: @color-spotlight;}}
+      &.movie_tv { .mask { background-color: @color-movie; }}
+      &.tv { .mask { background-color: @color-tv;}}
+      &.cast { .mask { background-color: @color-cast;}}
+      &.spotlight { .mask { background-color: @color-spotlight;}}
 
-    .mask {
-      z-index: 1;
-      opacity: .5;
-      position: absolute;
-      top:0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      transition: all 0.7s ease;
-    }
-    .item-content {
-      border: @theme-border;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      padding: 10px 20px;
-      @media @mobile-device { height: 250px; }
-      .content {
-        &.front { position: relative; top: 10px; width: 100%; height: 90%; z-index: 2;}
-        &.back { z-index: 0;
-          position: absolute;
-          //top: 50%;
-          //transform: translateY(-50%);
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-        }
-
-        .item-title { text-transform: capitalize; text-align: center; font-size: 2rem; font-weight: bold; font-family: 'Rancho', cursive;}
-        .item-text { font-size: 1.5rem; text-align: center; @media @mobile-device, @tablet-device { font-size: 1.2rem;}}
-        .fa { font-size: 7rem; transition: all 0.7s ease-in-out; opacity: 0.4; }
-        .back-img { width: 100%; height: 100%; position: absolute; left: 0; top: 0; opacity: 0.4; transition: all 0.7s ease-in-out; -webkit-filter: grayscale(90%); filter: grayscale(90%); img { wigth: 100%; min-height: 100%;}}
+      .mask {
+        z-index: 1;
+        opacity: .5;
+        position: absolute;
+        top:0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all 0.7s ease;
       }
-    }
-    &:hover, &:focus { -webkit-animation:1s bounce ease; animation: 1s bounce ease; .mask { opacity: 0.8; } .item-content { .content { .back-img { /*transform: scale(1.1);*/ }} } }
-  }
+      .item-content {
+        border: @theme-border;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        padding: 10px 20px;
+        @media @mobile-device { height: 250px; }
+        .content {
+          &.front { position: relative; top: 10px; width: 100%; height: 90%; z-index: 2;}
+          &.back { z-index: 0;
+            position: absolute;
+            //top: 50%;
+            //transform: translateY(-50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+          }
 
+          .item-title { text-transform: capitalize; text-align: center; font-size: 2rem; font-weight: bold; font-family: 'Rancho', cursive;}
+          .item-text { font-size: 1.5rem; text-align: center; @media @mobile-device, @tablet-device { font-size: 1.2rem;}}
+          .fa { font-size: 7rem; transition: all 0.7s ease-in-out; opacity: 0.4; }
+          .back-img { width: 100%; height: 100%; position: absolute; left: 0; top: 0; opacity: 0.4; transition: all 0.7s ease-in-out; -webkit-filter: grayscale(90%); filter: grayscale(90%); img { wigth: 100%; min-height: 100%;}}
+        }
+      }
+      &:hover, &:focus { -webkit-animation:1s bounce ease; animation: 1s bounce ease; .mask { opacity: 0.8; } .item-content { .content { .back-img { /*transform: scale(1.1);*/ }} } }
+    }
+  }
   .blog-post {
     padding: 30px 10px;
     .blog-container {

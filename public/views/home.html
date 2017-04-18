@@ -4,18 +4,21 @@
   <div class="home-img card crd-1">
     <!--<div class="home-title">WE DB</div>-->
     <div class="home-logo"><img src="imgs\icons\logo_c_w.png"> </div>
-    <div class="backcover-img" back-img="{{sc.homeImg}}"></div>
+    <!--<div class="backcover-img" back-img="{{sc.homeImg}}"></div>-->
+    <div class="backcover-img"></div>
   </div>
 
-  <div class="page-cards card crd-3" ng-repeat="item in sc.pageCards" ng-class="item.class">
-    <div class="item-content" ui-sref="{{item.loc}}">
-      <div class="mask"></div>
-      <div class="content front">
-        <div class="item-title">{{item.title}}</div>
-        <div class="item-text">{{item.text}}</div>
-      </div>
-      <div class="content back">
-        <img class="back-img" ng-src="{{item.img}}">
+  <div class="page-card-container">
+    <div class="page-cards card crd-3" ng-repeat="item in sc.pageCards" ng-class="item.class">
+      <div class="item-content" ui-sref="{{item.loc}}">
+        <div class="mask"></div>
+        <div class="content front">
+          <div class="item-title">{{item.title}}</div>
+          <div class="item-text">{{item.text}}</div>
+        </div>
+        <div class="content back">
+          <!--<img class="back-img" ng-src="{{item.img}}">-->
+        </div>
       </div>
     </div>
   </div>
