@@ -226,7 +226,7 @@ html, body {
     }
   }
   .page-container {
-    padding-bottom: 80px;
+    padding: 0px 10px 80px 10px;
     background-color:black;
     background-image:
     radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
@@ -389,6 +389,7 @@ html, body {
                     padding: 10px 0px;
                     transition: all 0.5s ease-in-out;
                     position: relative;
+                    white-space: normal;
 
                     &:hover {
                       -webkit-animation:0.7s pulse ease;
@@ -401,7 +402,7 @@ html, body {
                     }
                     @media @mobile-device {  width: 200px; }
 
-                    img { height: 90%;}
+                    img { height: 80%;}
                     .suggestion-title { font-weight: bold;}
 
                     &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
@@ -654,7 +655,7 @@ html, body {
       }
     }
     .extra-content {
-      padding: 30px 10px;
+      padding: 30px 0px;
       .extra-content-containers {
         padding: 20px;
         background-color: rgba(30,30,30,0.7);
@@ -730,7 +731,7 @@ html, body {
 
   ::-webkit-scrollbar  {
   	width: 10px;
-    height: 10px; 
+    height: 10px;
     background-color: rgba(10,10,10,0.2);
   }
 
