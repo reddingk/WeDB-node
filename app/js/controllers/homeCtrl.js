@@ -11,7 +11,7 @@
       vm.displayResults = { "max":10, "display":[]};
       vm.allResults = [];
 
-      vm.homeImg = "imgs/siteart/Home6.jpg";
+      vm.homeImg = "imgs/siteart/main1.jpg";
       vm.pageCards = [
         {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"imgs/siteart/Home7.jpg", "loc":"app.movie_tv","text":"Get details on Movie's and Television shows both new and old.  Also use our comparison machine to find out which cast & crew members have appeared on programs together."},
         {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"imgs/siteart/Cast&Crew3.jpg", "loc":"app.cast", "text":"Get information on cast & crew member's content credits.  As well as get the programs that cast & crew have worked on together using our comparision machine."},
@@ -21,7 +21,7 @@
       vm.latestBlog = weInfo.blogs.latest();
       // Get Blog info
       vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
-      
+
       if(vm.blogs.all.length > 0){
         weInfo.blogs.displayData(vm.blogs.all[vm.blogs.displayID].displayIds, function(res){
             vm.blogs.all[vm.blogs.displayID].displayData = res;
