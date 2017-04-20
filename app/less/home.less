@@ -37,6 +37,26 @@
         }
       }
     }
+    .mobile-text {
+      display: none;
+      @media @mobile-device {
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: 20%;
+        font-size: 4rem;
+        z-index: 4;
+        text-align: center;
+        color: rgba(255,255,255,1);
+        font-family: 'Rancho', cursive;
+      }
+    }
+    .home-animate-logo {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      z-index: 1;
+    }
     .backcover-img {
       position: absolute;
       z-index:0;

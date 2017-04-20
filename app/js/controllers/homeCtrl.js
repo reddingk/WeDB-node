@@ -12,6 +12,8 @@
       vm.allResults = [];
 
       vm.homeImg = "imgs/siteart/main1.jpg";
+      vm.homeSVG = "views/templates/_logoAnimation.html";
+
       vm.pageCards = [
         {"title": "movie & tv", "class":"movie_tv", "icon":"fa-film", "img":"imgs/siteart/Home7.jpg", "loc":"app.movie_tv","text":"Get details on Movie's and Television shows both new and old.  Also use our comparison machine to find out which cast & crew members have appeared on programs together."},
         {"title": "cast & crew", "class":"cast", "icon":"fa-users", "img":"imgs/siteart/Cast&Crew3.jpg", "loc":"app.cast", "text":"Get information on cast & crew member's content credits.  As well as get the programs that cast & crew have worked on together using our comparision machine."},
