@@ -12,7 +12,7 @@
       <!-- Nav Title -->
       <div class="details-section details-nav">
         <div class="item-title item-row">{{sc.selectedCast.details.name}}</div>
-        <div class="item-row">
+        <div class="item-row mobile-hide">
           <div class="item-details-container options">
             <div class="option-link" ng-class="sc.selectedCast.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details')">Biography</div>
             <div class="option-link" ng-class="sc.selectedCast.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits')">Credits</div>
@@ -23,7 +23,7 @@
       <div class="details-section blk-section blk-left">
         <div class="details-img">
           <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedCast.details.profile_path}}">
-          <div class="add-item cast" ng-click="sc.addItem(sc.selectedCast)" ng-show="sc.addCheck(sc.selectedCast.id)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Person To Comparison</span></div>
+          <div class="add-item cast" ng-click="sc.addItem(sc.selectedCast)" ng-show="sc.addCheck(sc.selectedCast.id)"><div class="icon"> <i class="material-icons">person_add</i></div> <span>Add Person To Comparison</span></div>
         </div>
       </div>
 
@@ -33,6 +33,12 @@
             <div class="item-section-seperation" ng-if="sc.selectedCast.details.homepage != null"><a ng-href="{{sc.selectedCast.details.homepage}}" target="_blank">Website</a></div>
             <div class="item-section-seperation"><div class="age">Age: {{sc.selectedCast.details.age}}</div></div>
             <div class="item-section-seperation"><div class="birthplace">Birthplace: {{sc.selectedCast.details.place_of_birth}}</div></div>
+          </div>
+        </div>
+        <div class="item-row mobile-show">
+          <div class="item-details-container options">
+            <div class="option-link" ng-class="sc.selectedCast.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details')">Biography</div>
+            <div class="option-link" ng-class="sc.selectedCast.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits')">Credits</div>
           </div>
         </div>
 

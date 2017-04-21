@@ -17,7 +17,7 @@
         }
       })
       .state('app.movie_tv', {
-        url: "movie_tv?id1&id2&id3",
+        url: "Movie-Tv?id1&id2&id3",
         views: {
           'content@': {
             templateUrl: 'views/movie_tv.html',
@@ -26,7 +26,7 @@
         }
       })
       .state('app.cast', {
-        url: "cast?id1&id2&id3",
+        url: "Cast?id1&id2&id3",
         views: {
           'content@': {
             templateUrl: 'views/cast.html',
@@ -35,7 +35,7 @@
         }
       })
       .state('app.spotlight', {
-        url: "spotlight?id",
+        url: "Spotlight?id",
         views: {
           'content@': {
             templateUrl: 'views/spotlight.html',

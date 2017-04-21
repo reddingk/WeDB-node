@@ -202,6 +202,7 @@
             vm.selectedMovieTv.id = id;
             vm.selectedMovieTv.details = results;
             vm.selectedMovieTv.details.type = type;
+            vm.selectedMovieTv.details.runtime = (results.episode_run_time.length > 0 ? results.episode_run_time[0] : "N\\A");
             vm.selectedMovieTv.credits = {};
             vm.selectedMovieTv.suggestions = {};
             vm.selectedMovieTv.infoview = 'details';

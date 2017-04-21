@@ -12,7 +12,7 @@
       <!--Nav Title-->
       <div class="details-section details-nav">
         <div class="item-title item-row"><span ng-if="sc.selectedMovieTv.details.type == 'movie'">{{sc.selectedMovieTv.details.title}}</span><span ng-if="sc.selectedMovieTv.details.type == 'tv'">{{sc.selectedMovieTv.details.name}}</span></div>
-        <div class="item-row">
+        <div class="item-row mobile-hide">
           <div class="item-details-container options {{sc.selectedMovieTv.details.type}}">
             <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details', sc.selectedMovieTv.details.type)">Overview</div>
             <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits', sc.selectedMovieTv.details.type)">Credits</div>
@@ -24,18 +24,26 @@
       <div class="details-section blk-section blk-left">
         <div class="details-img">
           <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovieTv.details.poster_path}}">
-          <div class="add-item {{sc.selectedMovieTv.details.type}}" ng-click="sc.addItem(sc.selectedMovieTv)" ng-show="sc.addCheck(sc.selectedMovieTv.id)"><div class="icon"><i class="fa fa-plus"></i></div> <span>Add Movie To Comparison</span></div>
+          <div class="add-item {{sc.selectedMovieTv.details.type}}" ng-click="sc.addItem(sc.selectedMovieTv)" ng-show="sc.addCheck(sc.selectedMovieTv.id)"><div class="icon"><i class="material-icons">add</i></div> <span>Add Movie To Comparison</span></div>
         </div>
       </div>
 
       <div class="details-section blk-section blk-right">
         <div class="item-row">
           <div class="item-details-container">
-            <div class="item-section-seperation" ng-if="sc.selectedMovieTv.details.homepage != null"><a ng-href="{{sc.selectedMovieTv.details.homepage}}" target="_blank">Website</a></div>
+            <div class="item-section-seperation" ng-if="sc.selectedMovieTv.details.homepage != null && sc.selectedMovieTv.details.homepage != ''"><a ng-href="{{sc.selectedMovieTv.details.homepage}}" target="_blank">Website</a></div>
             <div class="item-section-seperation"><div class="genres" ng-repeat="genre in sc.selectedMovieTv.details.genres">{{genre.name}}</div></div>
             <div class="item-section-seperation"><div class="runtime">{{sc.selectedMovieTv.details.runtime}} minutes</div></div>
           </div>
         </div>
+        <div class="item-row mobile-show">
+          <div class="item-details-container options {{sc.selectedMovieTv.details.type}}">
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('details', sc.selectedMovieTv.details.type)">Overview</div>
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'credits' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('credits', sc.selectedMovieTv.details.type)">Credits</div>
+            <div class="option-link" ng-class="sc.selectedMovieTv.infoview == 'suggestions' ? 'selected' : ''" ng-click="sc.getAdditionalSelectedInfo('suggestions', sc.selectedMovieTv.details.type)">Suggestions</div>
+          </div>
+        </div>
+
         <div class="item-row">
           <div class="item-details-container info">
             <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''">{{sc.selectedMovieTv.details.overview}}</div>

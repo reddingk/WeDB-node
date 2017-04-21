@@ -308,7 +308,7 @@ html, body {
               background-color: rgba(200,200,200,0.8);
               margin: 10px 0px;
               transition: 0.5s all ease-in-out;
-              .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px;}
+              .icon { width: 35px; text-align: center; background: rgba(0,0,0,0.5); display: inline-block; padding: 5px 0px; .material-icons { vertical-align: bottom;}}
               span { padding-left: 5px;}
             }
           }
@@ -727,6 +727,10 @@ html, body {
 
       @media @mobile-device { width: 100% !important; }
   }
+  /* Mobile show & hide */
+  .mobile-show { display: none; @media @mobile-device { display: initial; } }
+  .mobile-hide { display: initial; @media @mobile-device { display: none; } }
+
   .loading-container {
     background: rgba(255,255,255,0.7);
     position: relative;
