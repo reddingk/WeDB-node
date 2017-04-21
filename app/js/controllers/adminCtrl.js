@@ -43,16 +43,22 @@
 
       function toggleSearch(control){
         if(control == "open")
-        { vm.searchOpen = true; }
+        {
+          vm.searchOpen = true;
+        }
         else if(control == "close")
-        { vm.searchOpen = false; }
+        {
+          vm.searchOpen = false;
+        }
         else if(control == "toggle")
-        { vm.searchOpen = !vm.searchOpen; }
+        {
+          vm.searchOpen = !vm.searchOpen;
+        }
 
         if(vm.searchOpen) {
           var navMain = $("#weNavbar");
           navMain.collapse('hide');
-        }
+        }        
       }
 
     }]);

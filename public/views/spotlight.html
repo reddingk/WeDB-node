@@ -42,13 +42,33 @@
   <div class="visual-section cast-connections-section">
     <div class="visual-title">Cast Connections</div>
     <div class="header-message spotlight">View the projects each cast or crew member has been involved in that connects them to each other.</div>
-    <div id="network-container"></div>
+    <div class="visual-content">
+      <div id="network-container" ></div>
+      <!-- Loading -->
+      <div class="loading-container" ng-if="sc.visualLoading.network">
+        <div class="loading-icon">
+          <div class="loading-text">Loading</div>
+          <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="visual-section cast-frequency-section">
     <div class="visual-title">Cast Work Frequency</div>
     <div class="header-message spotlight">Look at the number of projects a member of the spotlight group has colaborated with the other members with.  Broken down to individual frequency as well as overall.</div>
-    <div class="chord-container"></div>
+    <div class="visual-content">
+      <div class="chord-container"></div>
+      <!-- Loading -->
+      <div class="loading-container" ng-if="sc.visualLoading.chord">
+        <div class="loading-icon">
+          <div class="loading-text">Loading</div>
+          <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>

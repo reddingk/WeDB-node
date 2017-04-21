@@ -77,7 +77,7 @@ html, body {
       margin-bottom: 0px;
       position: relative;
       z-index: 90;
-      background-color: rgba(34,34,34,0.8);
+      background-color: rgba(34,34,34,0.95);
       border-color: rgba(0,0,0,0) !important;
       font-family: 'Rancho', cursive;
       .container-fluid {
@@ -150,7 +150,8 @@ html, body {
         .nav-close { display: inline-block; width: 10%; transition: all 0.7s ease; &:hover { color:  rgba(200,200,200,1);}}
         .search-container {
           padding: 3px;
-          display: inline-block;
+          display: inline-flex;
+          justify-content: space-between;
           width: 85%;
           border-bottom: 1px solid rgba(255,255,255,1);
           .search-icon {
@@ -229,7 +230,7 @@ html, body {
     }
   }
   .page-container {
-    padding: 0px 10px 80px 10px;
+    padding: 3px 10px 80px 10px;
     background-color:black;
     background-image:
     radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
@@ -238,6 +239,7 @@ html, body {
     radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
     background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
     background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+    background-attachment: fixed;
 
     .construction-txt { text-align: center; padding-top: 30px; }
 
@@ -367,7 +369,7 @@ html, body {
                       overflow: hidden;
                       border: 2px solid rgba(0,0,0,1);
                       background-color: rgba(255,255,255,1);
-                      img { width: 100%;}
+                      img { width: 100%; }
                     }
                     .credit-content {
                       display: inline-block;
@@ -725,6 +727,25 @@ html, body {
 
       @media @mobile-device { width: 100% !important; }
   }
+  .loading-container {
+    background: rgba(255,255,255,0.7);
+    position: relative;
+    height: 600px;
+    .loading-icon{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .loading-text {
+        width: 100%;
+        position: absolute;
+        top: 50%;
+        text-align: center;
+        font-size: 25px;
+      }
+      i { font-size: 300px;}
+    }
+  }
 
   /*Scroll Styles*/
   ::-webkit-scrollbar-track   {
@@ -746,37 +767,51 @@ html, body {
 
 /*Footer*/
 .footer {
-  //height: 115px;
-  color: rgba(255,255,255,1);
-  width: 100%;
-  min-height: 50px;
   padding: 10px;
-  background-color: rgba(34,34,34,1);
+  .footer-container {
+    color: rgba(255,255,255,1);
+    width: 100%;
+    min-height: 50px;
+    .footer-section-container {
+      padding: 10px 20px;
+      background-color: rgba(34,34,34,1);
+      display: flex;
+      justify-content: space-between;
+      .footer-section {
+        padding: 10px;
+        display: inline-block;
+        vertical-align: top;
 
-  .footer-section {
-    width: 20%;
-    padding: 10px;
-    display: inline-block;
-    vertical-align: top;
-
-    @media @mobile-device { width: 30%;}
-    &.right { float: right; }
-    .poweredby {
-      font-size: 1rem;
-      img { width: 30px; height: 30px; margin-left: 10px; }
+        @media @mobile-device { padding: 10px 5px;}
+        &.right { float: right; }
+        .poweredby {
+          font-size: 1rem;
+          img { width: 30px; height: 30px; margin-left: 10px; }
+        }
+        .section-header {
+          color: rgba(230,230,230,1);
+          font-size: 1rem;
+          padding-bottom: 5px;
+        }
+        .footer-link {
+          padding-left: 3px;
+          font-size: .9rem;
+          color: rgba(190,190,190,0.8);
+          display: block;
+          &:hover { color: rgba(210,210,210,0.9);}
+          &.icon { display: inline-block;}
+        }
+      }
     }
-    .section-header {
-      color: rgba(230,230,230,1);
-      font-size: 1rem;
-      padding-bottom: 5px;
-    }
-    .footer-link {
-      padding-left: 3px;
-      font-size: .9rem;
-      color: rgba(190,190,190,0.8);
+    .footer-tail {
       display: block;
-      &:hover { color: rgba(210,210,210,0.9);}
-      &.icon { display: inline-block;}
+      background-color: rgba(24,24,24,0.5);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      font-size: 12px;
+      .tail-section { max-width: 40%; }
     }
   }
 }

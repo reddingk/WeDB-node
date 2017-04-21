@@ -101,7 +101,7 @@
         if(vm.searchOpen) {
           var navMain = $("#weNavbar");
           navMain.collapse('hide');
-        }
+        }        
       }
 
     }]);

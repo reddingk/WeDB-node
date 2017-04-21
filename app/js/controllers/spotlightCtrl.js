@@ -9,6 +9,7 @@
       vm.spotlightObject = {};
       vm.spotlightObjects = [];
       vm.spotlightMax = 10;
+      vm.visualLoading = {"network":false, "chord":false};
 
       vm.defaultItem = {id: 337339, type: "movie"};
 
@@ -24,6 +25,9 @@
       function displayDetails(id, type){
         vm.spotlightObject = {};
         vm.spotlightObjects = [];
+        vm.visualLoading.network = true;
+        vm.visualLoading.chord = true;
+
         if(type == "movie"){
           weInfo.search.movies.byId(id, function(results){
             vm.spotlightObject.id = id;
@@ -122,7 +126,10 @@
         svg.append("g").attr("transform", "translate("+(calcWidth/2)+","+(calcHeight/2)+")").call(ch);
 
         d3.select(self.frameElement).style("height", (calcHeight/2)+"px").style("width", (calcWidth/2)+"px");
+        // Loading visuals
+        vm.visualLoading.chord = false;
       }
+
       // Network Visuals
       function NetworkVisuals(vizData){
         var network = null;
@@ -170,13 +177,10 @@
         };
         network = new vis.Network(container, data, options);
         network.on("click", function (params) {
-          console.log(params);
-          //getEdgesInfo();
+          //console.log(params);          
         });
-      }
 
-      function getEdgesInfo(nodeid, edges, nodes){
-
+        vm.visualLoading.network = false;
       }
 
       /*Header*/
