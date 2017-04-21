@@ -11,7 +11,7 @@
       vm.spotlightMax = 10;
       vm.visualLoading = {"network":false, "chord":false};
 
-      vm.defaultItem = {id: 337339, type: "movie"};
+      vm.defaultItem = {id: 321612, type: "movie", title:"Beauty & The Best"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);
@@ -177,7 +177,7 @@
         };
         network = new vis.Network(container, data, options);
         network.on("click", function (params) {
-          //console.log(params);          
+          //console.log(params);
         });
 
         vm.visualLoading.network = false;
