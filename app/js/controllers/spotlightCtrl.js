@@ -42,7 +42,7 @@
               vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
             }
             else {
-              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+              vm.spotlightObject.images = "";
             }
             addItem(vm.spotlightObject);
             spotlightSelected();
@@ -62,7 +62,7 @@
               vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
             }
             else {
-              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+              vm.spotlightObject.images = "";
             }
 
             addItem(vm.spotlightObject);

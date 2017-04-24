@@ -140,6 +140,9 @@
             },
             images: function(id, callback){
               castServices.images(id, function(res) { callback(res); } );
+            },
+            taggedImages: function(id, callback){
+              castServices.taggedImages(id, function(res) { callback(res); } );
             }
           },
           movies_Tv: {

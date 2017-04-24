@@ -193,7 +193,7 @@
               vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.selectedMovieTv.details.backdrop_path;
             }
             else {
-              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              vm.selectedMovieTv.images = "";
             }
           });
         }

@@ -156,6 +156,9 @@
             },
             images: function(id, callback){
               castServices.images(id, function(res) { callback(res); } );
+            },
+            taggedImages: function(id, callback){
+              castServices.taggedImages(id, function(res) { callback(res); } );
             }
           },
           movies_Tv: {
@@ -474,6 +477,9 @@
              },
              getImages: function(id){
                return baseurl + "person/"+id+"/images?api_key="+apikey;
+             },
+             getTaggedImages: function(id){
+               return baseurl + "person/"+id+"/tagged_images?api_key="+apikey;
              }
          },
          tv: {
@@ -596,7 +602,7 @@
       /*Set Now Playing*/
       vm.extraContent = {"cast":{}};
 
-      weInfo.search.cast.popular(1, function(results){
+      weInfo.search.cast.popular(2, function(results){
         vm.extraContent.cast = results;
       });
 
@@ -750,12 +756,12 @@
           vm.selectedCast.infoview = 'details';
           vm.selectedCast.display = (results != null);
 
-          weInfo.search.cast.images(id, function(results2){
-            if(results2 != null && results2.profiles.length > 0){
-              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+ results2.profiles[results2.profiles.length-1].file_path;
+          weInfo.search.cast.taggedImages(id, function(results2){            
+            if(results2 != null && results2.results!= undefined && results2.results.length > 0){
+              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+ results2.results[0].media.backdrop_path;
             }
             else {
-              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              vm.selectedCast.images = "";
             }
           });
         });
@@ -1123,7 +1129,7 @@
               vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.selectedMovieTv.details.backdrop_path;
             }
             else {
-              vm.selectedMovieTv.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              vm.selectedMovieTv.images = "";
             }
           });
         }
@@ -1252,7 +1258,7 @@
               vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
             }
             else {
-              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+              vm.spotlightObject.images = "";
             }
             addItem(vm.spotlightObject);
             spotlightSelected();
@@ -1272,7 +1278,7 @@
               vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.spotlightObject.details.backdrop_path;
             }
             else {
-              vm.spotlightObject.images = "http://image.tmdb.org/t/p/w500"+vm.defaultImg;
+              vm.spotlightObject.images = "";
             }
 
             addItem(vm.spotlightObject);
@@ -1649,6 +1655,16 @@ angular.module('directives')
           }).error(function(response){
             callback(response);
           });
+        },
+        taggedImages: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.cast.getTaggedImages($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
         }
       }
     }]);
@@ -1791,7 +1807,7 @@ angular.module('directives')
           }).error(function(response){
             callback(response);
           });
-        },
+        },        
         info: function($mid, callback) {
           $http({
             method: 'GET',

@@ -9,7 +9,8 @@
       <div class="header-content">
         <div class="background-cover" ng-style="{'background-image':'url('+sc.spotlightObject.images +')'}"></div>
         <div class="spotlight-details detail-img">
-          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.spotlightObject.details.poster_path}}">
+          <div class="noPoster" ng-if="sc.spotlightObject.details.poster_path == null"></div>
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.spotlightObject.details.poster_path}}" ng-if="sc.spotlightObject.details.poster_path != null">
         </div>
         <div class="spotlight-details detail-info">
           <div class="info-title"><span ng-if="sc.spotlightObject.details.type == 'movie'">{{sc.spotlightObject.details.title}}</span> <span ng-if="sc.spotlightObject.details.type == 'tv'">{{sc.spotlightObject.details.name}}</span></div>

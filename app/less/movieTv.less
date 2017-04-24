@@ -4,6 +4,13 @@
     &.movietv {
       .details-container {
         .details-section {
+          .noPoster {
+            width: 100%;
+            height: 400px;
+            background: rgba(167, 55, 55,1); /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, rgba(167, 55, 55,1), rgba(122, 40, 40,1)); /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, rgba(167, 55, 55,1), rgba(122, 40, 40,1)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+          }
           .details-img {
             .add-item {
               &.movie {  background-color: @color-movie-back !important; &:hover { background-color: @color-movie !important;} }

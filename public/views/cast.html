@@ -22,7 +22,8 @@
 
       <div class="details-section blk-section blk-left">
         <div class="details-img">
-          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedCast.details.profile_path}}">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedCast.details.profile_path}}" ng-if="sc.selectedCast.details.profile_path != null">
+          <div class="noPoster" ng-if="sc.selectedCast.details.profile_path == null"></div>
           <div class="add-item cast" ng-click="sc.addItem(sc.selectedCast)" ng-show="sc.addCheck(sc.selectedCast.id)"><div class="icon"> <i class="material-icons">person_add</i></div> <span>Add Person To Comparison</span></div>
         </div>
       </div>
@@ -44,7 +45,10 @@
 
         <div class="item-row">
           <div class="item-details-container info">
-            <div class="info-section" ng-if="sc.selectedCast.infoview == 'details' ? 'selected' : ''">{{sc.selectedCast.details.biography}}</div>
+            <div class="info-section" ng-if="sc.selectedCast.infoview == 'details' ? 'selected' : ''">
+              <span ng-if="sc.selectedCast.details.biography != null">{{sc.selectedCast.details.biography}}</span>
+              <span ng-if="sc.selectedCast.details.biography == null">Sorry there currently is no biography for {{sc.selectedCast.details.name}}</span>
+            </div>
             <div class="info-section" ng-if="sc.selectedCast.infoview == 'credits' ? 'selected' : ''">
               <div class="info-credits">
                 <div class="credits-title">Cast</div>
@@ -52,7 +56,7 @@
                   <div class="item-name" ng-if="item.media_type == 'movie'"><i class="fa fa-film"></i> {{item.title}}</div> <div class="item-name" ng-if="item.media_type == 'tv'"><i class="fa fa-television "></i> {{item.name}}</div>
                   <div class="item-character">{{item.character}}</div>
                 </div>
-                <div ng-if="sc.selectedCast.credits.cast.length == 0">Sorry we don't have the cast for this</div>
+                <div ng-if="sc.selectedCast.credits.cast.length == 0">Sorry we don't have the cast credits for {{sc.selectedCast.details.name}}</div>
               </div>
               <div class="info-credits">
                 <div class="credits-title">Crew</div>
@@ -60,7 +64,7 @@
                   <div class="item-name" ng-if="item.media_type == 'movie'"><i class="fa fa-film"></i> {{item.title}}</div> <div class="item-name" ng-if="item.media_type == 'tv'"><i class="fa fa-television "></i> {{item.name}}</div>
                   <div class="item-job">{{item.job}}</div>
                 </div>
-                <div ng-if="sc.selectedCast.credits.crew.length == 0">Sorry we don't have the crew for this</div>
+                <div ng-if="sc.selectedCast.credits.crew.length == 0">Sorry we don't have the crew credits for {{sc.selectedCast.details.name}}</div>
               </div>
             </div>
           </div>
@@ -146,7 +150,7 @@
       <div class="item-container">
         <div class="item cast" ng-repeat="item in sc.extraContent.cast.results" ng-click="sc.displayDetails(item.id, 'cast')" scroll-to="">
           <div class="image-notify"></div>
-          <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}"/>
+          <img ng-src="https://image.tmdb.org/t/p/w235_and_h235_bestv2{{item.profile_path}}"/>
           <div class="extra-title">{{item.name}}</div>
         </div>
       </div>

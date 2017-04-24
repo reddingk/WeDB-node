@@ -43,7 +43,7 @@
           }).error(function(response){
             callback(response);
           });
-        },
+        },        
         info: function($mid, callback) {
           $http({
             method: 'GET',

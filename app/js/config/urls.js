@@ -60,6 +60,9 @@
              },
              getImages: function(id){
                return baseurl + "person/"+id+"/images?api_key="+apikey;
+             },
+             getTaggedImages: function(id){
+               return baseurl + "person/"+id+"/tagged_images?api_key="+apikey;
              }
          },
          tv: {

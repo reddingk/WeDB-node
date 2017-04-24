@@ -23,7 +23,8 @@
 
       <div class="details-section blk-section blk-left">
         <div class="details-img">
-          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovieTv.details.poster_path}}">
+          <img ng-src="http://image.tmdb.org/t/p/w500{{sc.selectedMovieTv.details.poster_path}}" ng-if="sc.selectedMovieTv.details.poster_path != null">
+          <div class="noPoster" ng-if="sc.selectedMovieTv.details.poster_path == null"></div>
           <div class="add-item {{sc.selectedMovieTv.details.type}}" ng-click="sc.addItem(sc.selectedMovieTv)" ng-show="sc.addCheck(sc.selectedMovieTv.id)"><div class="icon"><i class="material-icons">add</i></div> <span>Add Movie To Comparison</span></div>
         </div>
       </div>
@@ -46,7 +47,10 @@
 
         <div class="item-row">
           <div class="item-details-container info">
-            <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''">{{sc.selectedMovieTv.details.overview}}</div>
+            <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'details' ? 'selected' : ''">
+              <span ng-if="sc.selectedMovieTv.details.overview != ''">{{sc.selectedMovieTv.details.overview}}</span>
+              <span ng-if="sc.selectedMovieTv.details.overview == ''">Sorry We Currently Don't Have An Overview For This Title</span>
+            </div>
             <div class="info-section" ng-if="sc.selectedMovieTv.infoview == 'credits' ? 'selected' : ''">
               <div class="info-credits">
                 <div class="credits-title">Cast</div>

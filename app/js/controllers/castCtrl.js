@@ -23,7 +23,7 @@
       /*Set Now Playing*/
       vm.extraContent = {"cast":{}};
 
-      weInfo.search.cast.popular(1, function(results){
+      weInfo.search.cast.popular(2, function(results){
         vm.extraContent.cast = results;
       });
 
@@ -177,12 +177,12 @@
           vm.selectedCast.infoview = 'details';
           vm.selectedCast.display = (results != null);
 
-          weInfo.search.cast.images(id, function(results2){
-            if(results2 != null && results2.profiles.length > 0){
-              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+ results2.profiles[results2.profiles.length-1].file_path;
+          weInfo.search.cast.taggedImages(id, function(results2){            
+            if(results2 != null && results2.results!= undefined && results2.results.length > 0){
+              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+ results2.results[0].media.backdrop_path;
             }
             else {
-              vm.selectedCast.images = "http://image.tmdb.org/t/p/w500"+vm.homeImg;
+              vm.selectedCast.images = "";
             }
           });
         });

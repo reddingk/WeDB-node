@@ -53,6 +53,16 @@
           }).error(function(response){
             callback(response);
           });
+        },
+        taggedImages: function($mid, callback){
+          $http({
+            method: 'GET',
+            url: api.cast.getTaggedImages($mid)
+          }).success(function (response) {
+            callback(response);
+          }).error(function(response){
+            callback(response);
+          });
         }
       }
     }]);
