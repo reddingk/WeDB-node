@@ -794,6 +794,9 @@
       }
 
       function clearSearch() {
+        if(vm.searchQuery == ""){
+          toggleSearch("close");
+        }
         vm.searchQuery = "";
         vm.allResults = [];
         vm.displayResults.display = [];
@@ -1184,6 +1187,9 @@
       }
 
       function clearSearch() {
+        if(vm.searchQuery == ""){
+          toggleSearch("close");
+        }
         vm.searchQuery = "";
         vm.allResults = [];
         vm.displayResults.display = [];
@@ -1420,6 +1426,9 @@
       }
 
       function clearSearch() {
+        if(vm.searchQuery == ""){
+          toggleSearch("close");
+        }
         vm.searchQuery = "";
         vm.allResults = [];
         vm.displayResults.display = [];
