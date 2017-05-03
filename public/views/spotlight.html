@@ -33,8 +33,11 @@
 
     <div class="cast-container">
       <div class="cast-item" ng-repeat="item in sc.spotlightObject.creditsVisuals">
-        <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
-        <div class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image == null"></div>
+        <div class="img-container" ui-sref="app.cast({id1: item.id})">
+          <div class="add-cover" ng-style="{ 'background-color': item.color.border}"><i class="material-icons">person_add</i></div>
+          <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
+          <div class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image == null"></div>
+        </div>
         <div class="item-title">{{item.label}}</div>
       </div>
     </div>
@@ -42,7 +45,7 @@
 
   <div class="visual-section cast-connections-section">
     <div class="visual-title">Cast Connections</div>
-    <div class="header-message spotlight">View the projects each cast or crew member has been involved in that connects them to each other.</div>
+    <div class="header-message spotlight">View the projects each cast or crew member has been involved in that connects them to each other. Select a node or connection to highlight it.</div>
     <div class="visual-content">
       <div id="network-container" ></div>
       <!-- Loading -->
@@ -58,7 +61,7 @@
 
   <div class="visual-section cast-frequency-section">
     <div class="visual-title">Cast Work Frequency</div>
-    <div class="header-message spotlight">Look at the number of projects a member of the spotlight group has colaborated with the other members with.  Broken down to individual frequency as well as overall.</div>
+    <div class="header-message spotlight">Check out the number of projects a member of the spotlight group has collaborated with the other members on.  Broken down into individual as well as overall total collaborations.</div>
     <div class="visual-content">
       <div class="chord-container"></div>
       <!-- Loading -->

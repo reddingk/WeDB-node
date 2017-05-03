@@ -21,6 +21,7 @@
       ];
 
       vm.latestBlog = weInfo.blogs.latest();
+
       // Get Blog info
       vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
 
@@ -101,7 +102,7 @@
         if(vm.searchOpen) {
           var navMain = $("#weNavbar");
           navMain.collapse('hide');
-        }        
+        }
       }
 
     }]);

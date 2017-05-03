@@ -30,11 +30,21 @@
                   .credits-item {
                     &.movie {
                       .item-character, .item-job {color: @color-movie;}
-                      .credit-img { border-color: @color-movie; background-color: @color-movie; }
+                      .credit-img {
+                        border-color: @color-movie;
+                        background-color: @color-movie;
+                        position: relative;
+                        .add-cover {  background-color: @color-movie; }
+                      }
                     }
                     &.tv {
                       .item-character, .item-job {color: @color-tv;}
-                      .credit-img { border-color:@color-tv; }
+                      .credit-img {
+                        border-color:@color-tv;
+                        background-color: @color-tv;
+                        position: relative;
+                        .add-cover {  background-color: @color-tv; }
+                      }
                     }
                   }
                 }

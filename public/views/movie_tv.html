@@ -55,7 +55,8 @@
               <div class="info-credits">
                 <div class="credits-title">Cast</div>
                 <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.cast">
-                  <div class="credit-img">
+                  <div class="credit-img" ui-sref="app.cast({id1: item.id})">
+                    <div class="add-cover"><i class="material-icons">person_add</i></div>
                     <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" ng-if="item.profile_path != null"/>
                   </div>
                   <div class="credit-content">
@@ -69,7 +70,8 @@
               <div class="info-credits">
                 <div class="credits-title">Crew</div>
                 <div class="credits-item {{sc.selectedMovieTv.details.type}}" ng-repeat="item in sc.selectedMovieTv.credits.crew">
-                  <div class="credit-img">
+                  <div class="credit-img" ui-sref="app.cast({id1: item.id})">
+                    <div class="add-cover"><i class="material-icons">person_add</i></div>
                     <img ng-src="https://image.tmdb.org/t/p/w132_and_h132_bestv2{{item.profile_path}}" ng-if="item.profile_path != null"/>
                   </div>
                   <div class="credit-content">
