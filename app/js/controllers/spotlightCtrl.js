@@ -11,7 +11,7 @@
       vm.spotlightMax = 10;
       vm.visualLoading = {"network":false, "chord":false};
 
-      vm.defaultItem = {id: 321612, type: "movie", title:"Beauty & The Best"};
+      vm.defaultItem = {id: 166426, type: "movie", title:"Pirates of the Caribbean: Dead Men Tell No Tales"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);

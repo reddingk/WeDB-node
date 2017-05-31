@@ -16,7 +16,7 @@
           <div class="info-title"><span ng-if="sc.spotlightObject.details.type == 'movie'">{{sc.spotlightObject.details.title}}</span> <span ng-if="sc.spotlightObject.details.type == 'tv'">{{sc.spotlightObject.details.name}}</span></div>
           <div class="spotlight-item" ng-if="sc.spotlightObject.id == sc.defaultItem.id"><i class="fa fa-lightbulb-o"></i> WEDB Favorite</div>
           <div class="info-content">
-            <div class="content info-tagline" ng-if="sc.spotlightObject.details.tagline != null">"{{sc.spotlightObject.details.tagline}}"</div>
+            <div class="content info-tagline" ng-if="sc.spotlightObject.details.tagline != null && sc.spotlightObject.details.tagline.length > 0">"{{sc.spotlightObject.details.tagline}}"</div>
 
             <div class="content info-date" ng-if="sc.spotlightObject.details.type == 'movie'">{{sc.spotlightObject.details.release_date | date:'MMM dd, yyyy'}}</div>
             <div class="content info-date" ng-if="sc.spotlightObject.details.type == 'tv'">{{sc.spotlightObject.details.first_air_date | date:'MMM, yyyy'}}</div>

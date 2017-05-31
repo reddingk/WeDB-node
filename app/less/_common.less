@@ -28,7 +28,6 @@ html, body {
   color: rgba(255,255,255,1);
   background-color: rgba(5,5,5,1);
   font-size: @font-size;
-  //overflow-x: hidden;
 
   font-family: 'Poppins', sans-serif;
   //font-family: 'Rancho', cursive;
@@ -86,7 +85,6 @@ html, body {
             overflow: hidden;
             transition: all 0.5s ease-in-out;
             img {  height: 140%; display: inline-block;}
-            span { }
           }
           .navbar-out-search {
             float: right;
@@ -136,7 +134,6 @@ html, body {
       overflow: hidden;
       -webkit-animation:0.5s slideInDown  ease;
       animation:0.5s slideInDown  ease;
-      //background-color: rgba(50,50,50,0.9);
 
       /* when showing the thing */
       &.ng-hide  {
@@ -214,9 +211,7 @@ html, body {
 .mainBody {
   padding-top: 50px;
   min-height: 100%;
-  //padding-bottom: 50px;
-
-  .header-container {  }
+  
   .header-message {
     width: 100%;
     padding: 10px;
@@ -278,7 +273,6 @@ html, body {
 
         @media @mobile-device { padding: 30px 10px; }
         .clearDetails {
-          //font-size: 4rem;
           position: absolute;
           right: 30px;
           top: 30px;
@@ -294,11 +288,11 @@ html, body {
           &.blk-section {
             display: inline-block;
             vertical-align: top;
-            &.blk-left { }
             &.blk-right { width: 65%; @media @mobile-device { width: 100%; } }
           }
           &.details-nav {
             padding-bottom: 0px;
+            padding-top: 50px;
           }
           .details-img {
             vertical-align: top;
@@ -332,15 +326,32 @@ html, body {
                 font-size: 0.889rem;
                 display: inline-block;
                 &+.item-section-seperation { border-left: 1px solid rgba(255,255,255,1);}
-                @media @mobile-device {  width: 100%; display: block; overflow-x: auto; overflow-y: hidden; white-space: nowrap;}
+                @media @mobile-device {  
+                  width: 100%; 
+                  display: block; 
+                  overflow-x: auto; 
+                  overflow-y: hidden; 
+                  white-space: nowrap; 
+                  padding: 5px; 
+                  text-align: center; 
+                  border: none !important;
+                  &.genre-section {
+                    display: flex;
+                    text-align: left;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                  }
+                }
                 .genres {
                   color: rgba(0,0,0,1);
                   display: inline-block;
                   background: rgba(230,230,230,0.5);
                   border: 2px solid rgba(230,230,230,1);
                   border-radius: 5px;
-                  padding: 2px 7px; &+.genres { margin-left: 10px; }
+                  padding: 2px 7px; 
                   box-shadow: 0 1px 3px 0 rgba(0,0,0,.5), 0 1px 1px 0 rgba(0,0,0,.5), 0 2px 1px -1px rgba(0,0,0,.5);
+                  &+.genres { margin-left: 10px; }
+                  @media @mobile-device { margin: 5px 0 !important;}
                 }
               }
 
@@ -435,7 +446,7 @@ html, body {
                     @media @mobile-device {  width: 200px; }
 
                     img { height: 80%;}
-                    .suggestion-title { font-weight: bold;}
+                    .suggestion-title { font-weight: bold; padding: 0px 5px;}
 
                     &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
                     &.tv { .image-notify { border-top: 50px solid @color-tv-back; }}
@@ -721,7 +732,7 @@ html, body {
               &.cast { background-color: @color-cast-back; }
             }
             img { height: 90%; }
-            .extra-title { font-weight: bold; padding: 10px 0px; }
+            .extra-title { font-weight: bold; padding: 10px 5px; }
 
             &.movie { .image-notify { border-top: 50px solid @color-movie-back; }}
             &.tv { .image-notify { border-top: 50px solid @color-tv-back; }}

@@ -10,6 +10,7 @@
       var id2 = $stateParams.id2;
       var id3 = $stateParams.id3;
 
+      vm.letterLimit = 32;
       vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
       vm.comparisonMoviesTv = [];
       vm.resultsMovieTv = {};

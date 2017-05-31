@@ -737,6 +737,8 @@
         if(Object.keys(vm.selectedCast[type]).length == 0) {
           if(type == 'credits') {
             weInfo.search.cast[type](vm.selectedCast.id, function(results){
+              results.cast.sort(compare);
+              results.crew.sort(compare);
               vm.selectedCast[type] = results;
               vm.selectedCast.infoview = type
             });
@@ -821,6 +823,13 @@
           var navMain = $("#weNavbar");
           navMain.collapse('hide');
         }
+      }
+
+      function compare(a,b) {
+        var aItem = (a.media_type == "movie" ? a.release_date : a.first_air_date);
+        var bItem = (b.media_type == "movie" ? b.release_date : b.first_air_date);
+
+        return new Date(bItem) - new Date(aItem);        
       }
 
     }]);
@@ -950,6 +959,7 @@
       var id2 = $stateParams.id2;
       var id3 = $stateParams.id3;
 
+      vm.letterLimit = 32;
       vm.selectedMovieTv = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
       vm.comparisonMoviesTv = [];
       vm.resultsMovieTv = {};
@@ -1234,7 +1244,7 @@
       vm.spotlightMax = 10;
       vm.visualLoading = {"network":false, "chord":false};
 
-      vm.defaultItem = {id: 321612, type: "movie", title:"Beauty & The Best"};
+      vm.defaultItem = {id: 166426, type: "movie", title:"Pirates of the Caribbean: Dead Men Tell No Tales"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);

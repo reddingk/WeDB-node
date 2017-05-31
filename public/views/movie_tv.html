@@ -33,7 +33,7 @@
         <div class="item-row">
           <div class="item-details-container">
             <div class="item-section-seperation" ng-if="sc.selectedMovieTv.details.homepage != null && sc.selectedMovieTv.details.homepage != ''"><a ng-href="{{sc.selectedMovieTv.details.homepage}}" target="_blank">Website</a></div>
-            <div class="item-section-seperation"><div class="genres" ng-repeat="genre in sc.selectedMovieTv.details.genres">{{genre.name}}</div></div>
+            <div class="item-section-seperation genre-section"><div class="genres" ng-repeat="genre in sc.selectedMovieTv.details.genres">{{genre.name}}</div></div>
             <div class="item-section-seperation"><div class="runtime">{{sc.selectedMovieTv.details.runtime}} minutes</div></div>
           </div>
         </div>
@@ -171,7 +171,7 @@
         <div class="item movie" ng-repeat="item in sc.extraContent.movies.results" ng-click="sc.displayDetails(item.id, 'movie')" scroll-to="">
           <div class="image-notify"></div>
           <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
-          <div class="extra-title">{{item.title}}</div>
+          <div class="extra-title">{{item.title | limitTo:sc.letterLimit }}{{item.title.length > sc.letterLimit ? '...' : ''}}</div>
         </div>
       </div>
     </div>
@@ -184,7 +184,7 @@
         <div class="item tv" ng-repeat="item in sc.extraContent.tv.results" ng-click="sc.displayDetails(item.id, 'tv')" scroll-to="">
           <div class="image-notify"></div>
           <img ng-src="http://image.tmdb.org/t/p/w500{{item.poster_path}}"/>
-          <div class="extra-title">{{item.name}}</div>
+          <div class="extra-title">{{item.name| limitTo:sc.letterLimit }}{{item.name.length > sc.letterLimit ? '...' : ''}}</div>
         </div>
       </div>
     </div>

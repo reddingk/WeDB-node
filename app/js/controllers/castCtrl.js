@@ -158,6 +158,8 @@
         if(Object.keys(vm.selectedCast[type]).length == 0) {
           if(type == 'credits') {
             weInfo.search.cast[type](vm.selectedCast.id, function(results){
+              results.cast.sort(compare);
+              results.crew.sort(compare);
               vm.selectedCast[type] = results;
               vm.selectedCast.infoview = type
             });
@@ -242,6 +244,13 @@
           var navMain = $("#weNavbar");
           navMain.collapse('hide');
         }
+      }
+
+      function compare(a,b) {
+        var aItem = (a.media_type == "movie" ? a.release_date : a.first_air_date);
+        var bItem = (b.media_type == "movie" ? b.release_date : b.first_air_date);
+
+        return new Date(bItem) - new Date(aItem);        
       }
 
     }]);
