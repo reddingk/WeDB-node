@@ -20,10 +20,10 @@
         {"title": "spotlight", "class":"spotlight", "icon":"fa-lightbulb-o", "img":"imgs/siteart/Spotlight1.jpg", "loc":"app.spotlight", "text":"Put a spotlight on a movie or tv show by finding out the connections between the cast of your spotlight."}
       ];
 
-      vm.latestBlog = weInfo.blogs.latest();
+      //vm.latestBlog = weInfo.blogs.latest();
 
       // Get Blog info
-      vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
+      /*vm.blogs = {"all": weInfo.blogs.all(), "displayID":0, "displayObj":{}, "displayFlg":false};
 
       if(vm.blogs.all.length > 0){
         weInfo.blogs.displayData(vm.blogs.all[vm.blogs.displayID].displayIds, function(res){
@@ -33,7 +33,7 @@
             vm.blogs.displayObj.id = object.info.id;
             vm.blogs.displayObj.img = (object.info.media_type == 'movie' || object.info.media_type == 'tv'? object.info.poster_path : object.info.profile_path);
         });
-      }
+      }*/
 
       /**/
       vm.changeBlogImg = changeBlogImg;

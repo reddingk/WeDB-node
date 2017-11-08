@@ -418,10 +418,32 @@ html, body {
                     }
                   }
                 }
-
+                .suggestions-container {
+                  position: relative; 
+                  .nav-ctrl {
+                    position:absolute;
+                    top:0;
+                    width: 75px;
+                    height: 100%;
+                    background: rgba(0,0,0,0.2);
+                    color: rgba(255,255,255,1);
+                    cursor: pointer;
+                    transition: 0.5s all ease;
+                    i { font-size: 50px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}            
+                    &:hover { background: rgba(0,0,0,0.5);}
+                    &.ctrl-left { left: 0; }
+                    &.ctrl-right { right: 0; }
+        
+                    @media @mobile-device { 
+                      width: 25px;
+                      background: rgba(0,0,0,0.9);
+                      i { font-size: initial; }
+                    }
+                  }
+                }
                 .info-sugggestions-container {
                   width: 100%;
-                  overflow-x: auto;
+                  overflow: hidden;
                   white-space:nowrap;
                   .suggestions-item {
                     width: 300px;
@@ -472,7 +494,7 @@ html, body {
     }
 
     .comparison, .header-panel {
-      min-height: 400px;
+      //min-height: 400px;
       .comparison-container, .header-panel-container {
         width: 100%;
         padding: 10px 50px 30px;
@@ -493,7 +515,7 @@ html, body {
             font-family: 'Rancho', cursive;
             @media @mobile-device { font-size: 2.5rem; }
           }
-          .comparison-text { position: relative; z-index: 1; display: block; text-align: center; font-size: 2.1rem; padding: 10px 0px; max-width: 920px; margin: 0 auto; @media @mobile-device { font-size: 1.2rem; }}
+          .comparison-text { position: relative; z-index: 1; display: block; text-align: center; font-size: 1.5rem; padding: 10px 0px; max-width: 920px; margin: 0 auto; @media @mobile-device { font-size: 1.2rem; }}
           .comparison-ctrls {
              position: relative; z-index: 1;
              text-align: center;
@@ -516,7 +538,7 @@ html, body {
             top:0;
             left: 0;
             height: 100%;
-            min-height: 400px;
+            //min-height: 400px;
             /* Create the parallax scrolling effect */
             background-attachment: fixed;
             background-position: center;
@@ -703,14 +725,36 @@ html, body {
         padding: 20px;
         background-color: rgba(30,30,30,0.7);
         border: @theme-border;
-        .extra-header { font-size: 2rem; font-weight: bold; padding: 10px 0px; @media @mobile-device { font-size: 2rem;}}
+        .extra-header { font-size: 2rem; font-weight: bold; padding: 10px 0px; text-align: center; margin-bottom: 20px; @media @mobile-device { font-size: 2rem;}}
+        .extra-container {
+          position: relative; 
+          .nav-ctrl {
+            position:absolute;
+            top:0;
+            width: 75px;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            color: rgba(255,255,255,1);
+            cursor: pointer;
+            transition: 0.5s all ease;
+            i { font-size: 50px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}            
+            &:hover { background: rgba(0,0,0,1);}
+            &.ctrl-left { left: 0; }
+            &.ctrl-right { right: 0; }
+
+            @media @mobile-device { 
+              width: 25px;
+              background: rgba(0,0,0,0.9);
+              i { font-size: initial; }
+            }
+          }
+        }
         .item-container {
           width: 100%;
-          overflow-x: auto;
+          overflow: hidden;
           white-space:nowrap;
-          min-height: 320px;
-          border-top: 1px solid rgba(0,0,0,1);
-          @media @mobile-device { }
+          min-height: 320px;          
+                   
           .item {
             width: 300px;
             height: 290px;

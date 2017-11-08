@@ -105,9 +105,32 @@
       .loading-container { position: absolute; top: 0; left: 0; height: 100%; width: 100%;}
     }
     &.cast-spotlight-section {
+      .extra-container {
+        position: relative; 
+        .nav-ctrl {
+          position:absolute;
+          top:0;
+          width: 50px;
+          height: 100%;
+          background: rgba(0,0,0,0.2);
+          color: rgba(255,255,255,1);
+          cursor: pointer;
+          transition: 0.5s all ease;
+          i { font-size: 30px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);}            
+          &:hover { background: rgba(0,0,0,0.7);}
+          &.ctrl-left { left: 0; }
+          &.ctrl-right { right: 0; }
+
+          @media @mobile-device { 
+            width: 25px;
+            background: rgba(0,0,0,0.9);
+            i { font-size: initial; }
+          }
+        }
+      }
       .cast-container {
         width: 100%;
-        overflow-x: auto;
+        overflow: hidden;
         white-space:nowrap;
         min-height: 200px;
         display: flex;

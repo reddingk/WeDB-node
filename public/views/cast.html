@@ -147,12 +147,16 @@
   <div class="extra-content card crd-1">
     <div class="extra-content-containers">
       <div class="extra-header">Popular Stars</div>
-      <div class="item-container">
-        <div class="item cast" ng-repeat="item in sc.extraContent.cast.results" ng-click="sc.displayDetails(item.id, 'cast')" scroll-to="">
-          <div class="image-notify"></div>
-          <img ng-src="https://image.tmdb.org/t/p/w235_and_h235_bestv2{{item.profile_path}}"/>
-          <div class="extra-title">{{item.name}}</div>
+      <div class="extra-container">
+        <div class="item-container" id="popularStars">
+          <div class="item cast" ng-repeat="item in sc.extraContent.cast.results" ng-click="sc.displayDetails(item.id, 'cast')" scroll-to="">            
+            <img ng-src="https://image.tmdb.org/t/p/w235_and_h235_bestv2{{item.profile_path}}"/>
+            <div class="extra-title">{{item.name}}</div>
+          </div>
         </div>
+        <!-- Controls -->
+        <div class="nav-ctrl ctrl-left" ng-click="sc.clickActivate(-1, 'popularStars')" ng-mouseenter="sc.scrollActivate(-1, 'popularStars')" ng-mouseleave="sc.scrollDeactivate()"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+        <div class="nav-ctrl ctrl-right" ng-click="sc.clickActivate(-1, 'popularStars')" ng-mouseenter="sc.scrollActivate(1, 'popularStars')" ng-mouseleave="sc.scrollDeactivate()"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
       </div>
     </div>
   </div>

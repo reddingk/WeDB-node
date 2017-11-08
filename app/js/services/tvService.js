@@ -8,9 +8,9 @@
           $http({
             method: 'GET',
             url: api.tv.searchname($str)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -18,9 +18,9 @@
           $http({
             method: 'GET',
             url: api.tv.getTvCredits($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -28,9 +28,9 @@
           $http({
             method: 'GET',
             url: api.tv.getSimilarTv($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -38,9 +38,9 @@
           $http({
             method: 'GET',
             url: api.tv.getImages($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },        
@@ -48,9 +48,9 @@
           $http({
             method: 'GET',
             url: api.tv.getTvInfo($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -58,9 +58,9 @@
           $http({
             method: 'GET',
             url: api.tv.getOnAir($pg)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function successCallback(response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         }

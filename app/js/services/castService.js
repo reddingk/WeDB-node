@@ -8,9 +8,9 @@
           $http({
             method: 'GET',
             url: api.cast.searchname($str)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -18,9 +18,9 @@
           $http({
             method: 'GET',
             url: api.cast.getCombinedCredits($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -28,9 +28,9 @@
           $http({
             method: 'GET',
             url: api.cast.getCastDetails($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -38,9 +38,9 @@
           $http({
             method: 'GET',
             url: api.cast.getPopular($pg)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -48,9 +48,9 @@
           $http({
             method: 'GET',
             url: api.cast.getImages($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -58,9 +58,9 @@
           $http({
             method: 'GET',
             url: api.cast.getTaggedImages($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         }

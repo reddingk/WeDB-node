@@ -5,13 +5,19 @@
       var vm = this;
       vm.title = "spotlight";
       vm.defaultImg = "imgs/siteart/Home7.jpg";
+      
+      var intervalId = null;
+      var scrollInterval = 15;
+      var mobileCheck = new RegExp('Android|webOS|iPhone|iPad|' + 'BlackBerry|Windows Phone|'  + 'Opera Mini|IEMobile|Mobile' , 'i');
+      
+
       /*Variables*/
       vm.spotlightObject = {};
       vm.spotlightObjects = [];
       vm.spotlightMax = 10;
       vm.visualLoading = {"network":false, "chord":false};
 
-      vm.defaultItem = {id: 166426, type: "movie", title:"Pirates of the Caribbean: Dead Men Tell No Tales"};
+      vm.defaultItem = {id: 284054, type: "movie", title:"Black Panther"};
 
       if(vm.spotlightObject.id == undefined){
         displayDetails(vm.defaultItem.id,vm.defaultItem.type);
@@ -21,6 +27,33 @@
       vm.spotlightSelected = spotlightSelected;
       vm.addItem = addItem;
       vm.displayDetails = displayDetails;
+      
+      vm.scrollActivate = scrollActivate;
+      vm.scrollDeactivate = scrollDeactivate;
+      vm.clickActivate = clickActivate;
+
+      function clickActivate(direction, container){
+        var containerObj = $("#"+container);
+        if(containerObj != null){
+          //containerObj.scrollLeft = containerObj.scrollLeft + (100 * direction);
+          containerObj.animate({ scrollLeft: containerObj[0].scrollLeft + (250 * direction)}, "slow");
+        }
+      }
+
+      function scrollActivate(direction, container){
+        var containerObj = document.getElementById(container);
+        if(containerObj != null && !mobileCheck.test(navigator.userAgent)){
+          clearInterval(intervalId);
+
+          intervalId = setInterval(function() {
+            containerObj.scrollLeft = containerObj.scrollLeft + (scrollInterval * direction);
+          }, 25);
+        }
+      }
+
+      function scrollDeactivate() {
+        clearInterval(intervalId);
+      }
 
       function displayDetails(id, type){
         vm.spotlightObject = {};
@@ -102,85 +135,96 @@
 
       //Chord Visuals
       function ChordVisuals(vizData){
-        function sort(a,b){ return d3.ascending(vizData.sortOrder.indexOf(a),vizData.sortOrder.indexOf(b)); }
-        var calcWidth = document.getElementsByClassName("chord-container")[0].offsetWidth;
-        var calcHeight = document.getElementsByClassName("chord-container")[0].offsetHeight;
+        try {
+          function sort(a,b){ return d3.ascending(vizData.sortOrder.indexOf(a),vizData.sortOrder.indexOf(b)); }
+          var calcWidth = document.getElementsByClassName("chord-container")[0].offsetWidth;
+          var calcHeight = document.getElementsByClassName("chord-container")[0].offsetHeight;
 
-        var chordRadius = (calcWidth < 500 ? 80 : 250);
+          var chordRadius = (calcWidth < 500 ? 80 : 250);
 
-        var ch = viz.ch().data(vizData.data)
-          .padding(.01)
-          .sort(sort)
-          .innerRadius(chordRadius - 20)
-	        .outerRadius(chordRadius)
-	        .duration(1000)
-	        .chordOpacity(0.3)
-	        .labelPadding(.03)
-          .fill(function(d){ return vizData.colors[d];});
+          var ch = viz.ch().data(vizData.data)
+            .padding(.01)
+            .sort(sort)
+            .innerRadius(chordRadius - 20)
+            .outerRadius(chordRadius)
+            .duration(1000)
+            .chordOpacity(0.3)
+            .labelPadding(.03)
+            .fill(function(d){ return vizData.colors[d];});
 
-        // remove old svg
-        d3.select(".chord-container > svg").remove();
-        // append new svg
-        var svg = d3.select(".chord-container").append("svg");
+          // remove old svg
+          d3.select(".chord-container > svg").remove();
+          // append new svg
+          var svg = d3.select(".chord-container").append("svg");
 
-        svg.append("g").attr("transform", "translate("+(calcWidth/2)+","+(calcHeight/2)+")").call(ch);
+          svg.append("g").attr("transform", "translate("+(calcWidth/2)+","+(calcHeight/2)+")").call(ch);
 
-        d3.select(self.frameElement).style("height", (calcHeight/2)+"px").style("width", (calcWidth/2)+"px");
-        // Loading visuals
-        vm.visualLoading.chord = false;
+          d3.select(self.frameElement).style("height", (calcHeight/2)+"px").style("width", (calcWidth/2)+"px");
+          // Loading visuals
+          vm.visualLoading.chord = false;
+        }
+        catch(ex){
+
+        }
       }
 
       // Network Visuals
       function NetworkVisuals(vizData){
-        var network = null;
-        var container = document.getElementById('network-container');
-        var data = {
-          nodes: vizData.nodes,
-          edges: vizData.edges
-        };
-        var options = {
-          interaction: {
-            keyboard: {
-              enabled: false
+        try {
+          var network = null;
+          var container = document.getElementById('network-container');
+          var data = {
+            nodes: vizData.nodes,
+            edges: vizData.edges
+          };
+          var options = {
+            interaction: {
+              keyboard: {
+                enabled: false
+              },
+              zoomView: false
             },
-            zoomView: false
-          },
-          nodes: {
-            borderWidth:4,
-            size:30,
-    	      color: {
-                highlight: {
-                  border:'#F19F4D',
-                  background:'#F19F4D'
+            nodes: {
+              borderWidth:4,
+              size:30,
+              color: {
+                  highlight: {
+                    border:'#F19F4D',
+                    background:'#F19F4D'
+                  }
                 }
+            },
+            edges: {
+              color: {
+                inherit: 'both',
+                highlight: '#F19F4D',
+                opacity: 0.5
+              },
+              font: {
+                align: 'middle',
+                color: "#ffffff",
+                strokeWidth:0
+              },
+              length: 500,
+              labelHighlightBold: true,
+              selectionWidth: function (width) {return width*10;},
+              smooth: {
+                type: 'cubicBezier',
+                forceDirection : 'horizontal'
               }
-          },
-          edges: {
-            color: {
-              inherit: 'both',
-              highlight: '#F19F4D',
-              opacity: 0.5
-            },
-            font: {
-              align: 'middle',
-              color: "#ffffff",
-              strokeWidth:0
-            },
-            length: 500,
-            labelHighlightBold: true,
-            selectionWidth: function (width) {return width*10;},
-            smooth: {
-              type: 'cubicBezier',
-              forceDirection : 'horizontal'
             }
-          }
-        };
-        network = new vis.Network(container, data, options);
-        network.on("click", function (params) {
-          //console.log(params);
-        });
+          };
+          network = new vis.Network(container, data, options);
+          network.on("click", function (params) {
+            //console.log(params);
+          });
 
-        vm.visualLoading.network = false;
+          vm.visualLoading.network = false;
+        }
+        catch(ex){
+          vm.visualLoading.network = false;
+          vm.visualLoading.networkError = "Error Retrieving Results";
+        }
       }
 
       /*Header*/

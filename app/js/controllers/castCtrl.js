@@ -9,12 +9,17 @@
       var id1 = $stateParams.id1;
       var id2 = $stateParams.id2;
       var id3 = $stateParams.id3;
-
+      var intervalId = null;
+      var scrollInterval = 15;
+      var mobileCheck = new RegExp('Android|webOS|iPhone|iPad|' + 'BlackBerry|Windows Phone|'  + 'Opera Mini|IEMobile|Mobile' , 'i');
+      
+      
       vm.selectedCast = {"id":-1,"details":{}, "credits":{}, "suggestions":{}, "display":false, "infoview":"details"};
       vm.comparisonCast = [];
       vm.resultsCast = {};
       vm.resultsCast.visuals = {};
       vm.resultsCast.visuals.view = false;
+      
 
       if(id1 != undefined && (id2 == undefined && id3 == undefined)){
         displayDetails(id1);
@@ -39,6 +44,33 @@
       vm.toggleResultViews = toggleResultViews;
       vm.clearCompare = clearCompare;
       vm.removeCast = removeCast;
+
+      vm.scrollActivate = scrollActivate;
+      vm.scrollDeactivate = scrollDeactivate;
+      vm.clickActivate = clickActivate;
+
+      function clickActivate(direction, container){
+        var containerObj = $("#"+container);
+        if(containerObj != null){
+          //containerObj.scrollLeft = containerObj.scrollLeft + (100 * direction);
+          containerObj.animate({ scrollLeft: containerObj[0].scrollLeft + (250 * direction)}, "slow");
+        }
+      }
+
+      function scrollActivate(direction, container){
+        var containerObj = document.getElementById(container);
+        if(containerObj != null && !mobileCheck.test(navigator.userAgent)){
+          clearInterval(intervalId);
+
+          intervalId = setInterval(function() {
+            containerObj.scrollLeft = containerObj.scrollLeft + (scrollInterval * direction);
+          }, 25);
+        }
+      }
+
+      function scrollDeactivate() {
+        clearInterval(intervalId);
+      }
 
       function getAge(dateString, deathString){
         var today = (deathString == undefined || deathString == "" ? new Date() : new Date(deathString));

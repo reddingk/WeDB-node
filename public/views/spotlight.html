@@ -30,16 +30,20 @@
   <div class="visual-section cast-spotlight-section">
     <div class="visual-title">Spotlight Cast</div>
     <div class="header-message spotlight">Our spotlight section chooses {{sc.spotlightMax}} of the top billed cast & crew to build our connections.</div>
-
-    <div class="cast-container">
-      <div class="cast-item" ng-repeat="item in sc.spotlightObject.creditsVisuals">
-        <div class="img-container" ui-sref="app.cast({id1: item.id})">
-          <div class="add-cover" ng-style="{ 'background-color': item.color.border}"><i class="material-icons">person_add</i></div>
-          <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
-          <div class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image == null"></div>
+    <div class="extra-container">
+      <div class="cast-container" id="spotlightCast">
+        <div class="cast-item" ng-repeat="item in sc.spotlightObject.creditsVisuals">
+          <div class="img-container" ui-sref="app.cast({id1: item.id})">
+            <div class="add-cover" ng-style="{ 'background-color': item.color.border}"><i class="material-icons">person_add</i></div>
+            <img class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image != null">
+            <div class="cast-img" ng-src="{{item.image}}" ng-style="{'border-color': item.color.border, 'background-color': item.color.border}" ng-if="item.image == null"></div>
+          </div>
+          <div class="item-title">{{item.label}}</div>
         </div>
-        <div class="item-title">{{item.label}}</div>
       </div>
+      <!-- Controls -->
+      <div class="nav-ctrl ctrl-left" ng-click="sc.clickActivate(-1, 'spotlightCast')" ng-mouseenter="sc.scrollActivate(-1, 'spotlightCast')" ng-mouseleave="sc.scrollDeactivate()"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+      <div class="nav-ctrl ctrl-right" ng-click="sc.clickActivate(-1, 'spotlightCast')" ng-mouseenter="sc.scrollActivate(1, 'spotlightCast')" ng-mouseleave="sc.scrollDeactivate()"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
     </div>
   </div>
 

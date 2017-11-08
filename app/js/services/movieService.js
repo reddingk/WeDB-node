@@ -8,9 +8,9 @@
           $http({
             method: 'GET',
             url: api.movie.searchname($str)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -18,9 +18,9 @@
           $http({
             method: 'GET',
             url: api.movie.getMovieCredits($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -28,9 +28,9 @@
           $http({
             method: 'GET',
             url: api.movie.getSimilarMovies($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -38,9 +38,9 @@
           $http({
             method: 'GET',
             url: api.movie.getImages($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -48,9 +48,9 @@
           $http({
             method: 'GET',
             url: api.movie.getMovieInfo($mid)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -58,9 +58,9 @@
           $http({
             method: 'GET',
             url: api.movie.getNowPlaying($pg)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -68,9 +68,9 @@
           $http({
             method: 'GET',
             url: api.any.all($str)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         },
@@ -78,9 +78,9 @@
           $http({
             method: 'GET',
             url: api.any.page($str, $page)
-          }).success(function (response) {
-            callback(response);
-          }).error(function(response){
+          }).then(function (response) {
+            callback(response.data);
+          }, function errorCallback(response){
             callback(response);
           });
         }
